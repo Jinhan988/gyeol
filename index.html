@@ -225,8 +225,10 @@ details.privacy[open] summary::after{content:" ▴"}
 @keyframes pulse{50%{opacity:.4}}
 .retake{margin-top:14px;background:var(--sunk);border-radius:14px;padding:14px 16px;font-size:14px}
 .retake ul{margin:6px 0 12px;padding-left:18px;color:var(--muted)}
-.why{margin-top:12px;background:var(--sunk);border-radius:12px;padding:10px 14px;font-size:13px}
-.why ul{margin:4px 0 0;padding-left:18px;color:var(--muted)}
+.adet{margin-top:4px;font-size:13px}
+.adet summary{cursor:pointer;color:var(--muted);font-weight:600}
+.adet ul{margin:4px 0 10px;padding-left:18px;color:var(--muted)}
+.adet .label{margin-top:8px}
 .pal i{border-radius:50%!important;aspect-ratio:1!important}
 .pal.avoid{grid-template-columns:repeat(5,minmax(0,1fr))}
 .mk{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15px}
@@ -261,7 +263,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
     <div>
       <div class="label">AI personal color analysis</div>
       <h1>Upload a selfie. Get the K-beauty look made for your coloring.</h1>
-      <p>Gyeol's AI reads your skin tone, hair and eyes, finds your personal color season, and matches you with Korean makeup looks. Every look breaks down into steps, with the exact products used and where to buy them in the US and Canada.</p>
+      <p>Find your personal color, then shop the Korean makeup that suits you.</p>
     </div>
     <div class="col">
     <div class="selfie" id="selfie">
@@ -269,11 +271,10 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
       <h2 class="shead">AI Personal Color Analysis</h2>
       <label class="drop big" for="selfiefile">
         <img id="selfieimg" alt="Your selfie" hidden>
-        <span class="ph" id="dropcopy"><span class="wheel" aria-hidden="true"></span><b>Add a selfie</b><small>Front-facing · JPG, PNG or HEIC</small></span>
+        <span class="ph" id="dropcopy"><span class="wheel" aria-hidden="true"></span><b>Add a selfie</b><small>Front-facing photo</small></span>
       </label>
       <input type="file" id="selfiefile" class="sr" accept="image/*">
-      <h3 class="stitle">Upload a selfie. Discover your season.</h3>
-      <p class="sdesc">Your AI beauty analysis examines your skin tone, hair and eye features to estimate your personal color season. Use natural daylight and a makeup-free photo for a better estimate.</p>
+      <p class="sdesc">Best in daylight, with no filter and little makeup.</p>
       <button class="primary big" id="analyze" type="button">Analyze My Color</button>
       <div class="subacts"><button class="linkbtn" id="changephoto" type="button" hidden>Change photo</button><button class="linkbtn" id="stopai" type="button" hidden>Stop</button></div>
       <div id="aiout" aria-live="polite"></div>
@@ -301,7 +302,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
     <article class="sheet" id="sheet"></article>
   </section>
 
-  <footer>Gyeol beta. Selfie photos are analyzed once and never stored by Gyeol. Some shop links are affiliate links, so Gyeol may earn a commission at no extra cost to you. Product picks are editorial suggestions, not sponsored.</footer>
+  <footer>Gyeol beta · Photos are never stored · Some links are affiliate links</footer>
 </div>
 
 
@@ -347,9 +348,9 @@ const P={
   snail:{b:"COSRX",n:"Advanced Snail 96 Mucin Power Essence",c:"#f1ece2"},
   torriden:{b:"Torriden",n:"DIVE-IN Low Molecular Hyaluronic Acid Serum",c:"#d9ebf3"},
   boj:{b:"Beauty of Joseon",n:"Relief Sun: Rice + Probiotics SPF50+",c:"#f4ead2"},
-  laneigeCushion:{b:"Laneige",n:"Neo Cushion Glow",s:"match your skin with the store's shade finder",fam:true,c:"#efcfb6"},
-  clio:{b:"CLIO",n:"Kill Cover The New Founwear Cushion",s:"match your skin with the store's shade finder",fam:true,c:"#e9c6aa"},
-  hera:{b:"HERA",n:"Black Cushion Foundation",s:"match your skin with the store's shade finder",fam:true,c:"#e3c0a5"},
+  laneigeCushion:{b:"Laneige",n:"Neo Cushion Glow",s:"your skin match",fam:true,c:"#efcfb6"},
+  clio:{b:"CLIO",n:"Kill Cover The New Founwear Cushion",s:"your skin match",fam:true,c:"#e9c6aa"},
+  hera:{b:"HERA",n:"Black Cushion Foundation",s:"your skin match",fam:true,c:"#e3c0a5"},
   lipbalm:{b:"Laneige",n:"Lip Glowy Balm",c:"#f5b8c4"},
   jujube:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#05 Jujube",c:"#e0705c"},
   peachme:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#23 Peach Peach Me",c:"#e98f78"},
@@ -459,7 +460,7 @@ function renderQuiz(){
   const i=state.answers.length,q=Q[i];
   el.innerHTML=`<div class="qhead"><span class="label">Personal color check · ${i+1} of 4</span><div class="dots">${Q.map((_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div></div>
     <div class="q">${q.q}</div><div class="opts">${q.o.map((o,k)=>`<button class="opt" type="button" data-k="${k}">${o[0]}</button>`).join("")}</div>
-    <div style="margin-top:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="note">Already know your season? Pick it in the filters below.</span><button class="linkbtn" id="quizcancel" type="button">Cancel</button></div>`;
+    <div style="margin-top:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span></span><button class="linkbtn" id="quizcancel" type="button">Cancel</button></div>`;
   $("quizcancel").onclick=()=>{state.quizOpen=false;state.answers=[];renderQuiz()};
   el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
     state.answers.push(q.o[+b.dataset.k][1]);
@@ -482,8 +483,9 @@ function renderResult(){const el=$("result");
     <div class="resgrid">
       <div class="rcol">
         <p class="consult">${esc(ai&&ai.note?ai.note:s.consult)}</p>
-        ${ai&&ai.obs.length?`<div class="seen"><div class="label">What we noticed</div><ul>${ai.obs.map(o=>`<li>${esc(o)}</li>`).join("")}</ul></div>`:""}
-        ${ai?`<div class="why"><div class="label">Why ${esc(ai.confidence)} confidence</div><ul>${(ai.why||[]).map(w=>`<li>${esc(w)}</li>`).join("")}</ul></div>`:""}
+        ${ai?`<details class="adet"><summary>Analysis details</summary>
+          ${ai.obs.length?`<div class="label">What we noticed</div><ul>${ai.obs.map(o=>`<li>${esc(o)}</li>`).join("")}</ul>`:""}
+          <div class="label">Why ${esc(ai.confidence)} confidence</div><ul>${(ai.why||[]).map(w=>`<li>${esc(w)}</li>`).join("")}</ul></details>`:""}
         <h3 class="rh">Your best colors</h3>
         <div class="pal">${s.best.map(([c,n])=>`<div><i style="background:${c}"></i><span>${n}</span></div>`).join("")}</div>
         <h3 class="rh">Avoid or use sparingly</h3>
@@ -499,7 +501,7 @@ function renderResult(){const el=$("result");
       </div>
     </div>
     ${ai&&ai.confidence==="high"?"":`<div class="improve"><div><h3 class="rh" style="margin:0 0 4px">${ai?"Improve your result":"Get a more accurate result"}</h3>
-      <p>${ai?"Upload a front-facing photo in natural daylight, without filters or heavy makeup, to improve your color analysis.":"The quiz gives a rough estimate. A selfie lets the AI read your actual skin tone, eyes and hair."}</p></div>
+      <p>${ai?"Retake in daylight, with no filter, for a sharper result.":"The quiz is a rough guess. A selfie is more accurate."}</p></div>
       <button class="primary" id="retryphoto" type="button">${ai?"Retake My Photo":"Analyze a selfie"}</button></div>`}
     <div class="resfoot">${ai&&ai.confidence==="high"?`<button class="linkbtn" id="retryphoto" type="button">Try another photo</button>`:""}<button class="linkbtn" id="retakequiz" type="button">Take the 4-question check</button></div>`;
   el.querySelectorAll(".reclook").forEach(b=>b.onclick=()=>{state.look=b.dataset.id;state.filter=state.season;track.look(state.look);renderFilters();renderShelf();renderSheet();
@@ -549,7 +551,7 @@ function renderSheet(){
       ${s[2].map(pid=>{const p=P[pid],q=pq(p),on=state.bag.includes(pid);
         return `<div class="prod"><span class="dot" style="background:${p.c}"></span><div style="min-width:0">
           <div class="pname">${esc(p.n)}</div><div class="pbrand">${esc(p.b)}</div>${shadeLine(p)}
-          <div class="shop"><a href="${amz(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="amazon">Amazon ↗</a><a href="${ys(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div></div>
+          <div class="shop"><a href="${amz(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="amazon">Amazon ↗</a><a href="${ys(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">More ↗</a></div></div>
           <button class="add" type="button" data-p="${pid}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div>`}).join("")}
       <div class="why">${s[3]}</div></div></li>`).join("")}</ol>
     <div class="tip"><b>Tip.</b> ${l.tip}</div>`;
