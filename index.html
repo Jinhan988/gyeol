@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Upload a selfie and Gyeol's AI finds your personal color season, then matches you with Korean makeup looks and the exact products to buy.">
+<meta property="og:title" content="Gyeol: AI personal color and K-beauty looks">
+<meta property="og:description" content="Find your personal color season from a selfie and shop Korean makeup made for you.">
+<title>Gyeol K-Beauty Looks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a compact quiz strip up top, then a shelf of "cushion compact" look cards beside a step-by-step product sheet */
+:root{
+  --bg:#f5f1f2; --surface:#fffdfd; --sunk:#ece5e8; --line:#ddd2d7;
+  --ink:#2b1d24; --muted:#6f5d66; --accent:#a8324f; --accent-ink:#ffffff; --accent-soft:#f3dbe2;
+  --display:"Young Serif",Georgia,"Times New Roman",serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ko:"Gowun Batang","Apple SD Gothic Neo","Malgun Gothic",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
+  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
+  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
+.ko{font-family:var(--ko)}
+.label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:20px 8px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand b{font-family:var(--display);font-weight:400;font-size:26px}
+.brand span{font-family:var(--ko);color:var(--accent);font-size:20px}
+.bagbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;display:flex;gap:8px;align-items:center;font-weight:600;font-size:14px}
+.bagbtn em{font-style:normal;background:var(--accent);color:var(--accent-ink);border-radius:999px;min-width:22px;height:22px;display:inline-grid;place-items:center;font-size:12px;font-variant-numeric:tabular-nums}
+
+.intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:32px;align-items:start;padding-block:20px 28px}
+.intro h1{font-size:clamp(30px,4.4vw,48px);line-height:1.08}
+.intro p{color:var(--muted);max-width:52ch;margin:14px 0 0}
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dots{display:flex;gap:6px}.dots i{width:22px;height:4px;border-radius:2px;background:var(--sunk)}.dots i.on{background:var(--accent)}
+.q{font-weight:600;font-size:17px;margin-bottom:12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.35}
+.opt:hover{border-color:var(--accent)}
+.result{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.result .sw{display:flex}.result .sw i{width:34px;height:34px;border-radius:50%;margin-left:-8px;border:2px solid var(--surface)}
+.result .sw i:first-child{margin-left:0}
+.result h3{font-size:24px}
+.result p{margin:2px 0 0;color:var(--muted);font-size:14px;max-width:44ch}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13px;text-decoration:underline;text-underline-offset:3px}
+
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-block:4px 16px;border-top:1px solid var(--line);padding-top:20px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500;display:inline-flex;gap:6px;align-items:center}
+.chip .ko{font-size:13px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] .ko{color:inherit;opacity:.75}
+
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:28px;align-items:start}
+.shelf{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:10px}
+.card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.card h3{font-size:18px;line-height:1.2}
+.card .ko{color:var(--muted);font-size:13px}
+.compact{aspect-ratio:1.6;max-width:100%;border-radius:12px;background:var(--sunk);position:relative;overflow:hidden}
+.compact b{position:absolute;border-radius:50%}
+.tags{display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.tag.match{background:var(--accent-soft);color:var(--accent)}
+.empty{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center;border:1px dashed var(--line);border-radius:16px}
+
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+.sheet .hero{display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;align-items:center}
+.sheet .compact{aspect-ratio:1;border-radius:50%}
+.sheet h2{font-size:30px;line-height:1.1}
+.sheet .sub{font-family:var(--ko);color:var(--accent);font-size:17px;margin-top:2px}
+.sheet .desc{color:var(--muted);margin:10px 0 0;max-width:60ch}
+.steps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:0}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;padding-block:14px;border-top:1px solid var(--line)}
+.num{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px}
+.stepname{font-weight:700;font-size:14px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.stepname .ko{font-weight:400;color:var(--muted);font-size:13px}
+.prod{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:start;margin-top:8px}
+.dot{width:16px;height:16px;border-radius:50%;margin-top:3px;border:1px solid var(--line)}
+.pname{font-weight:600}.pbrand{color:var(--muted);font-size:13px}
+.why{font-size:13px;color:var(--muted);margin-top:2px}
+.shop{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.shop a{font-size:12px;font-weight:600;color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+.shop a:hover{border-color:var(--accent)}
+.add{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 10px;font-size:12px;font-weight:600;white-space:nowrap}
+.add[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tip{margin-top:16px;background:var(--sunk);border-radius:12px;padding:12px 14px;font-size:13px}
+.tip b{font-weight:700}
+
+.bag{position:fixed;right:0;top:0;bottom:0;width:min(400px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:20;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) max(20px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 20px) 20px;
+  display:flex;flex-direction:column;gap:14px;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
+.bag ul{list-style:none;margin:0;padding:0;overflow:auto;flex:1;display:grid;gap:10px;align-content:start}
+.bag li{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.bag .x{background:none;border:0;color:var(--muted);font-size:18px;line-height:1}
+.primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:12px;font-weight:700}
+.scrim{position:fixed;inset:0;background:rgba(20,10,15,.35);z-index:19}
+.note{font-size:12px;color:var(--muted)}
+.col{display:grid;gap:12px;min-width:0}
+.selfie{background:var(--surface);border:1.5px solid var(--accent);border-radius:20px;padding:22px;box-shadow:0 10px 30px -18px var(--accent)}
+.shead{font-size:26px;margin:2px 0 14px}
+.privacy{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.privacy b{color:var(--ink);font-size:13px}
+.privacy ul{margin:6px 0 0;padding-left:18px;display:grid;gap:3px}
+.quiz.collapsed{padding:0;background:transparent;border:0}
+.quizopen{width:100%;text-align:left;border:1px dashed var(--line);background:transparent;border-radius:14px;padding:12px 16px;font-size:14px;color:var(--muted);display:flex;justify-content:space-between;gap:12px}
+.quizopen:hover{border-color:var(--accent);color:var(--ink)}
+.srow{display:flex;gap:18px;align-items:flex-start}
+.drop{flex:0 0 120px;height:150px;border:1.5px dashed var(--line);border-radius:14px;display:grid;place-items:center;cursor:pointer;overflow:hidden;background:var(--bg);font-size:12px;font-weight:600;color:var(--muted);text-align:center;padding:6px}
+.drop:hover{border-color:var(--accent)}
+.drop img{width:100%;height:100%;object-fit:cover;max-width:none}
+.drop:has(img:not([hidden])){padding:0;border-style:solid}
+.sr{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.primary.sm{padding:9px 14px;font-size:14px;border-radius:999px}
+.primary:disabled{opacity:.45;cursor:default}
+.ai{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;font-size:14px}
+.ai h4{font-family:var(--display);font-weight:400;font-size:20px;margin:0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.ai ul{margin:8px 0;padding-left:18px;color:var(--muted)}
+.swrow{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
+.swrow div{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--muted)}
+.swrow i{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);display:inline-block}
+.err{color:var(--accent);font-size:13px;margin-top:12px}
+.ins{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 32px) max(16px,env(safe-area-inset-left,0px))}
+.ins .in{max-width:1080px;margin:0 auto;display:grid;gap:20px}
+.inshead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.inshead h2{font-size:28px}
+.banner{background:var(--accent-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:13px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;min-width:0}
+.panel h3{font-size:19px;margin-bottom:4px}
+.panel .q2{font-size:13px;color:var(--muted);margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.funnel{display:grid;gap:10px}
+.frow{display:grid;grid-template-columns:170px minmax(0,1fr) 110px;gap:12px;align-items:center;font-size:14px}
+.bar{height:26px;background:var(--sunk);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:6px;min-width:2px}
+.frow .v{font-variant-numeric:tabular-nums;text-align:right}
+.frow .v small{display:block;color:var(--muted);font-size:11px}
+.hbars{display:grid;gap:8px}
+.hrow{display:grid;grid-template-columns:120px minmax(0,1fr) 56px;gap:10px;align-items:center;font-size:13px}
+.hrow .bar{height:16px}
+.hrow .v{text-align:right;font-variant-numeric:tabular-nums}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:460px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.rate{display:inline-block;min-width:46px;text-align:center;border-radius:999px;padding:1px 8px;font-weight:700;font-size:12px;background:var(--sunk)}
+.rate.hi{background:var(--accent-soft);color:var(--accent)}
+@media (max-width:760px){.grid2{grid-template-columns:minmax(0,1fr)}.frow{grid-template-columns:110px minmax(0,1fr) 84px}}
+.rec{font-size:12px;font-weight:700;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.selfie .drop.big{display:grid;width:100%;max-width:100%;height:auto;aspect-ratio:4/3;flex:none;border-radius:16px;border:1.5px dashed var(--line);background:var(--sunk);padding:0;margin-bottom:16px}
+.selfie .drop.big:hover{border-color:var(--accent)}
+.ph{display:grid;justify-items:center;gap:6px;color:var(--ink)}
+.ph b{font-size:16px}.ph small{color:var(--muted);font-weight:500}
+.wheel{width:72px;height:72px;border-radius:50%;margin-bottom:6px;background:conic-gradient(#f39a7c 0 25%,#d98aa6 0 50%,#2b1b3a 0 75%,#a5523a 0);box-shadow:0 0 0 6px var(--surface)}
+.stitle{font-family:var(--body);font-weight:700;font-size:19px;margin:0 0 6px}
+.sdesc{margin:0 0 16px;color:var(--muted);font-size:14px}
+.primary.big{width:100%;padding:15px;font-size:17px;border-radius:999px}
+.subacts{display:flex;justify-content:center;gap:18px;margin-top:8px}
+.subacts:not(:has(:not([hidden]))){display:none}
+details.privacy{margin-top:14px;border-top:1px solid var(--line);padding-top:12px}
+details.privacy summary{cursor:pointer;text-align:center;font-size:13px;font-weight:600;color:var(--muted);list-style:none}
+details.privacy summary::-webkit-details-marker{display:none}
+details.privacy summary::after{content:" ▾"}
+details.privacy[open] summary::after{content:" ▴"}
+.alt{text-align:center;padding-top:8px}
+.alt h3{font-family:var(--body);font-weight:700;font-size:16px}
+.alt p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.shade{font-size:12.5px;color:var(--muted);margin-top:1px}
+.shade b{color:var(--ink);font-weight:600}
+.rescard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;margin-bottom:28px;scroll-margin-top:16px}
+.season{font-size:clamp(38px,6vw,56px);line-height:1.02;margin:6px 0 6px}
+.resub{display:flex;gap:8px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:16px}
+.resub .ko{font-size:16px}
+.conf{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;background:var(--sunk);color:var(--muted);margin-left:4px}
+.conf.c-high{background:var(--accent-soft);color:var(--accent)}
+.conf.c-low{background:var(--accent-soft);color:var(--accent);outline:1px dashed var(--accent)}
+.resgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;margin-top:22px}
+.consult{font-size:16px;line-height:1.6;margin:0 0 14px;max-width:56ch}
+.seen ul{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:14px}
+.warnbox{margin-top:12px;background:var(--sunk);border-radius:12px;padding:10px 14px;font-size:13px}
+.rh{font-family:var(--body);font-weight:700;font-size:17px;margin:22px 0 10px}
+.rcol>.rh:first-child{margin-top:0}
+.pal{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.pal div{min-width:0;display:grid;gap:6px;font-size:12px;color:var(--muted);text-align:center}
+.pal i{display:block;width:100%;min-width:0;aspect-ratio:1.3;max-width:100%;border-radius:12px;border:1px solid var(--line)}
+.skiprow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:14px;font-size:12px;color:var(--muted)}
+.sk{display:inline-flex;gap:5px;align-items:center}.sk i{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);position:relative;overflow:hidden}
+.sk i::after{content:"";position:absolute;left:-2px;right:-2px;top:6px;height:1.5px;background:var(--ink);transform:rotate(-45deg)}
+.reclooks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.reclook{border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:8px 8px 10px;text-align:left;display:grid;gap:4px}
+.reclook:hover{border-color:var(--accent)}
+.reclook .compact{aspect-ratio:1;border-radius:10px;margin-bottom:4px}
+.reclook b{font-size:14px;line-height:1.2}.reclook .ko{font-size:12px;color:var(--muted)}
+.resacts{display:grid;gap:8px;margin-top:16px}
+.resacts .primary{padding:13px;font-size:15px;border-radius:999px}
+.resacts .bagbtn{justify-content:center;padding:12px}
+.resfoot{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.okline{margin-top:12px;font-weight:700;color:var(--accent);text-align:center}
+@media (max-width:860px){.resgrid{grid-template-columns:minmax(0,1fr);gap:8px}.rescard{padding:20px}}
+@media (max-width:420px){.pal{gap:6px}.pal span{font-size:11px}.reclooks{gap:6px}.reclook b{font-size:12.5px}}
+.checks{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.ck{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start;font-size:14px}
+.ck b{display:block;font-weight:600}.ck small{color:var(--muted);font-size:12.5px}
+.ci{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;background:var(--sunk);color:var(--muted)}
+.ck.ok .ci{background:var(--accent-soft);color:var(--accent)}
+.ck.warn .ci{background:var(--sunk);color:var(--ink);outline:1.5px solid var(--muted)}
+.ck.fail .ci{background:var(--accent);color:var(--accent-ink)}
+@media (prefers-reduced-motion:no-preference){.ck.wait .ci{animation:pulse 1.2s ease-in-out infinite}}
+@keyframes pulse{50%{opacity:.4}}
+.retake{margin-top:14px;background:var(--sunk);border-radius:14px;padding:14px 16px;font-size:14px}
+.retake ul{margin:6px 0 12px;padding-left:18px;color:var(--muted)}
+.why{margin-top:12px;background:var(--sunk);border-radius:12px;padding:10px 14px;font-size:13px}
+.why ul{margin:4px 0 0;padding-left:18px;color:var(--muted)}
+.pal i{border-radius:50%!important;aspect-ratio:1!important}
+.pal.avoid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.mk{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15px}
+.improve{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.improve p{margin:0;color:var(--muted);font-size:14px;max-width:60ch}
+.improve .primary{padding:13px 22px;border-radius:999px;font-size:15px;white-space:nowrap}
+@media (max-width:600px){.improve{grid-template-columns:minmax(0,1fr)}.improve .primary{width:100%}}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+
+@media (max-width:860px){
+  .intro,.main{grid-template-columns:minmax(0,1fr)}
+  .sheet{position:static}
+}
+@media (max-width:420px){
+  .opts{grid-template-columns:1fr}
+  .drop{flex-basis:96px;height:120px}
+  .sheet{padding:18px}.sheet .hero{grid-template-columns:84px minmax(0,1fr)}.sheet h2{font-size:24px}
+}
+@media (prefers-reduced-motion:no-preference){.card,.chip,.opt{transition:border-color .15s,background .15s}}
+</style>
+<style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><b>Gyeol</b><span>결</span></div>
+    <div style="display:flex;gap:8px"><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
+  </header>
+
+  <section class="intro">
+    <div>
+      <div class="label">AI personal color analysis</div>
+      <h1>Upload a selfie. Get the K-beauty look made for your coloring.</h1>
+      <p>Gyeol's AI reads your skin tone, hair and eyes, finds your personal color season, and matches you with Korean makeup looks. Every look breaks down into steps, with the exact products used and where to buy them in the US and Canada.</p>
+    </div>
+    <div class="col">
+    <div class="selfie" id="selfie">
+      <div class="qhead"><span class="rec">Recommended</span><span class="tag">Beta</span></div>
+      <h2 class="shead">AI Personal Color Analysis</h2>
+      <label class="drop big" for="selfiefile">
+        <img id="selfieimg" alt="Your selfie" hidden>
+        <span class="ph" id="dropcopy"><span class="wheel" aria-hidden="true"></span><b>Add a selfie</b><small>Front-facing · JPG, PNG or HEIC</small></span>
+      </label>
+      <input type="file" id="selfiefile" class="sr" accept="image/*">
+      <h3 class="stitle">Upload a selfie. Discover your season.</h3>
+      <p class="sdesc">Your AI beauty analysis examines your skin tone, hair and eye features to estimate your personal color season. Use natural daylight and a makeup-free photo for a better estimate.</p>
+      <button class="primary big" id="analyze" type="button">Analyze My Color</button>
+      <div class="subacts"><button class="linkbtn" id="changephoto" type="button" hidden>Change photo</button><button class="linkbtn" id="stopai" type="button" hidden>Stop</button></div>
+      <div id="aiout" aria-live="polite"></div>
+      <details class="privacy">
+        <summary>Your photo privacy details</summary>
+        <ul>
+          <li>Your photo is resized in your browser, which also removes its location and camera data.</li>
+          <li>It is sent over an encrypted connection to Gyeol's server, which passes it straight to our AI provider, Anthropic, for this one analysis. Gyeol's server doesn't save or log your photo.</li>
+          <li>Anthropic doesn't use it to train AI models and deletes it within 30 days, unless its usage policy or the law requires keeping it longer.</li>
+          <li>Your result (your season) is saved only in this browser, so your looks stay matched to you.</li>
+        </ul>
+      </details>
+    </div>
+    <div class="alt" id="althead"><h3>Prefer a quick quiz?</h3><p>Answer 4 simple questions instead.</p></div>
+    <div class="quiz" id="quiz" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="rescard" id="result" hidden aria-live="polite"></section>
+
+  <div class="filters" id="filters" role="group" aria-label="Filter looks by personal color"></div>
+
+  <section class="main">
+    <div class="shelf" id="shelf"></div>
+    <article class="sheet" id="sheet"></article>
+  </section>
+
+  <footer>Gyeol beta. Selfie photos are analyzed once and never stored by Gyeol. Some shop links are affiliate links, so Gyeol may earn a commission at no extra cost to you. Product picks are editorial suggestions, not sponsored.</footer>
+</div>
+
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="bag" id="bag" hidden aria-label="Shopping list">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h2 style="font-size:22px">Shopping list</h2>
+    <button class="x" id="bagclose" type="button" aria-label="Close shopping list" style="background:none;border:0;font-size:22px;color:var(--muted)">×</button>
+  </div>
+  <ul id="baglist"></ul>
+  <button class="primary" id="copybag" type="button">Copy list</button>
+  <div class="note" id="copynote">Copies product names so you can paste them into a note or message.</div>
+</aside>
+
+<script>
+const SEASONS={
+  spring:{mk:["Peach or coral blush","Clear coral or apricot lip tint","Light warm brown or peach eyeshadow"],en:"Spring Warm",ko:"봄웜",tag:"Bright & Warm",sc:"#cf6340",sw:["#f6c9a8","#f39a7c","#ffb07a"],desc:"Bright, warm, clear. Peach, coral and apricot make your skin glow.",
+    consult:"Your coloring is warm and clear, so fresh, light shades bring your skin to life. Reach for peach, coral and apricot, and keep heavy dark tones away from your face.",
+    best:[["#f4a582","Peach"],["#f27d68","Coral"],["#ffc36b","Warm yellow"],["#9fd18b","Fresh green"],["#d6a77a","Camel"]],skip:[["#2b2b2b","Black"],["#8a7f9e","Grey lavender"],["#7e2638","Deep burgundy"]]},
+  summer:{mk:["Cool pink or mauve blush","Rose or MLBB berry lip tint","Rosy taupe eyeshadow"],en:"Summer Cool",ko:"여름쿨",tag:"Soft & Cool",sc:"#b0577f",sw:["#f2c6d3","#d98aa6","#b9a7d6"],desc:"Soft, cool, airy. Rose, lavender-pink and MLBB berry look natural on you.",
+    consult:"Your coloring is cool and soft. Muted rose, lavender-pink and berry tones blend into your skin naturally, while orange and golden shades can make you look tired.",
+    best:[["#f2c6d3","Baby pink"],["#d98aa6","Rose"],["#b9a7d6","Lavender"],["#9fb8d9","Powder blue"],["#b5636f","Fig rose"]],skip:[["#e46f2a","Orange"],["#c9a227","Mustard"],["#5a3a1e","Dark brown"]]},
+  autumn:{mk:["Warm peach-brown blush","Muted brick or fig lipstick","Soft brown eyeshadow"],en:"Autumn Warm",ko:"가을웜",tag:"Muted & Warm",sc:"#a9552f",sw:["#c98b5f","#a5523a","#7b5a3c"],desc:"Deep, warm, muted. Brick, fig, camel and brown give you depth.",
+    consult:"Your coloring is warm, deep and soft. Earthy brick, fig and brown shades give you depth, while icy pastels can wash you out.",
+    best:[["#a5523a","Brick"],["#a3432f","Terracotta"],["#c98b5f","Peach brown"],["#b8a06a","Olive gold"],["#7b5a3c","Chocolate"]],skip:[["#f2c6d3","Icy pink"],["#9fb8d9","Pastel blue"],["#f4f4f8","Stark white"]]},
+  winter:{mk:["Barely-there cool pink blush","Clear berry or wine lip","Cool shimmer with a sharp liner"],en:"Winter Cool",ko:"겨울쿨",tag:"Clear & Cool",sc:"#7a4fb0",sw:["#2b1b3a","#a3164a","#e9e6f2"],desc:"High contrast and cool. Clear berry, burgundy and crisp tones suit you.",
+    consult:"Your coloring is cool with strong contrast. Clear, saturated shades like berry and wine look crisp on you, while muted beige and peach can look flat.",
+    best:[["#8e1b3b","Wine"],["#a3164a","Berry"],["#1f2a5a","Navy"],["#e9e6f2","Icy white"],["#2b1b3a","Black plum"]],skip:[["#f4a582","Peach"],["#d6a77a","Camel"],["#b8a06a","Olive"]]}
+};
+const Q=[
+  {q:"Look at the veins on your inner wrist. They look mostly…",o:[["Green or olive","w"],["Blue or purple","c"]]},
+  {q:"Which jewelry makes your skin look brighter?",o:[["Gold","w"],["Silver","c"]]},
+  {q:"Your hair and eyes compared to your skin are…",o:[["Soft, low contrast","l"],["Dark, high contrast","d"]]},
+  {q:"Which lip color gets you the most compliments?",o:[["Light: peach, rosy pink","l"],["Deep: brick, berry, wine","d"]]}
+];
+/* Affiliate tags: fill in once approved (e.g. amazon: "gyeol-20"). Links work without them. */
+const AFF={amazon:"",yesstyle:""};
+const amz=q=>"https://www.amazon.com/s?k="+encodeURIComponent(q)+(AFF.amazon?"&tag="+encodeURIComponent(AFF.amazon):"");
+const ys=q=>"https://www.yesstyle.com/en/list.html?q="+encodeURIComponent(q)+(AFF.yesstyle?"&rco="+encodeURIComponent(AFF.yesstyle):"");
+const ggl=q=>"https://www.google.com/search?tbm=shop&q="+encodeURIComponent(q);
+/* s = official shade name; fam:true = shade depends on the person, so we name a shade family instead */
+const P={
+  snail:{b:"COSRX",n:"Advanced Snail 96 Mucin Power Essence",c:"#f1ece2"},
+  torriden:{b:"Torriden",n:"DIVE-IN Low Molecular Hyaluronic Acid Serum",c:"#d9ebf3"},
+  boj:{b:"Beauty of Joseon",n:"Relief Sun: Rice + Probiotics SPF50+",c:"#f4ead2"},
+  laneigeCushion:{b:"Laneige",n:"Neo Cushion Glow",s:"match your skin with the store's shade finder",fam:true,c:"#efcfb6"},
+  clio:{b:"CLIO",n:"Kill Cover The New Founwear Cushion",s:"match your skin with the store's shade finder",fam:true,c:"#e9c6aa"},
+  hera:{b:"HERA",n:"Black Cushion Foundation",s:"match your skin with the store's shade finder",fam:true,c:"#e3c0a5"},
+  lipbalm:{b:"Laneige",n:"Lip Glowy Balm",c:"#f5b8c4"},
+  jujube:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#05 Jujube",c:"#e0705c"},
+  peachme:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#23 Peach Peach Me",c:"#e98f78"},
+  figfig:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#04 Fig Fig",c:"#b5636f"},
+  almondrose:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#14 Almond Rose",c:"#b97a7c"},
+  snowstraw:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#28 Snow Strawberry",c:"#e27a8e"},
+  joseonfig:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#29 Joseon Fig",c:"#a2626a"},
+  plumcoke:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#16 Plum Coke",c:"#7e2638"},
+  eatdotori:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#13 Eat Dotori",c:"#9c3f2c"},
+  goodbrick:{b:"Peripera",n:"Ink the Velvet",s:"01 Good Brick",c:"#a3432f"},
+  celebrose:{b:"Peripera",n:"Ink the Velvet",s:"02 Celeb Deep Rose",c:"#a8475a"},
+  vitcoral:{b:"Peripera",n:"Ink the Velvet",s:"04 Vitality Coral",c:"#ec7a63"},
+  amuse:{b:"AMUSE",n:"Dew Tint",s:"a coral or rose shade for your season",fam:true,c:"#e46f7c"},
+  btPampas:{b:"rom&nd",n:"Better Than Palette",s:"01 Pampas Garden",c:"#c3a48c"},
+  btMahogany:{b:"rom&nd",n:"Better Than Palette",s:"02 Mahogany Garden",c:"#8a4a3a"},
+  btDusty:{b:"rom&nd",n:"Better Than Palette",s:"04 Dusty Fog Garden",c:"#9c8a86"},
+  btBerry:{b:"rom&nd",n:"Better Than Palette",s:"07 Berry Fuchsia Garden",c:"#8f3a5c"},
+  btPeach:{b:"rom&nd",n:"Better Than Palette",s:"08 Peach Dahlia Garden",c:"#e3a08a"},
+  btGlitter:{b:"rom&nd",n:"Better Than Palette",s:"00 Light & Glitter Garden",c:"#efdccb"},
+  rosemilktea:{b:"dasique",n:"Shadow Palette",s:"27 Rose Milk Tea",c:"#b88a8c"},
+  etudeBrow:{b:"ETUDE",n:"Drawing Eye Brow pencil",s:"a soft brown",fam:true,c:"#6b5040"},
+  liner:{b:"CLIO",n:"Sharp, So Simple Waterproof Pencil Liner",s:"brown",fam:true,c:"#5a3a2e"},
+  peripBlush:{b:"Peripera",n:"Pure Blushed Sunshine Cheek",s:"a peach or coral shade",fam:true,c:"#f4a79a"},
+  dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"}
+};
+const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
+const shadeLine=p=>p.s?(p.fam?`<div class="shade">Shade: ${esc(p.s)}</div>`:`<div class="shade">Shade <b>${esc(p.s)}</b></div>`):"";
+const LOOKS=[
+  {id:"glass",en:"Glass Skin",ko:"물광 메이크업",tones:["spring","summer","autumn","winter"],cmp:["#f6e7dc","#f9d3d0","#f2b3b8"],
+   desc:"Skin that looks lit from within. Thin layers of hydration under a dewy cushion, with almost no color on top.",
+   steps:[["Prep","스킨케어",["snail","torriden"],"Pat in, don't rub. Two thin layers beat one thick one."],
+          ["Sun","선크림",["boj"],"Wait 3 minutes before base so the cushion doesn't pill."],
+          ["Base","베이스",["laneigeCushion"],"Press with the puff only where you need coverage: center of face, around the nose."],
+          ["Lips","립",["lipbalm"],"Sheer and glossy, so the skin stays the focus."]],
+   tip:"Skip powder entirely. If you get oily, blot the T-zone with a tissue instead."},
+  {id:"peach",en:"Peach Coral Daily",ko:"피치 코랄 데일리",tones:["spring"],cmp:["#f8dcc8","#f7a58a","#e0705c"],
+   desc:"The everyday Seoul office look for warm, bright skin. Juicy coral lips and a sunlit peach cheek.",
+   steps:[["Base","베이스",["clio"],"Thin first layer, then spot-conceal with the same puff."],
+          ["Eyes","아이",["btPeach"],"Sweep the lightest shade over the lid and a peach shade along the lower lash line."],
+          ["Cheeks","블러셔",["peripBlush"],"Tap it high on the apples, blended toward the ears."],
+          ["Lips","립",["jujube","vitcoral"],"Jujube for a glossy tint, Vitality Coral for soft matte. Apply to the inner lips, then blur outward."]],
+   tip:"If coral reads orange on you, you may be closer to Summer Cool. Try the MLBB Rose look."},
+  {id:"mlbb",en:"MLBB Rose",ko:"엠엘비비 로즈",tones:["summer"],cmp:["#f4dde3","#d89aac","#b5636f"],
+   desc:"My-lips-but-better rose with a soft cool flush. Quiet, polished, and easy to wear daily.",
+   steps:[["Base","베이스",["laneigeCushion"],"Keep it luminous; cool tones look grey under a matte base."],
+          ["Eyes","아이",["rosemilktea"],"Use the rosy-taupe shades. Avoid orange-browns."],
+          ["Cheeks","블러셔",["dasiqueBlush"],"A cool pink, placed slightly lower and closer to the nose."],
+          ["Lips","립",["figfig","almondrose"],"Fig Fig for a cool rose, Almond Rose for a dustier nude. Full lip, then press with a tissue."]],
+   tip:"Silver accessories finish this look better than gold."},
+  {id:"gradient",en:"Blurred Gradient Lip",ko:"그라데이션 립",tones:["spring","summer"],cmp:["#f8e4df","#f3a7a5","#e27a8e"],
+   desc:"The signature K-beauty lip. Strong color at the center fading to bare edges, like you just ate a popsicle.",
+   steps:[["Prep","립 베이스",["lipbalm"],"Balm first, then blot so the tint grips."],
+          ["Base","입술 커버",["clio"],"Press a little cushion over the lip line to soften the edges."],
+          ["Lips","립",["vitcoral","snowstraw","amuse"],"Dot tint on the inner lip, press lips together, blur with a fingertip."]],
+   tip:"Spring Warm: Vitality Coral. Summer Cool: Snow Strawberry. Want it extra juicy? Layer Dew Tint on top."},
+  {id:"fig",en:"Fig & Brick",ko:"무화과 브릭",tones:["autumn"],cmp:["#e9cdb2","#b9724e","#a3432f"],
+   desc:"Warm, deep and a little moody. Brick lips and brown smudged eyes for autumn-warm coloring.",
+   steps:[["Base","베이스",["hera"],"A semi-matte cushion keeps deep warm tones crisp."],
+          ["Eyes","아이",["btMahogany","liner"],"Smudge brown liner along the upper lash line, then set it with the deepest brown in the palette."],
+          ["Brows","눈썹",["etudeBrow"],"Fill in with soft strokes, keeping the front light."],
+          ["Lips","립",["goodbrick","eatdotori"],"Good Brick for soft matte, Eat Dotori for a glossy brick. Full lip, blotted once."]],
+   tip:"Terracotta or camel knits complete the look."},
+  {id:"taupe",en:"Mute Taupe",ko:"뮤트 토프",tones:["summer","autumn"],cmp:["#e8ddd6","#b8a49a","#a2626a"],
+   desc:"Soft greyed browns for muted, low-contrast coloring. Understated and very wearable at work.",
+   steps:[["Base","베이스",["clio"],"Natural finish. Set only the T-zone."],
+          ["Eyes","아이",["btDusty"],"Wash the taupe shade over the lid, deepen the outer third."],
+          ["Cheeks","블러셔",["dasiqueBlush"],"Barely there. You should not see where it starts."],
+          ["Lips","립",["joseonfig"],"A muted fig rose keeps the look soft without going flat."]],
+   tip:"Works for both Summer and Autumn because it's muted, not strongly warm or cool."},
+  {id:"berry",en:"Berry Glam",ko:"버건디 글램",tones:["winter"],cmp:["#efe6ec","#8f3a5c","#7e2638"],
+   desc:"Clear, deep berry against crisp skin. Built for high-contrast winter-cool coloring.",
+   steps:[["Base","베이스",["hera"],"Even, smooth coverage. Winter tones carry a cleaner base."],
+          ["Eyes","아이",["btBerry","liner"],"A thin sharp liner and the berry shimmer on the center of the lid."],
+          ["Lips","립",["plumcoke","celebrose"],"Plum Coke for deep berry, Celeb Deep Rose for a softer day version. Define the edge cleanly."]],
+   tip:"Keep cheeks almost bare so the lip leads."},
+  {id:"aegyo",en:"Aegyo-sal Sparkle",ko:"애교살 메이크업",tones:["spring","summer","autumn","winter"],cmp:["#f7ebe2","#efdccb","#f5b8c4"],
+   desc:"Highlights the soft puffy area under the eyes for a bright, youthful look. Works with any tone.",
+   steps:[["Base","베이스",["laneigeCushion"],"Keep under-eyes lightly covered so the glitter sits smooth."],
+          ["Eyes","아이",["btGlitter"],"Glitter along the under-eye puff, then a faint matte brown just beneath it."],
+          ["Lips","립",["lipbalm"],"A sheer balm keeps the eyes as the focus."]],
+   tip:"Smile while applying to find exactly where your aegyo-sal sits."}
+];
+
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+             set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let state={season:store.get("gy-season",null),filter:null,look:"glass",answers:[],bag:store.get("gy-bag",[])};
+state.bag=state.bag.filter(id=>P[id]);
+state.ai=store.get("gy-ai",null);
+state.filter=state.season||"all";
+if(state.season){const f=LOOKS.find(l=>l.tones.includes(state.season)&&l.tones.length<4);if(f)state.look=f.id}
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function score(a){const warm=a[0]+a[1],light=a[2]+a[3];
+  const w=[...warm].filter(x=>x==="w").length>=1&&warm!=="cc"?(warm==="ww"?true:null):false;
+  const isWarm=warm==="ww"?true:warm==="cc"?false:a[3]==="l"?a[1]==="w":a[0]==="w";
+  const isLight=[...light].filter(x=>x==="l").length>=1&&light!=="dd"?(light==="ll"?true:a[2]==="l"):false;
+  return isWarm?(isLight?"spring":"autumn"):(isLight?"summer":"winter")}
+
+function renderQuiz(){
+  const el=$("quiz");$("althead").hidden=!!state.season;
+  if(!state.quizOpen){el.classList.add("collapsed");
+    el.innerHTML=`<button class="quizopen" id="quizopen" type="button"><span>${state.season?"Retake the 4-question check":"Start the 4-question check"}</span><span aria-hidden="true">→</span></button>`;
+    $("quizopen").onclick=()=>{state.quizOpen=true;state.answers=[];renderQuiz()};return}
+  el.classList.remove("collapsed");
+  const i=state.answers.length,q=Q[i];
+  el.innerHTML=`<div class="qhead"><span class="label">Personal color check · ${i+1} of 4</span><div class="dots">${Q.map((_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div></div>
+    <div class="q">${q.q}</div><div class="opts">${q.o.map((o,k)=>`<button class="opt" type="button" data-k="${k}">${o[0]}</button>`).join("")}</div>
+    <div style="margin-top:12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="note">Already know your season? Pick it in the filters below.</span><button class="linkbtn" id="quizcancel" type="button">Cancel</button></div>`;
+  $("quizcancel").onclick=()=>{state.quizOpen=false;state.answers=[];renderQuiz()};
+  el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    state.answers.push(q.o[+b.dataset.k][1]);
+    if(state.answers.length===4){state.season=score(state.answers);state.answers=[];state.quizOpen=false;state.ai=null;store.set("gy-ai",null);
+      store.set("gy-season",state.season);state.filter=state.season;track.season(state.season,"quiz");
+      const f=LOOKS.find(l=>l.tones.includes(state.season)&&l.tones.length<4);if(f)state.look=f.id;renderAll();showResult()}
+    else renderQuiz()})}
+
+const cap=x=>String(x||"").charAt(0).toUpperCase()+String(x||"").slice(1);
+function showResult(){const el=$("result");if(el.hidden)return;
+  el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})}
+function renderResult(){const el=$("result");
+  if(!state.season){el.hidden=true;return}el.hidden=false;
+  const s=SEASONS[state.season],ai=state.ai&&state.ai.season===state.season&&state.ai.why?state.ai:null;
+  const recs=LOOKS.filter(l=>l.tones.includes(state.season)).sort((a,b)=>a.tones.length-b.tones.length).slice(0,3);
+  const conf=ai?`<span class="conf c-${esc(ai.confidence)}">${esc(cap(ai.confidence))} confidence</span>`:`<span class="conf">From the 4-question check</span>`;
+  el.innerHTML=`<div class="reshead"><div class="label">Your personal color result</div>
+      <h2 class="season" style="color:${s.sc}">${s.en}</h2>
+      <div class="resub"><span class="ko">${s.ko}</span><span>·</span><span>${s.tag}</span>${conf}</div></div>
+    <div class="resgrid">
+      <div class="rcol">
+        <p class="consult">${esc(ai&&ai.note?ai.note:s.consult)}</p>
+        ${ai&&ai.obs.length?`<div class="seen"><div class="label">What we noticed</div><ul>${ai.obs.map(o=>`<li>${esc(o)}</li>`).join("")}</ul></div>`:""}
+        ${ai?`<div class="why"><div class="label">Why ${esc(ai.confidence)} confidence</div><ul>${(ai.why||[]).map(w=>`<li>${esc(w)}</li>`).join("")}</ul></div>`:""}
+        <h3 class="rh">Your best colors</h3>
+        <div class="pal">${s.best.map(([c,n])=>`<div><i style="background:${c}"></i><span>${n}</span></div>`).join("")}</div>
+        <h3 class="rh">Avoid or use sparingly</h3>
+        <div class="pal avoid">${s.skip.map(([c,n])=>`<div><i style="background:${c}"></i><span>${n}</span></div>`).join("")}</div>
+      </div>
+      <div class="rcol">
+        <h3 class="rh">Recommended makeup</h3>
+        <ul class="mk">${s.mk.map(m=>`<li>${m}</li>`).join("")}</ul>
+        <h3 class="rh">Looks made for you</h3>
+        <div class="reclooks">${recs.map(l=>`<button class="reclook" type="button" data-id="${l.id}"><div class="compact">${compact(l.cmp)}</div><b>${l.en}</b><span class="ko">${l.ko}</span></button>`).join("")}</div>
+        <div class="resacts"><button class="primary" id="buildlist" type="button">Build my shopping list</button><button class="bagbtn" id="explore" type="button">Explore Korean makeup products ↓</button></div>
+        <div class="note" id="buildnote" aria-live="polite"></div>
+      </div>
+    </div>
+    ${ai&&ai.confidence==="high"?"":`<div class="improve"><div><h3 class="rh" style="margin:0 0 4px">${ai?"Improve your result":"Get a more accurate result"}</h3>
+      <p>${ai?"Upload a front-facing photo in natural daylight, without filters or heavy makeup, to improve your color analysis.":"The quiz gives a rough estimate. A selfie lets the AI read your actual skin tone, eyes and hair."}</p></div>
+      <button class="primary" id="retryphoto" type="button">${ai?"Retake My Photo":"Analyze a selfie"}</button></div>`}
+    <div class="resfoot">${ai&&ai.confidence==="high"?`<button class="linkbtn" id="retryphoto" type="button">Try another photo</button>`:""}<button class="linkbtn" id="retakequiz" type="button">Take the 4-question check</button></div>`;
+  el.querySelectorAll(".reclook").forEach(b=>b.onclick=()=>{state.look=b.dataset.id;state.filter=state.season;track.look(state.look);renderFilters();renderShelf();renderSheet();
+    $("sheet").scrollIntoView({behavior:"smooth",block:"start"})});
+  $("explore").onclick=()=>$("filters").scrollIntoView({behavior:"smooth",block:"start"});
+  $("buildlist").onclick=()=>{const ids=[];recs.forEach(l=>l.steps.forEach(st=>st[2].forEach(id=>{if(!ids.includes(id))ids.push(id)})));
+    const fresh=ids.filter(id=>!state.bag.includes(id));fresh.forEach(id=>track.add(id));
+    state.bag=state.bag.concat(fresh);store.set("gy-bag",state.bag);renderBag();renderSheet();
+    $("buildnote").textContent=fresh.length?`Added ${fresh.length} product${fresh.length===1?"":"s"} from your ${recs.length} looks.`:"Everything from your looks is already on your list.";openBag(true)};
+  $("retryphoto").onclick=()=>{$("selfie").scrollIntoView({behavior:"smooth",block:"start"});$("selfiefile").click()};
+  $("retakequiz").onclick=()=>{state.quizOpen=true;state.answers=[];renderQuiz();$("quiz").scrollIntoView({behavior:"smooth",block:"center"})}}
+
+function renderFilters(){
+  const opts=[["all","All looks",""]].concat(Object.entries(SEASONS).map(([k,s])=>[k,s.en,s.ko]));
+  $("filters").innerHTML=`<span class="label" style="margin-right:4px">Show</span>`+opts.map(([k,en,ko])=>
+    `<button class="chip" type="button" data-f="${k}" aria-pressed="${state.filter===k}">${en}${ko?` <span class="ko">${ko}</span>`:""}${k===state.season?" ·  you":""}</button>`).join("");
+  $("filters").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{state.filter=b.dataset.f;
+    if(state.filter==="all"&&state.season===null&&false){}
+    if(state.season===null&&state.filter!=="all"&&state.answers.length===0){state.season=state.filter;store.set("gy-season",state.season);track.season(state.season,"picked")}
+    renderAll()})}
+
+function compact(c){return `<b style="width:62%;height:100%;left:-6%;top:12%;background:radial-gradient(circle at 40% 40%,${c[0]},transparent 70%)"></b>
+  <b style="width:48%;height:78%;left:34%;top:-14%;background:radial-gradient(circle at 50% 50%,${c[1]},transparent 70%)"></b>
+  <b style="width:44%;height:70%;left:58%;top:40%;background:radial-gradient(circle at 50% 50%,${c[2]} 20%,transparent 72%)"></b>`}
+
+function renderShelf(){
+  const list=LOOKS.filter(l=>state.filter==="all"||l.tones.includes(state.filter));
+  if(!list.find(l=>l.id===state.look)&&list[0])state.look=list[0].id;
+  $("shelf").innerHTML=list.length?list.map(l=>{
+    const all=l.tones.length===4;
+    return `<button class="card" type="button" data-id="${l.id}" aria-current="${l.id===state.look}">
+      <div class="compact">${compact(l.cmp)}</div>
+      <div><h3>${l.en}</h3><div class="ko">${l.ko}</div></div>
+      <div class="tags">${all?`<span class="tag${state.season?" match":""}">All tones</span>`:l.tones.map(t=>`<span class="tag${t===state.season?" match":""}">${SEASONS[t].en}</span>`).join("")}</div></button>`}).join("")
+    :`<div class="empty">No looks for this tone yet.</div>`;
+  $("shelf").querySelectorAll(".card").forEach(b=>b.onclick=()=>{state.look=b.dataset.id;track.look(state.look);renderShelf();renderSheet();
+    if(matchMedia("(max-width:860px)").matches)$("sheet").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})})}
+
+function renderSheet(){
+  const l=LOOKS.find(x=>x.id===state.look);if(!l)return;
+  const fit=state.season?(l.tones.includes(state.season)?`<span class="tag match">Matches your ${SEASONS[state.season].en}</span>`:`<span class="tag">Not your best match</span>`):"";
+  $("sheet").innerHTML=`<div class="hero"><div class="compact">${compact(l.cmp)}</div>
+    <div style="min-width:0"><h2>${l.en}</h2><div class="sub">${l.ko}</div>${fit?`<div class="tags" style="margin-top:8px">${fit}</div>`:""}</div></div>
+    <p class="desc">${l.desc}</p>
+    <ol class="steps">${l.steps.map((s,i)=>`<li class="step"><div class="num">STEP ${String(i+1).padStart(2,"0")}</div><div style="min-width:0">
+      <div class="stepname">${s[0]} <span class="ko">${s[1]}</span></div>
+      ${s[2].map(pid=>{const p=P[pid],q=pq(p),on=state.bag.includes(pid);
+        return `<div class="prod"><span class="dot" style="background:${p.c}"></span><div style="min-width:0">
+          <div class="pname">${esc(p.n)}</div><div class="pbrand">${esc(p.b)}</div>${shadeLine(p)}
+          <div class="shop"><a href="${amz(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="amazon">Amazon ↗</a><a href="${ys(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div></div>
+          <button class="add" type="button" data-p="${pid}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div>`}).join("")}
+      <div class="why">${s[3]}</div></div></li>`).join("")}</ol>
+    <div class="tip"><b>Tip.</b> ${l.tip}</div>`;
+  $("sheet").querySelectorAll(".shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,l.id,a.dataset.s)));
+  $("sheet").querySelectorAll(".add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;
+    if(!state.bag.includes(id))track.add(id);
+    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderSheet();renderBag()})}
+
+function renderBag(){
+  $("bagcount").textContent=state.bag.length;
+  $("baglist").innerHTML=state.bag.length?state.bag.map(id=>{const p=P[id];return `<li><span class="dot" style="background:${p.c}"></span>
+    <div style="min-width:0"><div class="pname">${esc(p.n)}${p.s&&!p.fam?" · "+esc(p.s):""}</div><div class="pbrand">${esc(p.b)} · <a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon" class="bagshop" style="color:var(--accent)">Shop ↗</a></div></div>
+    <button class="x" type="button" data-p="${id}" aria-label="Remove ${esc(p.n)}">×</button></li>`}).join("")
+    :`<li style="display:block;border:0;color:var(--muted)">Nothing here yet. Tap “+ Add” on any product in a look.</li>`;
+  $("baglist").querySelectorAll(".bagshop").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,null,"amazon")));
+  $("baglist").querySelectorAll(".x").forEach(b=>b.onclick=()=>{state.bag=state.bag.filter(x=>x!==b.dataset.p);store.set("gy-bag",state.bag);renderBag();renderSheet()})}
+
+function openBag(o){$("bag").hidden=!o;$("scrim").hidden=!o}
+$("bagbtn").onclick=()=>openBag(true);$("bagclose").onclick=()=>openBag(false);$("scrim").onclick=()=>openBag(false);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")openBag(false)});
+$("copybag").onclick=()=>{const txt=state.bag.map(id=>"• "+pq(P[id])).join("\n")||"(empty)";
+  const done=()=>$("copynote").textContent="Copied.";
+  navigator.clipboard?.writeText(txt).then(done).catch(()=>{$("copynote").textContent=txt})||($("copynote").textContent=txt)};
+
+/* AI selfie analysis: resize in the browser, send to /api/analyze (which calls the Claude API) */
+let selfieBlob=null,aiCtl=null;const maxBytes=25e6;
+function toJpeg(blob){return new Promise((ok,no)=>{const url=URL.createObjectURL(blob),img=new Image();
+  img.onload=()=>{try{const sc=Math.min(1,1024/Math.max(img.naturalWidth,img.naturalHeight));const c=document.createElement("canvas");
+    c.width=Math.max(1,Math.round(img.naturalWidth*sc));c.height=Math.max(1,Math.round(img.naturalHeight*sc));
+    c.getContext("2d").drawImage(img,0,0,c.width,c.height);ok(c.toDataURL("image/jpeg",0.86).split(",")[1])}catch(e){no({code:"image_rejected"})}finally{URL.revokeObjectURL(url)}};
+  img.onerror=()=>{URL.revokeObjectURL(url);no({code:"image_rejected"})};img.src=url})}
+async function analyzeImage(blob,signal){const image=await toJpeg(blob);
+  let res;try{res=await fetch("/api/analyze",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({image}),signal})}
+  catch(e){throw {code:e&&e.name==="AbortError"?"cancelled":"upstream_error"}}
+  const j=await res.json().catch(()=>null);
+  if(!res.ok)throw {code:(j&&j.code)||({429:"rate_limited",413:"image_rejected",400:"image_rejected",422:"refused"}[res.status])||"upstream_error"};
+  return j}
+$("selfiefile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
+  if(f.size>maxBytes){$("aiout").innerHTML=`<div class="err">That photo is too large. Try a smaller one or a screenshot of it.</div>`;return}
+  selfieBlob=f;const img=$("selfieimg");img.src=URL.createObjectURL(f);img.hidden=false;$("dropcopy").hidden=true;
+  $("aiout").innerHTML="";$("changephoto").hidden=false;$("analyze").click()};
+$("changephoto").onclick=()=>$("selfiefile").click();
+/* The analysis prompt lives on the server: api/analyze.js */
+/* Confidence is computed here from the checks, not taken from the model's say-so. */
+const LIGHT={daylight:["Natural daylight",0],warm_cast:["Warm, yellow-tinted light",22,"The light has a warm, yellow tint, which can make anyone look warmer."],
+  cool_cast:["Cool, blue-tinted light",22,"The light has a cool, blue tint, which can make anyone look cooler."],dim:["Dim light",15,"The photo is a little dark."],
+  harsh:["Harsh light and shadows",10,"Strong shadows hide part of your skin tone."],too_dark:["Too dark to read skin tone",100],filtered:["Filter or heavy editing",100]};
+function assess(r){const L=LIGHT[r.lighting]||["Unclear lighting",15,"The lighting is hard to read."];
+  const gate=[];
+  if(!r.face_ok)gate.push(r.face_note||"Make sure your whole face is in frame, facing the camera, and in focus.");
+  if(r.lighting==="too_dark")gate.push("The photo is too dark to read your skin tone. Face a window in daylight.");
+  if(r.lighting==="filtered")gate.push("This photo looks filtered or edited, which changes skin color. Use an unedited photo from your camera.");
+  if(r.face_ok&&!r.skin_visible)gate.push("Your cheeks need to be clearly visible. Move hair or hands away from your face.");
+  if(!gate.length&&!SEASONS[r.season])gate.push("We couldn't read your coloring clearly from this photo. Try another one in daylight.");
+  let score=Math.max(0,Math.min(100,Number(r.fit)||0));const why=[];
+  if(L[1]&&L[1]<100){score-=L[1];why.push(L[2])}
+  if(r.eyes_visible===false){score-=12;why.push("Your eye color wasn't clear, so it wasn't used.")}
+  if(r.hair_visible===false){score-=10;why.push("Your natural hair wasn't visible, so it wasn't used.")}
+  if(r.heavy_makeup){score-=15;why.push("Makeup may be changing how your skin tone reads.")}
+  if(r.lighting==="daylight"&&r.eyes_visible!==false&&r.hair_visible!==false&&!r.heavy_makeup)why.unshift("Good daylight and all features visible.");
+  const confidence=score>=75?"high":score>=50?"medium":"low";
+  const checks=[
+    ["Face detected",r.face_ok?"ok":"fail",r.face_ok?"Whole face in frame":"Face not clear"],
+    ["Lighting",r.lighting==="daylight"?"ok":L[1]>=100?"fail":"warn",L[0]],
+    ["Features visible",!r.face_ok||!r.skin_visible?"fail":(r.eyes_visible===false||r.hair_visible===false)?"warn":"ok",
+      !r.face_ok?"Couldn't check without a clear face":["Skin "+(r.skin_visible?"✓":"✕"),"Eyes "+(r.eyes_visible===false?"✕":"✓"),"Hair "+(r.hair_visible===false?"✕":"✓")].join(" · ")],
+    ["Personal color result",gate.length?"fail":"ok",gate.length?"Not decided. Retake needed":SEASONS[r.season].en+" · "+cap(confidence)+" confidence"]];
+  return {gate,score:Math.max(0,score),confidence,why,checks}}
+const ICON={ok:"✓",warn:"!",fail:"✕",wait:"…"};
+function checklist(rows){return `<ol class="checks">${rows.map(([t,st,d],i)=>`<li class="ck ${st}"><span class="ci">${st==="wait"?i+1:ICON[st]}</span><div><b>${t}</b><small>${esc(d)}</small></div></li>`).join("")}</ol>`}
+
+const UNAVAIL="AI analysis isn't available right now. Use the 4-question check below for your season.";
+function aiOff(){$("aiout").innerHTML=`<div class="err">${UNAVAIL}</div>`;state.quizOpen=true;renderQuiz()}
+const ERR={not_granted:"AI analysis wasn't allowed, so it's off for now. Use the 4-question check below.",rate_limited:"Too many requests right now. Wait a minute and try again.",image_rejected:"That photo couldn't be read. Try a JPG or PNG under 25 MB.",upstream_error:"The analysis couldn't finish. Check your connection and tap Analyze to try again.",refused:"We couldn't analyze this photo. Try a clear, front-facing selfie.",invalid_json:"The result came back garbled. Tap Analyze to try again.",session_expired:"Your session expired. Sign in again, then retry."};
+const hex=c=>/^#[0-9a-f]{3,8}$/i.test(String(c))?c:null;
+$("stopai").onclick=()=>aiCtl&&aiCtl.abort();
+$("analyze").onclick=async()=>{if(!selfieBlob){$("selfiefile").click();return}
+  aiCtl=new AbortController();$("analyze").disabled=true;$("stopai").hidden=false;
+  $("aiout").innerHTML=checklist([["Face detected","wait","Checking…"],["Lighting","wait","Checking…"],["Features visible","wait","Skin, eyes and hair"],["Personal color result","wait","Up to a minute"]]);
+  try{const r=await analyzeImage(selfieBlob,aiCtl.signal);
+    const A=assess(r||{});
+    if(A.gate.length){$("aiout").innerHTML=checklist(A.checks)+`<div class="retake"><b>Let's try another photo</b><ul>${A.gate.map(g=>`<li>${esc(g)}</li>`).join("")}</ul><button class="primary sm" type="button" id="retakenow">Retake My Photo</button></div>`;
+      $("retakenow").onclick=()=>$("selfiefile").click();return}
+    const o=r.observations||{};const obs=[["Skin",o.skin],["Eyes",r.eyes_visible===false?null:o.eyes],["Hair",r.hair_visible===false?null:o.hair]].filter(x=>x[1]&&x[1]!=="null").map(([k,v])=>k+": "+String(v));
+    state.ai={season:r.season,confidence:A.confidence,score:A.score,why:A.why,obs,note:String(r.consultant_note||"")};
+    store.set("gy-ai",state.ai);
+    state.season=r.season;state.answers=[];state.quizOpen=false;store.set("gy-season",r.season);state.filter=r.season;track.season(r.season,"selfie");
+    const f=LOOKS.find(l=>l.tones.includes(r.season)&&l.tones.length<4);if(f)state.look=f.id;
+    $("aiout").innerHTML=checklist(A.checks)+`<div class="okline">Your result is ready ↓</div>`;
+    renderAll();showResult();
+
+  }catch(e){const c=e&&e.code;
+    if(c==="cancelled"){$("aiout").innerHTML=""}
+    else if(c==="not_granted"){$("aiout").innerHTML=`<div class="err">${ERR.not_granted}</div>`;state.quizOpen=true;renderQuiz()}
+    else if(["sampling_disabled","images_unavailable","not_declared","capability_disabled","capability_removed"].includes(c)){aiOff()}
+    else $("aiout").innerHTML=`<div class="err">${ERR[c]||"Something went wrong. Tap Analyze to try again."}</div>`}
+  finally{$("analyze").disabled=false;$("stopai").hidden=true}};
+
+/* ---------- Tracking: sends events to PostHog when it is loaded on the page; otherwise does nothing ---------- */
+const send=(name,props)=>{try{window.posthog&&window.posthog.capture(name,props)}catch(e){}};
+const track={
+  season(s,src){send("season_set",{season:s,source:src})},
+  look(id){send("look_open",{look:id,season:state.season})},
+  add(pid){send("product_add",{product:pid,brand:P[pid]&&P[pid].b,shade:P[pid]&&P[pid].s,season:state.season})},
+  click(pid,look,via){send("shop_click",{product:pid,brand:P[pid]&&P[pid].b,shade:P[pid]&&P[pid].s,look,store:via,season:state.season})}
+};
+
+function renderAll(){renderResult();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
+renderAll();
+</script>
+
+</body>
+</html>
