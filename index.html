@@ -13,7 +13,7 @@
 /* Layout: a compact quiz strip up top, then a shelf of "cushion compact" look cards beside a step-by-step product sheet */
 :root{
   --bg:#f5f1f2; --surface:#fffdfd; --sunk:#ece5e8; --line:#ddd2d7;
-  --ink:#2b1d24; --muted:#6f5d66; --accent:#a8324f; --accent-ink:#ffffff; --accent-soft:#f3dbe2;
+  --ink:#2b1d24; --muted:#6f5d66; --accent:#a8324f; --accent-ink:#ffffff; --accent-soft:#f3dbe2; --pack:#2b1d24; --tile:#ece5e8;
   --display:"Young Serif",Georgia,"Times New Roman",serif;
   --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --ko:"Gowun Batang","Apple SD Gothic Neo","Malgun Gothic",serif;
@@ -21,10 +21,10 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
-  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; color-scheme:dark}}
+  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; --pack:#0d0809; --tile:#3a2c33; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
-  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; color-scheme:dark}
+  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; --pack:#0d0809; --tile:#3a2c33; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
@@ -89,7 +89,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .num{font-family:var(--mono);font-size:12px;color:var(--muted);padding-top:3px}
 .stepname{font-weight:700;font-size:14px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
 .stepname .ko{font-weight:400;color:var(--muted);font-size:13px}
-.prod{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:start;margin-top:8px}
+.prod{display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:12px;align-items:start;margin-top:10px}
+.pimg{width:60px;height:60px;border-radius:12px;background:var(--tile);display:grid;place-items:center}
+.pimg svg{width:48px;height:48px}
+.pk{fill:var(--pack)}
 .dot{width:16px;height:16px;border-radius:50%;margin-top:3px;border:1px solid var(--line)}
 .pname{font-weight:600}.pbrand{color:var(--muted);font-size:13px}
 .why{font-size:13px;color:var(--muted);margin-top:2px}
@@ -105,7 +108,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
   padding:calc(env(safe-area-inset-top,0px) + 20px) max(20px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 20px) 20px;
   display:flex;flex-direction:column;gap:14px;box-shadow:-20px 0 40px rgba(0,0,0,.12)}
 .bag ul{list-style:none;margin:0;padding:0;overflow:auto;flex:1;display:grid;gap:10px;align-content:start}
-.bag li{display:grid;grid-template-columns:16px minmax(0,1fr) auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pimg.sm{width:40px;height:40px;border-radius:9px}.pimg.sm svg{width:32px;height:32px}
+.bag li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:start;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .bag .x{background:none;border:0;color:var(--muted);font-size:18px;line-height:1}
 .primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:12px;padding:12px;font-weight:700}
 .scrim{position:fixed;inset:0;background:rgba(20,10,15,.35);z-index:19}
@@ -236,6 +240,13 @@ details.privacy[open] summary::after{content:" ▴"}
 .improve p{margin:0;color:var(--muted);font-size:14px;max-width:60ch}
 .improve .primary{padding:13px 22px;border-radius:999px;font-size:15px;white-space:nowrap}
 @media (max-width:600px){.improve{grid-template-columns:minmax(0,1fr)}.improve .primary{width:100%}}
+.pstrip{display:grid;grid-auto-flow:column;grid-auto-columns:148px;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;margin-inline:-4px;padding-inline:4px}
+.ptile{scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--bg);display:flex;flex-direction:column;gap:2px;min-width:0}
+.ptile .pimg.lg{width:100%;height:auto;aspect-ratio:1;max-width:100%;margin-bottom:6px}
+.ptile .pimg.lg svg{width:70%;height:70%}
+.ptile .pname{font-size:13px;line-height:1.3}
+.ptact{margin-top:auto;padding-top:8px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.ptact a{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -244,6 +255,9 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
 }
 @media (max-width:420px){
   .opts{grid-template-columns:1fr}
+  .prod{grid-template-columns:60px minmax(0,1fr)}
+  .prod>.add{grid-column:2;justify-self:start;margin-top:-4px}
+  .shop{gap:4px 12px}
   .drop{flex-basis:96px;height:120px}
   .sheet{padding:18px}.sheet .hero{grid-template-columns:84px minmax(0,1fr)}.sheet h2{font-size:24px}
 }
@@ -377,6 +391,24 @@ const P={
   dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"}
 };
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
+/* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
+const TYPE={snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
+  amuse:"tint",etudeBrow:"pencil",liner:"pencil",peripBlush:"blush",dasiqueBlush:"blush",rosemilktea:"palette"};
+const ptype=id=>TYPE[id]||(/^bt/.test(id)?"palette":"tint");
+function shadeMix(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
+  const t=amt>0?255:0,a=Math.abs(amt);r=Math.round(r+(t-r)*a);g=Math.round(g+(t-g)*a);b=Math.round(b+(t-b)*a);
+  return "#"+((1<<24)|(r<<16)|(g<<8)|b).toString(16).slice(1)}
+function pack(id){const p=P[id],c=p.c,K='class="pk"',L='stroke="var(--line)" stroke-width="1"',hl='<rect x="0" y="0" width="0" height="0"/>';
+  const shapes={
+    tint:`<rect ${K} x="26" y="5" width="12" height="19" rx="2"/><rect x="22" y="23" width="20" height="35" rx="5" fill="${c}"/><rect x="26" y="28" width="3" height="24" rx="1.5" fill="#fff" opacity=".35"/>`,
+    tube:`<path d="M20 8h24l-3 40H23z" fill="${c}" ${L}/><rect x="20" y="14" width="24" height="6" fill="${shadeMix(c,-.25)}"/><rect ${K} x="23" y="47" width="18" height="11" rx="2"/>`,
+    cushion:`<circle ${K} cx="32" cy="33" r="23"/><circle cx="32" cy="33" r="16" fill="${c}"/><circle cx="26" cy="27" r="5" fill="#fff" opacity=".3"/>`,
+    palette:`<rect ${K} x="7" y="14" width="50" height="36" rx="5"/><circle cx="21" cy="26" r="7" fill="${shadeMix(c,.45)}"/><circle cx="43" cy="26" r="7" fill="${c}"/><circle cx="21" cy="39" r="7" fill="${shadeMix(c,.2)}"/><circle cx="43" cy="39" r="7" fill="${shadeMix(c,-.3)}"/>`,
+    pencil:`<g transform="rotate(35 32 32)"><rect ${K} x="29" y="3" width="6" height="46" rx="2"/><path d="M29 49h6l-3 11z" fill="${c}"/></g>`,
+    blush:`<circle ${K} cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="18" fill="${c}"/><circle cx="32" cy="32" r="9" fill="${shadeMix(c,.25)}" opacity=".7"/>`,
+    bottle:`<rect ${K} x="26" y="9" width="12" height="11" rx="2"/><rect x="18" y="20" width="28" height="38" rx="7" fill="${c}" ${L}/><rect x="22" y="32" width="20" height="12" rx="2" fill="#fff" opacity=".5"/>`,
+    dropper:`<rect ${K} x="27" y="4" width="10" height="22" rx="5"/><rect x="20" y="25" width="24" height="33" rx="5" fill="${c}" ${L}/><rect x="24" y="34" width="16" height="10" rx="2" fill="#fff" opacity=".5"/>`};
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">${shapes[ptype(id)]}</svg>`}
 const shadeLine=p=>p.s?(p.fam?`<div class="shade">Shade: ${esc(p.s)}</div>`:`<div class="shade">Shade <b>${esc(p.s)}</b></div>`):"";
 const LOOKS=[
   {id:"glass",en:"Glass Skin",ko:"물광 메이크업",tones:["spring","summer","autumn","winter"],cmp:["#f6e7dc","#f9d3d0","#f2b3b8"],
@@ -476,6 +508,8 @@ function renderResult(){const el=$("result");
   if(!state.season){el.hidden=true;return}el.hidden=false;
   const s=SEASONS[state.season],ai=state.ai&&state.ai.season===state.season&&state.ai.why?state.ai:null;
   const recs=LOOKS.filter(l=>l.tones.includes(state.season)).sort((a,b)=>a.tones.length-b.tones.length).slice(0,3);
+  const picks=[];recs.forEach(l=>l.steps.forEach(st=>{if(["Lips","Eyes","Cheeks"].includes(st[0]))st[2].forEach(id=>{if(!picks.includes(id)&&!P[id].fam)picks.push(id)})}));
+  picks.splice(6);
   const conf=ai?`<span class="conf c-${esc(ai.confidence)}">${esc(cap(ai.confidence))} confidence</span>`:`<span class="conf">From the 4-question check</span>`;
   el.innerHTML=`<div class="reshead"><div class="label">Your personal color result</div>
       <h2 class="season" style="color:${s.sc}">${s.en}</h2>
@@ -494,6 +528,12 @@ function renderResult(){const el=$("result");
       <div class="rcol">
         <h3 class="rh">Recommended makeup</h3>
         <ul class="mk">${s.mk.map(m=>`<li>${m}</li>`).join("")}</ul>
+        <h3 class="rh">Products for you</h3>
+        <div class="pstrip">${picks.map(id=>{const p=P[id],on=state.bag.includes(id);return `<div class="ptile">
+          <div class="pimg lg">${pack(id)}</div><div class="pbrand">${esc(p.b)}</div><div class="pname">${esc(p.n)}</div>
+          ${p.s&&!p.fam?`<div class="shade"><b>${esc(p.s)}</b></div>`:""}
+          <div class="ptact"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon">Shop ↗</a>
+          <button class="add" type="button" data-p="${id}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div></div>`}).join("")}</div>
         <h3 class="rh">Looks made for you</h3>
         <div class="reclooks">${recs.map(l=>`<button class="reclook" type="button" data-id="${l.id}"><div class="compact">${compact(l.cmp)}</div><b>${l.en}</b><span class="ko">${l.ko}</span></button>`).join("")}</div>
         <div class="resacts"><button class="primary" id="buildlist" type="button">Build my shopping list</button><button class="bagbtn" id="explore" type="button">Explore Korean makeup products ↓</button></div>
@@ -506,6 +546,11 @@ function renderResult(){const el=$("result");
     <div class="resfoot">${ai&&ai.confidence==="high"?`<button class="linkbtn" id="retryphoto" type="button">Try another photo</button>`:""}<button class="linkbtn" id="retakequiz" type="button">Take the 4-question check</button></div>`;
   el.querySelectorAll(".reclook").forEach(b=>b.onclick=()=>{state.look=b.dataset.id;state.filter=state.season;track.look(state.look);renderFilters();renderShelf();renderSheet();
     $("sheet").scrollIntoView({behavior:"smooth",block:"start"})});
+  el.querySelectorAll(".ptile a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,null,"amazon")));
+  el.querySelectorAll(".ptile .add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;
+    if(!state.bag.includes(id))track.add(id);
+    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);
+    const on=state.bag.includes(id);b.setAttribute("aria-pressed",on);b.textContent=on?"Added":"+ Add";renderBag();renderSheet()});
   $("explore").onclick=()=>$("filters").scrollIntoView({behavior:"smooth",block:"start"});
   $("buildlist").onclick=()=>{const ids=[];recs.forEach(l=>l.steps.forEach(st=>st[2].forEach(id=>{if(!ids.includes(id))ids.push(id)})));
     const fresh=ids.filter(id=>!state.bag.includes(id));fresh.forEach(id=>track.add(id));
@@ -549,7 +594,7 @@ function renderSheet(){
     <ol class="steps">${l.steps.map((s,i)=>`<li class="step"><div class="num">STEP ${String(i+1).padStart(2,"0")}</div><div style="min-width:0">
       <div class="stepname">${s[0]} <span class="ko">${s[1]}</span></div>
       ${s[2].map(pid=>{const p=P[pid],q=pq(p),on=state.bag.includes(pid);
-        return `<div class="prod"><span class="dot" style="background:${p.c}"></span><div style="min-width:0">
+        return `<div class="prod"><div class="pimg">${pack(pid)}</div><div style="min-width:0">
           <div class="pname">${esc(p.n)}</div><div class="pbrand">${esc(p.b)}</div>${shadeLine(p)}
           <div class="shop"><a href="${amz(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="amazon">Amazon ↗</a><a href="${ys(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">More ↗</a></div></div>
           <button class="add" type="button" data-p="${pid}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div>`}).join("")}
@@ -562,7 +607,7 @@ function renderSheet(){
 
 function renderBag(){
   $("bagcount").textContent=state.bag.length;
-  $("baglist").innerHTML=state.bag.length?state.bag.map(id=>{const p=P[id];return `<li><span class="dot" style="background:${p.c}"></span>
+  $("baglist").innerHTML=state.bag.length?state.bag.map(id=>{const p=P[id];return `<li><div class="pimg sm">${pack(id)}</div>
     <div style="min-width:0"><div class="pname">${esc(p.n)}${p.s&&!p.fam?" · "+esc(p.s):""}</div><div class="pbrand">${esc(p.b)} · <a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon" class="bagshop" style="color:var(--accent)">Shop ↗</a></div></div>
     <button class="x" type="button" data-p="${id}" aria-label="Remove ${esc(p.n)}">×</button></li>`}).join("")
     :`<li style="display:block;border:0;color:var(--muted)">Nothing here yet. Tap “+ Add” on any product in a look.</li>`;
