@@ -277,7 +277,20 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .skin{margin-top:40px;padding-top:32px;border-top:1px solid var(--line);scroll-margin-top:16px}
 .skinh{font-size:clamp(26px,4vw,36px);margin:4px 0 6px}
 .skinsub{color:var(--muted);margin:0 0 18px;max-width:60ch}
-.skinpick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px 32px;margin-bottom:22px}
+.essentials{margin-top:18px}
+.esgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.estile{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.esn{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:8px}
+.estile .pimg.lg{width:100%;height:auto;aspect-ratio:1.4;max-width:100%;margin-bottom:8px}
+.estile .pimg.lg svg{width:50%;height:70%}
+.estile .why{margin-top:4px}
+.eshow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;font-size:14px;color:var(--muted)}
+.eshow b{color:var(--ink);margin-right:4px}
+.fullr{margin-top:22px}
+.fullr summary{cursor:pointer;font-weight:600;color:var(--accent);font-size:14px}
+.fullr .routine{margin-top:16px}
+@media (max-width:640px){.esgrid{grid-template-columns:minmax(0,1fr)}.estile{display:grid;grid-template-columns:76px minmax(0,1fr);column-gap:12px}
+  .estile .esn{grid-column:1/-1}.estile .pimg.lg{grid-row:2/span 5;aspect-ratio:1;margin:0}.estile .pimg.lg svg{width:70%}.estile .ptact{grid-column:2}}
 .chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .routine{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
 .rcolumn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0}
@@ -290,7 +303,7 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .rname{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);counter-increment:r}
 .rname::before{content:counter(r) ". "}
 .rname .ko{letter-spacing:0;text-transform:none;color:var(--muted);font-weight:400}
-@media (max-width:860px){.routine{grid-template-columns:minmax(0,1fr)}.skinpick{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:860px){.routine{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:420px){.rstep{grid-template-columns:60px minmax(0,1fr)}.rstep>.add{grid-column:2;justify-self:start}}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
@@ -381,13 +394,14 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
 
   <section class="skin" id="skincare">
     <div class="label">Skincare for you</div>
-    <h2 class="skinh">Your daily Korean skincare routine</h2>
-    <p class="skinsub">Pick your skin type and what you want to work on. We'll build a simple morning and night routine.</p>
-    <div class="skinpick">
-      <div><div class="label">Skin type</div><div class="chiprow" id="sktype" role="radiogroup" aria-label="Skin type"></div></div>
-      <div><div class="label">Concerns · up to 2</div><div class="chiprow" id="skcon" role="group" aria-label="Skin concerns"></div></div>
-    </div>
-    <div class="routine" id="routine"></div>
+    <h2 class="skinh">Your 3 skincare essentials</h2>
+    <p class="skinsub">What bothers your skin most?</p>
+    <div class="chiprow" id="skcon" role="radiogroup" aria-label="Main skin concern"></div>
+    <div class="essentials" id="essentials"></div>
+    <details class="fullr" id="fullr"><summary>Want more? See a full morning and night routine</summary>
+      <div class="label" style="margin-top:14px">Skin type</div><div class="chiprow" id="sktype" role="radiogroup" aria-label="Skin type"></div>
+      <div class="routine" id="routine"></div>
+    </details>
     <p class="note" id="sknote"></p>
   </section>
 
@@ -923,35 +937,48 @@ const SKR={
   sun:{dry:["birchSun","Moisturizing SPF that layers well on dry skin."],oily:["skinSun","Watery sun serum with a light finish."],sensitive:["boj","Gentle SPF50+ that rarely stings."],combination:["boj","Lightweight SPF50+ with no white cast."]},
   night:{dryness:["sleepMask","Seal it all in overnight. Wake up plump."],aging:["sbmRetinol","Retinol for fine lines. Start 2–3 nights a week."],breakouts:["pimple","Stick on a spot overnight to flatten it."]},
   eye:{aging:["bojEye","Retinal and ginseng for fine lines around the eyes."]}};
-const skState=Object.assign({type:"combination",con:["dryness"]},store.get("gy-skin",{}));
-function skStep(name,ko,pair,when){if(!pair)return "";const [id,why]=pair,p=P[id],on=state.bag.includes(id);
+const CON_TYPE={dryness:"dry",aging:"dry",dullness:"combination",redness:"sensitive",pores:"oily",breakouts:"oily"};
+const SK_SERUM={breakouts:["centella","Calms breakouts and redness without drying you out."]};
+const SK_HOW={aging:"Morning: serum → cream → sunscreen. Night: serum → cream.",default:"Morning: serum → cream → sunscreen. Night: serum → cream."};
+const skState=(()=>{const v=store.get("gy-skin",{});const con=Array.isArray(v.con)?v.con[0]:v.con;
+  return {con:SKC[con]?con:"dryness",type:SKT[v.type]?v.type:null}})();
+const skType=()=>skState.type||CON_TYPE[skState.con];
+function skStep(name,ko,pair){if(!pair)return "";const [id,why]=pair,p=P[id],on=state.bag.includes(id);
   return `<li class="rstep"><div class="pimg">${pack(id)}</div><div style="min-width:0"><div class="rname">${name} <span class="ko">${ko}</span></div>
     <div class="pname">${esc(p.n)}</div><div class="pbrand">${esc(p.b)}</div><div class="why">${why}</div>
     <div class="shop"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon">Amazon ↗</a><a href="${ys(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="yesstyle">YesStyle ↗</a></div></div>
     <button class="add" type="button" data-p="${id}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></li>`}
-function renderSkin(){const t=skState.type,cs=skState.con;
+function essentials(){const c=skState.con,t=skType();
+  return [["Serum",(SK_SERUM[c]||SKR.treat[c])],["Cream",SKR.moist[t]],["Sunscreen",SKR.sun[t]]]}
+function renderSkin(){const c=skState.con,t=skType();
+  $("skcon").innerHTML=Object.entries(SKC).map(([k,v])=>`<button class="chip" type="button" role="radio" aria-checked="${k===c}" aria-pressed="${k===c}" data-c="${k}">${v}</button>`).join("");
+  const ess=essentials(),all=ess.every(([,x])=>state.bag.includes(x[0]));
+  $("essentials").innerHTML=`<div class="esgrid">${ess.map(([label,[id,why]],i)=>{const p=P[id],on=state.bag.includes(id);return `<div class="estile">
+      <div class="esn">${i+1} · ${label}</div><div class="pimg lg">${pack(id)}</div>
+      <div class="pbrand">${esc(p.b)}</div><div class="pname">${esc(p.n)}</div><div class="why">${why}</div>
+      <div class="ptact"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon">Shop ↗</a><button class="add" type="button" data-p="${id}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div></div>`}).join("")}</div>
+    <div class="eshow"><span><b>How to use</b> ${SK_HOW[c]||SK_HOW.default}</span><button class="primary sm" type="button" id="esall"${all?" disabled":""}>${all?"All 3 on your list":"Add all 3 to my list"}</button></div>`;
+  // full routine (optional)
   $("sktype").innerHTML=Object.entries(SKT).map(([k,v])=>`<button class="chip" type="button" role="radio" aria-checked="${k===t}" aria-pressed="${k===t}" data-t="${k}">${v}</button>`).join("");
-  $("skcon").innerHTML=Object.entries(SKC).map(([k,v])=>`<button class="chip" type="button" aria-pressed="${cs.includes(k)}" data-c="${k}">${v}</button>`).join("");
-  const treats=cs.map(c=>SKR.treat[c]).filter((x,i,a)=>x&&a.findIndex(y=>y[0]===x[0])===i);
-  const am=[skStep("Cleanse","세안",SKR.cleanse[t]),skStep("Tone","토너",SKR.tone[t]),...treats.filter(x=>x[0]!=="bha").map(x=>skStep("Treat","세럼",x)),skStep("Moisturize","크림",SKR.moist[t]),skStep("Protect","선크림",SKR.sun[t])];
-  const pmCleanse=["banila","Double cleanse: melt sunscreen with the balm, then use your morning cleanser."];
-  const nightX=cs.map(c=>SKR.night[c]).filter(Boolean),eye=cs.includes("aging")?SKR.eye.aging:null;
-  const nx=k=>nightX.filter(x=>x[0]===k).map(x=>skStep({sbmRetinol:"Retinol",sleepMask:"Seal",pimple:"Spot care"}[k],{sbmRetinol:"레티놀",sleepMask:"슬리핑 마스크",pimple:"스팟"}[k],x));
-  const pm=[skStep("Cleanse","더블 클렌징",pmCleanse),skStep("Tone","토너",SKR.tone[t]),...treats.map(x=>skStep("Treat","세럼",x)),...nx("sbmRetinol"),eye?skStep("Eyes","아이",eye):"",skStep("Moisturize","크림",SKR.moist[t]),...nx("sleepMask"),...nx("pimple")];
+  const treat=SK_SERUM[c]||SKR.treat[c];
+  const am=[skStep("Cleanse","세안",SKR.cleanse[t]),skStep("Tone","토너",SKR.tone[t]),skStep("Serum","세럼",treat),skStep("Cream","크림",SKR.moist[t]),skStep("Sunscreen","선크림",SKR.sun[t])];
+  const pm=[skStep("Cleanse","더블 클렌징",["banila","Melt sunscreen with the balm, then use your morning cleanser."]),skStep("Tone","토너",SKR.tone[t]),
+    c==="aging"?skStep("Retinol","레티놀",SKR.night.aging):skStep("Serum","세럼",treat),c==="aging"?skStep("Eyes","아이",SKR.eye.aging):"",skStep("Cream","크림",SKR.moist[t]),
+    c==="dryness"?skStep("Seal","슬리핑 마스크",SKR.night.dryness):"",c==="breakouts"?skStep("Spot care","스팟",SKR.night.breakouts):"",c==="pores"?skStep("Exfoliate","BHA · 주 2–3회",SKR.treat.pores):""];
   $("routine").innerHTML=`<div class="rcolumn"><h3 class="rh"><span class="sun" aria-hidden="true"></span>Morning</h3><ol class="rlist">${am.join("")}</ol></div>
     <div class="rcolumn"><h3 class="rh"><span class="moon" aria-hidden="true"></span>Night</h3><ol class="rlist">${pm.join("")}</ol></div>`;
-  const notes=[];if(cs.includes("aging"))notes.push("Retinol makes skin more sun-sensitive, so wear sunscreen every morning. If you're pregnant or breastfeeding, ask your doctor before using retinoids.");
-  if(cs.includes("aging")&&(cs.includes("pores")||cs.includes("breakouts")))notes.push("Use BHA and retinol on different nights.");
-  if(cs.includes("breakouts"))notes.push("For painful or lasting breakouts, see a dermatologist.");
-  notes.push("Patch test new products on your jaw for a few days first.");
+  const notes=["Patch test new products on your jaw for a few days first."];
+  if(c==="aging")notes.unshift("The full routine adds retinol at night: wear sunscreen every morning, and if you're pregnant or breastfeeding, ask your doctor first.");
+  if(c==="breakouts")notes.unshift("For painful or lasting breakouts, see a dermatologist.");
   $("sknote").textContent=notes.join(" ");
+  const sec=$("skincare");
+  $("skcon").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{skState.con=b.dataset.c;skState.type=null;store.set("gy-skin",skState);send("skin_concern",{concern:skState.con});renderSkin()});
   $("sktype").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{skState.type=b.dataset.t;store.set("gy-skin",skState);send("skin_type",{type:skState.type});renderSkin()});
-  $("skcon").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const c=b.dataset.c,i=skState.con.indexOf(c);
-    if(i>=0)skState.con.splice(i,1);else{skState.con.push(c);if(skState.con.length>2)skState.con.shift()}
-    store.set("gy-skin",skState);send("skin_concerns",{concerns:skState.con.join(",")});renderSkin()});
-  $("routine").querySelectorAll(".shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"skincare",a.dataset.s)));
-  $("routine").querySelectorAll(".add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(!state.bag.includes(id))track.add(id);
-    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderBag();renderSkin()})}
+  sec.querySelectorAll("#essentials a,#routine .shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"skincare",a.dataset.s)));
+  sec.querySelectorAll("#essentials .add,#routine .add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(!state.bag.includes(id))track.add(id);
+    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderBag();renderSkin()});
+  const allb=$("esall");if(allb)allb.onclick=()=>{ess.forEach(([,x])=>{if(!state.bag.includes(x[0])){track.add(x[0]);state.bag.push(x[0])}});
+    store.set("gy-bag",state.bag);renderBag();renderSkin();openBag(true)}}
 
 function renderAll(){renderSkin();renderResult();renderTryOn();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
 renderAll();
