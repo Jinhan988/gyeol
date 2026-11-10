@@ -273,6 +273,25 @@ details.privacy[open] summary::after{content:" ▴"}
 .tryamt{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:13px;font-weight:600;color:var(--muted)}
 .tryamt input{flex:1;accent-color:var(--accent)}
 @media (max-width:860px){.trygrid{grid-template-columns:minmax(0,1fr);gap:16px}}
+a.navlink{text-decoration:none;color:var(--ink)}
+.skin{margin-top:40px;padding-top:32px;border-top:1px solid var(--line);scroll-margin-top:16px}
+.skinh{font-size:clamp(26px,4vw,36px);margin:4px 0 6px}
+.skinsub{color:var(--muted);margin:0 0 18px;max-width:60ch}
+.skinpick{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px 32px;margin-bottom:22px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.routine{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.rcolumn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px;min-width:0}
+.rcolumn .rh{margin:0 0 6px;display:flex;align-items:center;gap:8px}
+.sun{width:14px;height:14px;border-radius:50%;background:#e9b44c;box-shadow:0 0 0 4px rgba(233,180,76,.25)}
+.moon{width:14px;height:14px;border-radius:50%;box-shadow:inset -4px -2px 0 0 #7a6aa8}
+.rlist{list-style:none;margin:0;padding:0;counter-reset:r}
+.rstep{display:grid;grid-template-columns:60px minmax(0,1fr) auto;gap:12px;padding-block:14px;border-top:1px solid var(--line);align-items:start}
+.rstep:first-child{border-top:0}
+.rname{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);counter-increment:r}
+.rname::before{content:counter(r) ". "}
+.rname .ko{letter-spacing:0;text-transform:none;color:var(--muted);font-weight:400}
+@media (max-width:860px){.routine{grid-template-columns:minmax(0,1fr)}.skinpick{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:420px){.rstep{grid-template-columns:60px minmax(0,1fr)}.rstep>.add{grid-column:2;justify-self:start}}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -296,7 +315,7 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
 <div class="wrap">
   <header>
     <div class="brand"><b>Gyeol</b><span>결</span></div>
-    <div style="display:flex;gap:8px"><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
+    <div style="display:flex;gap:8px"><a class="bagbtn navlink" href="#skincare">Skincare</a><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
   </header>
 
   <section class="intro">
@@ -358,6 +377,18 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
   <section class="main">
     <div class="shelf" id="shelf"></div>
     <article class="sheet" id="sheet"></article>
+  </section>
+
+  <section class="skin" id="skincare">
+    <div class="label">Skincare for you</div>
+    <h2 class="skinh">Your daily Korean skincare routine</h2>
+    <p class="skinsub">Pick your skin type and what you want to work on. We'll build a simple morning and night routine.</p>
+    <div class="skinpick">
+      <div><div class="label">Skin type</div><div class="chiprow" id="sktype" role="radiogroup" aria-label="Skin type"></div></div>
+      <div><div class="label">Concerns · up to 2</div><div class="chiprow" id="skcon" role="group" aria-label="Skin concerns"></div></div>
+    </div>
+    <div class="routine" id="routine"></div>
+    <p class="note" id="sknote"></p>
   </section>
 
   <footer>Gyeol beta · Photos are never stored · Some links are affiliate links</footer>
@@ -432,11 +463,32 @@ const P={
   etudeBrow:{b:"ETUDE",n:"Drawing Eye Brow pencil",s:"a soft brown",fam:true,c:"#6b5040"},
   liner:{b:"CLIO",n:"Sharp, So Simple Waterproof Pencil Liner",s:"brown",fam:true,c:"#5a3a2e"},
   peripBlush:{b:"Peripera",n:"Pure Blushed Sunshine Cheek",s:"a peach or coral shade",fam:true,c:"#f4a79a"},
-  dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"}
+  dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"},
+  /* skincare */
+  banila:{b:"BANILA CO",n:"Clean it Zero Cleansing Balm Original",c:"#f4c6cf"},
+  cosrxGel:{b:"COSRX",n:"Low pH Good Morning Gel Cleanser",c:"#cfe6d3"},
+  dokdoCleanser:{b:"ROUND LAB",n:"1025 Dokdo Cleanser",c:"#d8e8f2"},
+  birchToner:{b:"ROUND LAB",n:"Birch Juice Moisturizing Toner",c:"#dbeaf5"},
+  anuaToner:{b:"Anua",n:"Heartleaf 77% Soothing Toner",c:"#e3efd9"},
+  dokdoToner:{b:"ROUND LAB",n:"1025 Dokdo Toner",c:"#e2edf6"},
+  anuaTxa:{b:"Anua",n:"Niacinamide 10% + TXA 4% Serum",c:"#f1ebe0"},
+  bojGlow:{b:"Beauty of Joseon",n:"Glow Serum: Propolis + Niacinamide",c:"#f2d48a"},
+  centella:{b:"SKIN1004",n:"Madagascar Centella Ampoule",c:"#f3ecd4"},
+  bha:{b:"COSRX",n:"BHA Blackhead Power Liquid",c:"#e9eef0"},
+  bojEye:{b:"Beauty of Joseon",n:"Revive Eye Serum: Ginseng + Retinal",c:"#f2e3c4"},
+  sbmRetinol:{b:"SOME BY MI",n:"Retinol Intense Reactivating Serum",c:"#f0d8b0"},
+  aestura:{b:"AESTURA",n:"Atobarrier 365 Cream",c:"#eef2f6"},
+  illiyoon:{b:"ILLIYOON",n:"Ceramide Ato Concentrate Cream",c:"#eaf1f7"},
+  aquaBomb:{b:"belif",n:"The True Cream Aqua Bomb",c:"#cfe3f4"},
+  soonjung:{b:"ETUDE",n:"SoonJung 2x Barrier Intensive Cream",c:"#e6f0e9"},
+  sleepMask:{b:"Laneige",n:"Water Sleeping Mask",c:"#bcd6f2"},
+  birchSun:{b:"ROUND LAB",n:"Birch Juice Moisturizing Sun Cream",c:"#e3eef8"},
+  skinSun:{b:"SKIN1004",n:"Hyalu-Cica Water-fit Sun Serum",c:"#dcefe9"},
+  pimple:{b:"COSRX",n:"Acne Pimple Master Patch",c:"#f3efe6"}
 };
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
 /* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
-const TYPE={snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
+const TYPE={banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
   amuse:"tint",etudeBrow:"pencil",liner:"pencil",peripBlush:"blush",dasiqueBlush:"blush",rosemilktea:"palette"};
 const ptype=id=>TYPE[id]||(/^bt/.test(id)?"palette":"tint");
 function shadeMix(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
@@ -450,6 +502,8 @@ function pack(id){const p=P[id],c=p.c,K='class="pk"',L='stroke="var(--line)" str
     palette:`<rect ${K} x="7" y="14" width="50" height="36" rx="5"/><circle cx="21" cy="26" r="7" fill="${shadeMix(c,.45)}"/><circle cx="43" cy="26" r="7" fill="${c}"/><circle cx="21" cy="39" r="7" fill="${shadeMix(c,.2)}"/><circle cx="43" cy="39" r="7" fill="${shadeMix(c,-.3)}"/>`,
     pencil:`<g transform="rotate(35 32 32)"><rect ${K} x="29" y="3" width="6" height="46" rx="2"/><path d="M29 49h6l-3 11z" fill="${c}"/></g>`,
     blush:`<circle ${K} cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="18" fill="${c}"/><circle cx="32" cy="32" r="9" fill="${shadeMix(c,.25)}" opacity=".7"/>`,
+    jar:`<rect ${K} x="14" y="16" width="36" height="10" rx="3"/><rect x="12" y="26" width="40" height="26" rx="6" fill="${c}" ${L}/><rect x="18" y="33" width="28" height="9" rx="2" fill="#fff" opacity=".5"/>`,
+    patch:`<rect x="10" y="12" width="44" height="40" rx="6" fill="#fff" ${L}/>${[[22,24],[32,24],[42,24],[22,34],[32,34],[42,34],[27,44],[37,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="${c}" stroke="var(--muted)" stroke-width=".6"/>`).join("")}`,
     bottle:`<rect ${K} x="26" y="9" width="12" height="11" rx="2"/><rect x="18" y="20" width="28" height="38" rx="7" fill="${c}" ${L}/><rect x="22" y="32" width="20" height="12" rx="2" fill="#fff" opacity=".5"/>`,
     dropper:`<rect ${K} x="27" y="4" width="10" height="22" rx="5"/><rect x="20" y="25" width="24" height="33" rx="5" fill="${c}" ${L}/><rect x="24" y="34" width="16" height="10" rx="2" fill="#fff" opacity=".5"/>`};
   return `<svg viewBox="0 0 64 64" aria-hidden="true">${shapes[ptype(id)]}</svg>`}
@@ -857,7 +911,49 @@ const cmp=$("trycompare"),setBefore=v=>{T2.before=v;drawTry()};
 cmp.addEventListener("pointerdown",e=>{e.preventDefault();setBefore(true)});["pointerup","pointerleave","pointercancel"].forEach(ev=>cmp.addEventListener(ev,()=>setBefore(false)));
 cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")setBefore(true)});cmp.addEventListener("keyup",()=>setBefore(false));
 
-function renderAll(){renderResult();renderTryOn();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
+/* ---------- Skincare routine: built from skin type + concerns ---------- */
+const SKT={dry:"Dry",oily:"Oily",combination:"Combination",sensitive:"Sensitive"};
+const SKC={dryness:"Dryness",aging:"Fine lines",dullness:"Dullness",redness:"Redness",pores:"Pores",breakouts:"Breakouts"};
+const SKR={
+  cleanse:{dry:["dokdoCleanser","Mild foam that won't leave dry skin tight."],sensitive:["dokdoCleanser","Mild, low-irritation foam."],oily:["cosrxGel","Gentle gel that clears oil without tightness."],combination:["cosrxGel","Gentle gel that clears oil without tightness."]},
+  tone:{dry:["birchToner","Floods skin with hydration as the first layer."],oily:["anuaToner","Light and soothing, no stickiness."],sensitive:["anuaToner","Heartleaf calms irritation."],combination:["dokdoToner","Hydrates and gently smooths texture."]},
+  treat:{dryness:["torriden","Hyaluronic acid pulls water into dry skin."],aging:["bojGlow","Propolis and niacinamide for a firmer-looking glow."],dullness:["anuaTxa","Niacinamide and TXA even out dull, uneven tone."],
+    redness:["centella","Centella soothes redness and irritation."],pores:["bha","BHA clears inside pores. Use 2–3 times a week to start."],breakouts:["bha","BHA helps keep pores clear. Use 2–3 times a week to start."]},
+  moist:{dry:["illiyoon","Rich ceramide cream for tight, flaky skin."],oily:["aquaBomb","Water-gel that hydrates without grease."],sensitive:["aestura","Barrier cream for easily irritated skin."],combination:["soonjung","Light barrier cream that suits mixed skin."]},
+  sun:{dry:["birchSun","Moisturizing SPF that layers well on dry skin."],oily:["skinSun","Watery sun serum with a light finish."],sensitive:["boj","Gentle SPF50+ that rarely stings."],combination:["boj","Lightweight SPF50+ with no white cast."]},
+  night:{dryness:["sleepMask","Seal it all in overnight. Wake up plump."],aging:["sbmRetinol","Retinol for fine lines. Start 2–3 nights a week."],breakouts:["pimple","Stick on a spot overnight to flatten it."]},
+  eye:{aging:["bojEye","Retinal and ginseng for fine lines around the eyes."]}};
+const skState=Object.assign({type:"combination",con:["dryness"]},store.get("gy-skin",{}));
+function skStep(name,ko,pair,when){if(!pair)return "";const [id,why]=pair,p=P[id],on=state.bag.includes(id);
+  return `<li class="rstep"><div class="pimg">${pack(id)}</div><div style="min-width:0"><div class="rname">${name} <span class="ko">${ko}</span></div>
+    <div class="pname">${esc(p.n)}</div><div class="pbrand">${esc(p.b)}</div><div class="why">${why}</div>
+    <div class="shop"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon">Amazon ↗</a><a href="${ys(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="yesstyle">YesStyle ↗</a></div></div>
+    <button class="add" type="button" data-p="${id}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></li>`}
+function renderSkin(){const t=skState.type,cs=skState.con;
+  $("sktype").innerHTML=Object.entries(SKT).map(([k,v])=>`<button class="chip" type="button" role="radio" aria-checked="${k===t}" aria-pressed="${k===t}" data-t="${k}">${v}</button>`).join("");
+  $("skcon").innerHTML=Object.entries(SKC).map(([k,v])=>`<button class="chip" type="button" aria-pressed="${cs.includes(k)}" data-c="${k}">${v}</button>`).join("");
+  const treats=cs.map(c=>SKR.treat[c]).filter((x,i,a)=>x&&a.findIndex(y=>y[0]===x[0])===i);
+  const am=[skStep("Cleanse","세안",SKR.cleanse[t]),skStep("Tone","토너",SKR.tone[t]),...treats.filter(x=>x[0]!=="bha").map(x=>skStep("Treat","세럼",x)),skStep("Moisturize","크림",SKR.moist[t]),skStep("Protect","선크림",SKR.sun[t])];
+  const pmCleanse=["banila","Double cleanse: melt sunscreen with the balm, then use your morning cleanser."];
+  const nightX=cs.map(c=>SKR.night[c]).filter(Boolean),eye=cs.includes("aging")?SKR.eye.aging:null;
+  const nx=k=>nightX.filter(x=>x[0]===k).map(x=>skStep({sbmRetinol:"Retinol",sleepMask:"Seal",pimple:"Spot care"}[k],{sbmRetinol:"레티놀",sleepMask:"슬리핑 마스크",pimple:"스팟"}[k],x));
+  const pm=[skStep("Cleanse","더블 클렌징",pmCleanse),skStep("Tone","토너",SKR.tone[t]),...treats.map(x=>skStep("Treat","세럼",x)),...nx("sbmRetinol"),eye?skStep("Eyes","아이",eye):"",skStep("Moisturize","크림",SKR.moist[t]),...nx("sleepMask"),...nx("pimple")];
+  $("routine").innerHTML=`<div class="rcolumn"><h3 class="rh"><span class="sun" aria-hidden="true"></span>Morning</h3><ol class="rlist">${am.join("")}</ol></div>
+    <div class="rcolumn"><h3 class="rh"><span class="moon" aria-hidden="true"></span>Night</h3><ol class="rlist">${pm.join("")}</ol></div>`;
+  const notes=[];if(cs.includes("aging"))notes.push("Retinol makes skin more sun-sensitive, so wear sunscreen every morning. If you're pregnant or breastfeeding, ask your doctor before using retinoids.");
+  if(cs.includes("aging")&&(cs.includes("pores")||cs.includes("breakouts")))notes.push("Use BHA and retinol on different nights.");
+  if(cs.includes("breakouts"))notes.push("For painful or lasting breakouts, see a dermatologist.");
+  notes.push("Patch test new products on your jaw for a few days first.");
+  $("sknote").textContent=notes.join(" ");
+  $("sktype").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{skState.type=b.dataset.t;store.set("gy-skin",skState);send("skin_type",{type:skState.type});renderSkin()});
+  $("skcon").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const c=b.dataset.c,i=skState.con.indexOf(c);
+    if(i>=0)skState.con.splice(i,1);else{skState.con.push(c);if(skState.con.length>2)skState.con.shift()}
+    store.set("gy-skin",skState);send("skin_concerns",{concerns:skState.con.join(",")});renderSkin()});
+  $("routine").querySelectorAll(".shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"skincare",a.dataset.s)));
+  $("routine").querySelectorAll(".add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(!state.bag.includes(id))track.add(id);
+    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderBag();renderSkin()})}
+
+function renderAll(){renderSkin();renderResult();renderTryOn();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
 renderAll();
 </script>
 
