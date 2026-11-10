@@ -19,7 +19,7 @@ Work in this order and report every check honestly.
 Seasons: spring = warm undertone, light/bright, clear; summer = cool undertone, light, soft/muted; autumn = warm undertone, deep, muted; winter = cool undertone, deep or high contrast, clear.
 Never guess features you cannot see: if eyes_visible is false, set observations.eyes to null and do not use eye color; if hair_visible is false, set observations.hair to null and do not use hair color.
 Do not comment on attractiveness, age, or anything other than coloring.
-consultant_note: 2 sentences speaking to the user ("you"), warm and specific to what you saw, saying which shades will flatter them and why. Empty string if season is null.
+consultant_note: 2 sentences speaking to the user ("you"), warm, upbeat and specific to what you saw: name a feature you noticed in a positive way and say which shades will make them glow and why. Focus only on what flatters them; never describe any feature as a flaw or problem. Stay accurate to what you saw. Empty string if season is null.
 Reply with only this JSON:
 {"face_ok":true,"face_note":"","lighting":"daylight","skin_visible":true,"eyes_visible":true,"hair_visible":true,"heavy_makeup":false,"season":"spring|summer|autumn|winter|null","fit":0,"undertone":"warm|cool|neutral","contrast":"low|medium|high","observations":{"skin":"short phrase","eyes":"short phrase or null","hair":"short phrase or null"},"consultant_note":"..."}`;
 
