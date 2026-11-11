@@ -367,6 +367,11 @@ section.hero p{color:var(--muted);max-width:46ch;margin:14px 0 0}
 .studio .note{margin:0;text-align:center}
 .h1b{font-size:clamp(26px,3.6vw,38px);line-height:1.1;margin:6px 0 0}
 @media (max-width:860px){section.hero{grid-template-columns:minmax(0,1fr);gap:20px}.howsteps{grid-auto-flow:column;grid-auto-columns:1fr;font-size:13px}.howsteps li{flex-direction:column;text-align:center;gap:6px}}
+.liverow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.liverow .primary{border-radius:999px;padding:12px;font-size:15px}
+.liverow .bagbtn{justify-content:center}
+.liverow [hidden]{display:none!important}
+.livehint{position:absolute;left:50%;top:12px;transform:translateX(-50%);background:rgba(17,17,19,.7);color:#fff;font-size:13px;font-weight:600;border-radius:999px;padding:6px 12px;white-space:nowrap}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -458,10 +463,14 @@ footer{border-top:0;text-align:center}
     <section class="studio" id="tryon" aria-label="Makeup studio">
       <div class="trystage">
         <div class="tryillus" id="tryillus" aria-hidden="true"></div>
+        <video id="tryvideo" playsinline muted autoplay hidden></video>
         <canvas id="trycv" width="480" height="480" aria-label="Your selfie wearing the selected makeup"></canvas>
+        <div class="livehint" id="livehint" hidden>Move your face into the frame</div>
         <div class="trymsg" id="trymsg"></div>
         <button class="compare" id="trycompare" type="button" hidden>Hold for before</button>
       </div>
+      <div class="liverow"><button class="primary" type="button" id="liveon">Live camera</button><button class="bagbtn" type="button" id="liveupload" data-try="pick">Upload a photo</button>
+        <button class="primary" type="button" id="liveshot" hidden>Take photo</button><button class="bagbtn" type="button" id="liveoff" hidden>Stop camera</button></div>
       <label class="splitrow" id="splitrow" for="trysplit" hidden><span>Before</span><input type="range" id="trysplit" min="0" max="100" value="0" aria-label="Drag to compare before and after"><span>After</span></label>
       <div class="seg" id="tryseg" role="tablist" aria-label="Makeup category"><button type="button" role="tab" data-m="lip">Lips</button><button type="button" role="tab" data-m="blush">Blush</button><button type="button" role="tab" data-m="eye">Eyes</button><button type="button" role="tab" data-m="looks">Looks</button></div>
       <div class="trychips" id="trychips" role="radiogroup" aria-label="Shades"></div>
@@ -1090,7 +1099,11 @@ async function loadTryOn(){if(!selfieBlob||T2.busy||T2.forBlob===selfieBlob)retu
 function lipPath(ctx,pts,idx){idx.forEach((i,k)=>{const [x,y]=pts[i];k?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath()}
 function lumOf(hex){const h=parseInt(hex.slice(1),16);return (.299*(h>>16)+.587*(h>>8&255)+.114*(h&255))/255}
 /* Realistic recolor: keep each pixel's own brightness (texture, shadows, shine) and change only its color, inside soft masks */
-function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);return mc.getImageData(0,0,S,S).data}
+function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");draw(mc);
+  if(blur>1.2){const k=Math.max(1,blur/1.6),w=Math.max(1,Math.round(S/k)),t=document.createElement("canvas");t.width=w;t.height=w;const tc=t.getContext("2d");
+    tc.imageSmoothingEnabled=true;tc.imageSmoothingQuality="high";mc.imageSmoothingEnabled=true;mc.imageSmoothingQuality="high";
+    for(let pass=0;pass<2;pass++){tc.clearRect(0,0,w,w);tc.drawImage(m,0,0,w,w);mc.clearRect(0,0,S,S);mc.drawImage(t,0,0,S,S)}}
+  return mc.getImageData(0,0,S,S).data}
 const hexRgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
 const FINISH=id=>id==="lipbalm"?"balm":/^(goodbrick|celebrose|vitcoral)$/.test(id)?"velvet":"glossy";
 /* Light cast: compare the cheeks' color to a typical skin chroma, so shades sit in the photo's own lighting */
@@ -1134,17 +1147,48 @@ function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pt
     const m=maskOf(S,Math.max(1,lipW/45),mc=>{mc.fillStyle="#fff";mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")});
     const balm=sel.lip==="lipbalm";recolor(d,m,P[sel.lip].c,balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt),balm?"balm":"lip",cast,FINISH(sel.lip))}
   ctx.putImageData(img,0,0)}
-function drawTry(){const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
+function splitOverlay(ctx,S,base){if(T2.split<=0)return;const sx=Math.round(S*T2.split);ctx.save();ctx.beginPath();ctx.rect(0,0,sx,S);ctx.clip();base();ctx.restore();
+  ctx.fillStyle="#fff";ctx.fillRect(sx-1.5,0,3,S);ctx.font=`700 ${Math.round(S/30)}px system-ui,sans-serif`;ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=6;
+  if(sx>S*.18){ctx.textAlign="left";ctx.fillText("BEFORE",12,S-14)}if(sx<S*.82){ctx.textAlign="right";ctx.fillText("AFTER",S-12,S-14)}ctx.shadowBlur=0}
+function drawTry(){if(LIVE.on)return;const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
   const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;raw.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
   const side=Math.min(Math.max(x1-x0,y1-y0)*1.35,Math.max(W,H)),cx=(x0+x1)/2,cy=(y0+y1)/2;
   const S=Math.min(720,Math.max(320,Math.round(side)));cv.width=S;cv.height=S;const k=S/side,ox=cx-side/2,oy=cy-side/2;
   const base=()=>{ctx.fillStyle=getComputedStyle(document.body).backgroundColor;ctx.fillRect(0,0,S,S);ctx.drawImage(T2.src,ox,oy,side,side,0,0,S,S)};
   base();if(T2.before)return;
-  paintMakeup(ctx,raw.map(([x,y])=>[(x-ox)*k,(y-oy)*k]),S);
-  if(T2.split>0){const sx=Math.round(S*T2.split);ctx.save();ctx.beginPath();ctx.rect(0,0,sx,S);ctx.clip();base();ctx.restore();
-    ctx.fillStyle="#fff";ctx.fillRect(sx-1.5,0,3,S);ctx.font=`700 ${Math.round(S/30)}px Figtree,system-ui,sans-serif`;ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=6;
-    if(sx>S*.18){ctx.textAlign="left";ctx.fillText("BEFORE",12,S-14)}if(sx<S*.82){ctx.textAlign="right";ctx.fillText("AFTER",S-12,S-14)}ctx.shadowBlur=0}}
+  paintMakeup(ctx,raw.map(([x,y])=>[(x-ox)*k,(y-oy)*k]),S);splitOverlay(ctx,S,base)}
+/* ---------- Live camera: mirror view, landmarks every frame ---------- */
+const LIVE={on:false,stream:null,det:null,raf:0,miss:0};
+let videoLm=null,videoLmLoading=null;
+function getVideoLandmarker(){if(window.__gyeolTestLandmarker)return Promise.resolve(Object.assign({detectForVideo:(v,t)=>window.__gyeolTestLandmarker.detect(v)},window.__gyeolTestLandmarker));
+  if(videoLm)return Promise.resolve(videoLm);
+  if(!videoLmLoading)videoLmLoading=(async()=>{const v=await import(MP);const files=await v.FilesetResolver.forVisionTasks(MP+"/wasm");
+    const make=d=>v.FaceLandmarker.createFromOptions(files,{baseOptions:{modelAssetPath:MP_MODEL,delegate:d},runningMode:"VIDEO",numFaces:1});
+    try{videoLm=await make("GPU")}catch(e){videoLm=await make("CPU")}return videoLm})().catch(e=>{videoLmLoading=null;throw e});
+  return videoLmLoading}
+function setLiveUI(on){$("liveon").hidden=on;$("liveshot").hidden=!on;$("liveoff").hidden=!on;$("livehint").hidden=!on;$("tryon").classList.toggle("islive",on)}
+async function startLive(){if(LIVE.on)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){tryMsg(`<span><b>Live camera isn't available in this browser.</b>Add a photo instead.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
+  tryMsg(`<span><b>Starting your camera…</b>Allow camera access when your browser asks.</span>`);
+  try{const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:720},height:{ideal:720}},audio:false});
+    const v=$("tryvideo");v.srcObject=stream;await v.play();LIVE.stream=stream;LIVE.det=await getVideoLandmarker();LIVE.on=true;LIVE.miss=0;
+    tryMsg("");studioReady(true);setLiveUI(true);send("live_start",{});loop()}
+  catch(e){stopLive();tryMsg(`<span><b>We couldn't open your camera.</b>Allow camera access for this site in your browser settings, or add a photo instead.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`)}}
+function stopLive(){LIVE.on=false;cancelAnimationFrame(LIVE.raf);if(LIVE.stream)LIVE.stream.getTracks().forEach(t=>t.stop());LIVE.stream=null;const v=$("tryvideo");v.srcObject=null;setLiveUI(false)}
+function loop(){if(!LIVE.on)return;const v=$("tryvideo");
+  if(v.readyState>=2&&v.videoWidth){let lm=null;try{const r=LIVE.det.detectForVideo(v,performance.now());lm=r&&r.faceLandmarks&&r.faceLandmarks[0]}catch(e){}
+    LIVE.miss=lm?0:LIVE.miss+1;$("livehint").hidden=LIVE.miss<15;drawLive(v,lm)}
+  LIVE.raf=requestAnimationFrame(loop)}
+function drawLive(v,lm){const cv=$("trycv"),ctx=cv.getContext("2d"),vw=v.videoWidth,vh=v.videoHeight,side=Math.min(vw,vh),sx=(vw-side)/2,sy=(vh-side)/2,S=Math.min(innerWidth<600?360:420,side);
+  if(cv.width!==S){cv.width=S;cv.height=S}
+  const base=()=>{ctx.save();ctx.translate(S,0);ctx.scale(-1,1);ctx.drawImage(v,sx,sy,side,side,0,0,S,S);ctx.restore()};
+  base();if(!lm||T2.before)return;
+  paintMakeup(ctx,lm.map(p=>[S-(p.x*vw-sx)/side*S,(p.y*vh-sy)/side*S]),S);splitOverlay(ctx,S,base)}
+function captureLive(){const v=$("tryvideo");if(!v.videoWidth)return;const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;
+  const x=c.getContext("2d");x.translate(c.width,0);x.scale(-1,1);x.drawImage(v,0,0);
+  c.toBlob(b=>{if(!b)return;stopLive();selfieBlob=new File([b],"gyeol-selfie.jpg",{type:"image/jpeg"});T2.forBlob=null;
+    const img=$("selfieimg");img.src=URL.createObjectURL(selfieBlob);img.hidden=false;$("dropcopy").hidden=true;$("changephoto").hidden=false;send("live_capture",{});renderTryOn()},"image/jpeg",.92)}
 function selArt(sel){const F=FACE,c=k=>sel[k]?P[sel[k]].c:null,id="sa"+(++fcId);
   return `<svg viewBox="0 0 120 150"><rect width="120" height="150" fill="var(--sunk)"/><path d="M60 4C27 4 11 32 12 66L14 150H36L35 62C35 36 45 20 60 20S85 36 85 62L84 150H106L108 66C109 32 93 4 60 4Z" fill="#3b2a25"/>
     <defs><radialGradient id="${id}"><stop offset="0" stop-color="${c("blush")||"#000"}" stop-opacity="${c("blush")?.8:0}"/><stop offset="1" stop-color="${c("blush")||"#000"}" stop-opacity="0"/></radialGradient></defs>
@@ -1182,7 +1226,9 @@ function renderTryOn(){
   $("tryprod").querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"studio","amazon")));
   $("tryillus").innerHTML=swatchArt(T2.sel,"#efe3dd","Your look");
   if(!selfieBlob){T2.src=null;$("trycv").getContext("2d").clearRect(0,0,9999,9999);studioReady(false);
-    tryMsg(`<span><b>See it on your face</b>Hold your phone at eye level, face the camera, in good light.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
+    if(LIVE.on){tryMsg("");return}
+    tryMsg(`<span><b>See it on your face</b>Turn on the live camera, or add a selfie. Face the camera at eye level, in good light.</span>`);return}
+  if(LIVE.on){stopLive()}
   if(T2.forBlob!==selfieBlob)loadTryOn();else drawTry()}
 $("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");if(!t)return;const a=t.dataset.try;
   if(a==="pick")$("tryfile").click();
@@ -1196,6 +1242,8 @@ $("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");i
 $("tryfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;selfieBlob=f;T2.forBlob=null;e.target.value="";
   const img=$("selfieimg");img.src=URL.createObjectURL(f);img.hidden=false;$("dropcopy").hidden=true;$("changephoto").hidden=false;renderTryOn()};
 $("tryamt").oninput=e=>{T2.amt=e.target.value/100;drawTry()};
+$("liveon").onclick=startLive;$("liveoff").onclick=()=>{stopLive();renderTryOn()};$("liveshot").onclick=captureLive;
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&LIVE.on){stopLive();renderTryOn()}});
 $("trysplit").oninput=e=>{T2.split=e.target.value/100;drawTry()};
 const cmp=$("trycompare"),setBefore=v=>{T2.before=v;drawTry()};
 cmp.addEventListener("pointerdown",e=>{e.preventDefault();setBefore(true)});["pointerup","pointerleave","pointercancel"].forEach(ev=>cmp.addEventListener(ev,()=>setBefore(false)));
