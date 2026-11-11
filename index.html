@@ -465,7 +465,7 @@ footer{border-top:0;text-align:center}
       <label class="splitrow" id="splitrow" for="trysplit" hidden><span>Before</span><input type="range" id="trysplit" min="0" max="100" value="0" aria-label="Drag to compare before and after"><span>After</span></label>
       <div class="seg" id="tryseg" role="tablist" aria-label="Makeup category"><button type="button" role="tab" data-m="lip">Lips</button><button type="button" role="tab" data-m="blush">Blush</button><button type="button" role="tab" data-m="eye">Eyes</button><button type="button" role="tab" data-m="looks">Looks</button></div>
       <div class="trychips" id="trychips" role="radiogroup" aria-label="Shades"></div>
-      <label class="tryamt" for="tryamt">Intensity <input type="range" id="tryamt" min="30" max="100" value="70"></label>
+      <label class="tryamt" for="tryamt">Intensity <input type="range" id="tryamt" min="20" max="100" value="60"></label>
       <div class="tryprod" id="tryprod"></div>
       <input type="file" id="tryfile" class="sr" accept="image/*">
       <p class="note">The studio runs on your device. Your photo isn't uploaded.</p>
@@ -1064,7 +1064,7 @@ const fits=id=>!!state.season&&(FIT[id]||[]).includes(state.season);
 const sorted=cat=>STUDIO[cat].slice().sort((a,b)=>fits(b)-fits(a));
 function defaultSel(){if(state.season){const l=LOOKS.find(x=>x.tones.includes(state.season)&&x.tones.length<4);if(l&&LOOK_SEL[l.id])return Object.assign({},LOOK_SEL[l.id])}
   return {lip:"jujube",blush:"btcC01",eye:"btPeach"}}
-const T2={tab:"lip",sel:defaultSel(),touched:false,amt:.7,split:0,before:false,src:null,lm:null,forBlob:null,busy:false};
+const T2={tab:"lip",sel:defaultSel(),touched:false,amt:.6,split:0,before:false,src:null,lm:null,forBlob:null,busy:false};
 const savedLooks=()=>{const v=store.get("gy-looks",[]);return Array.isArray(v)?v.filter(x=>x&&typeof x==="object"):[]};
 let landmarker=null,lmLoading=null;
 function getLandmarker(){if(window.__gyeolTestLandmarker)return Promise.resolve(window.__gyeolTestLandmarker);
@@ -1093,13 +1093,21 @@ function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pt
   const layer=(draw,blur,ops)=>{const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);
     ctx.save();ops.forEach(([op,a])=>{ctx.globalCompositeOperation=op;ctx.globalAlpha=Math.min(1,a*T2.amt);ctx.drawImage(m,0,0)});ctx.restore()};
   if(sel.blush){const c=P[sel.blush].c;layer(mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
-    g.addColorStop(0,c);g.addColorStop(1,c+"00");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.15,r*.85,0,0,7);mc.fill()}),Math.max(2,faceW/60),[["multiply",.45],["color",.25]])}
-  if(sel.eye){const c=P[sel.eye].c,shim=sel.eye==="btGlitter";layer(mc=>[[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const by=brow.reduce((a,i)=>a+pts[i][1],0)/brow.length;
-    mc.fillStyle=c;mc.beginPath();eye.forEach((i,k)=>{const [x,y]=pts[i];k?mc.lineTo(x,y):mc.moveTo(x,y)});
-    [...eye].reverse().forEach(i=>{const [x,y]=pts[i];mc.lineTo(x,y-(y-by)*.55)});mc.closePath();mc.fill()}),Math.max(1.5,faceW/45),shim?[["screen",.45]]:[["multiply",.55],["color",.2]])}
+    g.addColorStop(0,c);g.addColorStop(1,c+"00");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.15,r*.85,0,0,7);mc.fill()}),Math.max(3,faceW/40),[["multiply",.5],["soft-light",.35],["color",.2]])}
+  if(sel.eye){const c=P[sel.eye].c,shim=sel.eye==="btGlitter";
+    /* Lid shadow: densest at the lash line, fading toward the crease, tapering to nothing at both corners */
+    [[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const E=eye.map(i=>pts[i]),B=brow.map(i=>pts[i]);
+      const avg=(A,j)=>A.reduce((a,p)=>a+p[j],0)/A.length,ecx=avg(E,0),ecy=avg(E,1),bcx=avg(B,0),bcy=avg(B,1);
+      const eyeW=Math.hypot(E[E.length-1][0]-E[0][0],E[E.length-1][1]-E[0][1]);
+      let ux=bcx-ecx,uy=bcy-ecy;const ul=Math.hypot(ux,uy)||1;ux/=ul;uy/=ul;
+      const H=Math.min(ul*.62,eyeW*.55);
+      const top=E.map(([x,y],k)=>{const t=k/(E.length-1),h=H*Math.pow(Math.sin(Math.PI*t),.8);return [x+ux*h,y+uy*h]});
+      layer(mc=>{const g=mc.createLinearGradient(ecx,ecy,ecx+ux*H,ecy+uy*H);g.addColorStop(0,c);g.addColorStop(.5,c+"a8");g.addColorStop(1,c+"00");
+        mc.fillStyle=g;mc.beginPath();E.forEach(([x,y],k)=>k?mc.lineTo(x,y):mc.moveTo(x,y));top.slice().reverse().forEach(([x,y])=>mc.lineTo(x,y));mc.closePath();mc.fill()},
+        Math.max(2,eyeW/8),shim?[["screen",.45],["soft-light",.4]]:[["multiply",.75],["soft-light",.4],["color",.25]])})}
   if(sel.lip){const c=P[sel.lip].c,lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
-    layer(mc=>{mc.fillStyle=c;mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")},Math.max(1,lipW/45),
-      sel.lip==="lipbalm"?[["color",.35],["screen",.15]]:[["color",1],["multiply",.3+.75*(1-lumOf(c))]])}}
+    layer(mc=>{mc.fillStyle=c;mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")},Math.max(1.2,lipW/30),
+      sel.lip==="lipbalm"?[["soft-light",.5],["screen",.12]]:[["soft-light",.4],["color",.85],["multiply",.2+.6*(1-lumOf(c))]])}}
 function drawTry(){const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
   const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;raw.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
