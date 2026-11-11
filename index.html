@@ -7,24 +7,23 @@
 <meta property="og:title" content="Gyeol: AI personal color and K-beauty looks">
 <meta property="og:description" content="Find your personal color season from a selfie and shop Korean makeup made for you.">
 <title>Gyeol K-Beauty Looks</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 /* Layout: a compact quiz strip up top, then a shelf of "cushion compact" look cards beside a step-by-step product sheet */
 :root{
-  --bg:#f5f1f2; --surface:#fffdfd; --sunk:#ece5e8; --line:#ddd2d7;
-  --ink:#2b1d24; --muted:#6f5d66; --accent:#a8324f; --accent-ink:#ffffff; --accent-soft:#f3dbe2; --pack:#2b1d24; --tile:#ece5e8;
-  --display:"Young Serif",Georgia,"Times New Roman",serif;
-  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --ko:"Gowun Batang","Apple SD Gothic Neo","Malgun Gothic",serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --bg:#ffffff; --surface:#f5f5f7; --sunk:#ececef; --line:#e6e6ea;
+  --ink:#111113; --muted:#76767e; --accent:#e5334b; --accent-ink:#ffffff; --accent-soft:#fde9ec; --pack:#1b1b1e; --tile:#efeff2;
+  --display:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  --body:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  --ko:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
-  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; --pack:#0d0809; --tile:#3a2c33; color-scheme:dark}}
+  --bg:#0f0f11; --surface:#1a1a1d; --sunk:#242428; --line:#2c2c31;
+  --ink:#f4f4f6; --muted:#9b9ba4; --accent:#ff5c72; --accent-ink:#0f0f11; --accent-soft:#3a1a21; --pack:#050506; --tile:#242428; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#1a1316; --surface:#241a1f; --sunk:#2e2328; --line:#3d2f36;
-  --ink:#f3e8ec; --muted:#b8a3ad; --accent:#e47592; --accent-ink:#1a1316; --accent-soft:#4a2633; --pack:#0d0809; --tile:#3a2c33; color-scheme:dark}
+  --bg:#0f0f11; --surface:#1a1a1d; --sunk:#242428; --line:#2c2c31;
+  --ink:#f4f4f6; --muted:#9b9ba4; --accent:#ff5c72; --accent-ink:#0f0f11; --accent-soft:#3a1a21; --pack:#050506; --tile:#242428; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
@@ -335,9 +334,9 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .fbpick .dotc{width:12px;height:12px;border-radius:50%;display:inline-block}
 .lownote{margin:10px 0 0;font-size:14px;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:8px 12px}
 .reclook .art{aspect-ratio:4/5;margin-bottom:4px}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:start;padding-block:20px 32px}
-.hero h1{font-size:clamp(32px,4.6vw,52px);line-height:1.06}
-.hero p{color:var(--muted);max-width:46ch;margin:14px 0 0}
+section.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:start;padding-block:20px 32px}
+section.hero h1{font-size:clamp(32px,4.6vw,52px);line-height:1.06}
+section.hero p{color:var(--muted);max-width:46ch;margin:14px 0 0}
 .howsteps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px}
 .howsteps li{display:flex;align-items:center;gap:12px;font-weight:600}
 .howsteps b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:13px}
@@ -367,7 +366,7 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .studioacts .bagbtn{justify-content:center}
 .studio .note{margin:0;text-align:center}
 .h1b{font-size:clamp(26px,3.6vw,38px);line-height:1.1;margin:6px 0 0}
-@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr);gap:20px}.howsteps{grid-auto-flow:column;grid-auto-columns:1fr;font-size:13px}.howsteps li{flex-direction:column;text-align:center;gap:6px}}
+@media (max-width:860px){section.hero{grid-template-columns:minmax(0,1fr);gap:20px}.howsteps{grid-auto-flow:column;grid-auto-columns:1fr;font-size:13px}.howsteps li{flex-direction:column;text-align:center;gap:6px}}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -383,6 +382,62 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
   .sheet{padding:18px}.sheet .hero{grid-template-columns:84px minmax(0,1fr)}.sheet h2{font-size:24px}
 }
 @media (prefers-reduced-motion:no-preference){.card,.chip,.opt{transition:border-color .15s,background .15s}}
+
+/* ---------- Brand refresh: clean K-beauty app look ---------- */
+body{font-size:15px;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:800;letter-spacing:-.035em}
+.ko{font-weight:500}
+.label{text-transform:none;letter-spacing:-.01em;font-size:13px;font-weight:700;color:var(--muted)}
+header{padding-block:16px 4px;position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:16;background:var(--bg)}
+.brand b{font-weight:900;font-size:26px;letter-spacing:-.06em}
+.brand span{color:var(--muted);font-size:14px;font-weight:600}
+.bagbtn{border:0;background:var(--surface);font-weight:700}
+.bagbtn em{background:var(--ink);color:var(--bg)}
+.primary{background:var(--ink);color:var(--bg);border-radius:999px;font-weight:700}
+.primary:hover{opacity:.88}
+section.hero{padding-block:28px 40px}
+section.hero h1{font-size:clamp(40px,6.4vw,72px);line-height:1;letter-spacing:-.05em}
+section.hero p{font-size:17px;color:var(--muted)}
+.sheet .hero .art{aspect-ratio:4/5}
+.howsteps{display:none}
+.studio{border:0;box-shadow:none;background:var(--surface);border-radius:28px;padding:14px}
+.studio .trystage{border-radius:20px;background:var(--sunk)}
+.studio .seg{background:var(--bg)}
+.seg button[aria-selected="true"]{background:var(--ink);color:var(--bg);box-shadow:none}
+.tchip{border:0;background:var(--bg);font-weight:600}
+.tchip[aria-checked="true"]{box-shadow:0 0 0 2px var(--ink);border:0}
+.tchip:not(.fit){opacity:.5}
+.tchip .star{color:var(--accent)}
+.chip{border:0;background:var(--surface);font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.card,.sheet,.rescard,.selfie,.quiz:not(.collapsed),.rcolumn,.estile,.panel{border:0;box-shadow:none;background:var(--surface)}
+.card{border-radius:22px}
+.card[aria-current="true"]{box-shadow:0 0 0 2px var(--ink)}
+.card h3,.reclook b{letter-spacing:-.03em}
+.art{border-radius:16px}
+.reclook,.ptile{border:0;background:var(--bg)}
+.selfie{border-radius:24px}
+.rec{background:var(--ink);color:var(--bg)}
+.shead{font-size:24px}
+.quizopen{border:0;background:var(--surface);color:var(--ink);font-weight:600}
+.filters{border-top:0;padding-top:28px}
+.tag{font-weight:700}
+.tag.match{background:var(--accent-soft);color:var(--accent)}
+.how{background:var(--bg)}
+.complete{background:var(--bg)}
+.crow .pimg.sm,.pimg{background:var(--bg)}
+.estile .pimg.lg,.ptile .pimg.lg{background:var(--surface)}
+.season{letter-spacing:-.05em}
+.skin{border-top:0}
+.fbb{border:0;background:var(--bg)}
+.add{border:0;background:var(--bg);font-weight:700}
+.add[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.quiz.collapsed{background:transparent}
+.opt{border:0;background:var(--bg);font-weight:600}
+.splitrow{text-transform:none;letter-spacing:0;font-size:13px}
+.alt h3{font-weight:800}
+footer{border-top:0;text-align:center}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -390,15 +445,14 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
 
 <div class="wrap">
   <header>
-    <div class="brand"><b>Gyeol</b><span>결</span></div>
+    <div class="brand"><b>gyeol</b><span>결</span></div>
     <div style="display:flex;gap:8px"><a class="bagbtn navlink" href="#skincare">Skincare</a><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
   </header>
 
   <section class="hero">
     <div class="herotext">
-      <div class="label">Korean makeup studio</div>
-      <h1>Try Korean makeup on your own face before you buy.</h1>
-      <p>Add a selfie, try real lip, blush and eye shades, then shop the exact products.</p>
+            <h1>Try K-beauty on your face before you buy.</h1>
+      <p>Real lip, blush and eye shades on your selfie. Love it? Shop the exact product.</p>
       <ol class="howsteps"><li><b>1</b>Add a selfie</li><li><b>2</b>Try shades and looks</li><li><b>3</b>Shop what you love</li></ol>
     </div>
     <section class="studio" id="tryon" aria-label="Makeup studio">
@@ -866,7 +920,7 @@ function renderShelf(){
 function renderSheet(){
   const l=LOOKS.find(x=>x.id===state.look);if(!l)return;
   const fit=state.season?(l.tones.includes(state.season)?`<span class="tag match">Matches your ${SEASONS[state.season].en}</span>`:`<span class="tag">A fun twist on your colors</span>`):"";
-  $("sheet").innerHTML=`<div class="hero"><div class="compact">${compact(l.cmp)}</div>
+  $("sheet").innerHTML=`<div class="hero"><div class="art">${lookArt(l)}</div>
     <div style="min-width:0"><h2>${l.en}</h2><div class="sub">${l.ko}</div>${fit?`<div class="tags" style="margin-top:8px">${fit}</div>`:""}</div></div>
     <p class="desc">${l.desc}</p>
     ${(()=>{const pr=lookParts(l),st=n=>l.steps.find(x=>x[0]===n),pick=(n,f)=>{const x=st(n);return x?x[2].find(f||(id=>id!=="liner")):null};
@@ -1171,14 +1225,14 @@ function renderSkin(){const c=skState.con,t=skType();
 /* ---------- Share card: 1080x1920 story image of the result ---------- */
 let shareBlob=null;
 async function makeShareCard(){const s=SEASONS[state.season];if(!s)return null;
-  try{await Promise.all(['400 120px "Young Serif"','700 40px Figtree','400 44px "Gowun Batang"'].map(f=>document.fonts.load(f)))}catch(e){}
+  try{await Promise.all(['800 120px "Pretendard Variable"','700 40px "Pretendard Variable"'].map(f=>document.fonts.load(f)))}catch(e){}
   const W=1080,H=1920,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
   const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,shadeMix(s.best[0][0],.82));g.addColorStop(1,"#fbf8f9");x.fillStyle=g;x.fillRect(0,0,W,H);
-  const ink="#2b1d24",muted="#6f5d66",SER='"Young Serif",Georgia,serif',SANS='Figtree,system-ui,sans-serif',KO='"Gowun Batang","Apple SD Gothic Neo",serif';
+  const ink="#111113",muted="#76767e",SER='"Pretendard Variable",Pretendard,system-ui,sans-serif',SANS=SER,KO=SER;
   x.textAlign="center";
   x.fillStyle=muted;x.font=`700 30px ${SANS}`;x.letterSpacing="6px";x.fillText("MY PERSONAL COLOR",W/2,230);x.letterSpacing="0px";
-  x.fillStyle=s.sc;x.font=`400 128px ${SER}`;x.fillText(s.en,W/2,390);
-  x.fillStyle=ink;x.font=`400 46px ${KO}`;x.fillText(s.ko+"  ·  "+s.tag,W/2,470);
+  x.fillStyle=s.sc;x.font=`800 120px ${SER}`;x.letterSpacing="-3px";x.fillText(s.en,W/2,390);
+  x.letterSpacing="0px";x.fillStyle=ink;x.font=`600 44px ${KO}`;x.fillText(s.ko+"  ·  "+s.tag,W/2,470);
   // palette
   x.fillStyle=ink;x.font=`700 34px ${SANS}`;x.fillText("My best colors",W/2,640);
   s.best.forEach(([col,name],i)=>{const cx=W/2+(i-2)*186,cy=780;x.beginPath();x.arc(cx,cy,74,0,7);x.fillStyle=col;x.fill();x.lineWidth=3;x.strokeStyle="rgba(43,29,36,.12)";x.stroke();
@@ -1196,7 +1250,7 @@ async function makeShareCard(){const s=SEASONS[state.season];if(!s)return null;
   // footer
   x.fillStyle=ink;x.beginPath();x.roundRect(140,H-190,800,110,55);x.fill();
   x.fillStyle="#fff";x.font=`700 34px ${SANS}`;x.fillText("Find yours free  →  "+location.host,W/2,H-122);
-  x.fillStyle=muted;x.font=`400 34px ${SER}`;x.fillText("Gyeol 결",W/2,120);
+  x.fillStyle=ink;x.font=`800 40px ${SER}`;x.fillText("gyeol",W/2,120);
   return new Promise(ok=>c.toBlob(ok,"image/png"))}
 async function openShare(){const wrap=$("sharewrap");$("sharenote").textContent="Making your card…";wrap.hidden=false;
   shareBlob=await makeShareCard();if(!shareBlob){wrap.hidden=true;return}
