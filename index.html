@@ -1089,25 +1089,40 @@ async function loadTryOn(){if(!selfieBlob||T2.busy||T2.forBlob===selfieBlob)retu
   finally{T2.busy=false}}
 function lipPath(ctx,pts,idx){idx.forEach((i,k)=>{const [x,y]=pts[i];k?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath()}
 function lumOf(hex){const h=parseInt(hex.slice(1),16);return (.299*(h>>16)+.587*(h>>8&255)+.114*(h&255))/255}
+/* Realistic recolor: keep each pixel's own brightness (texture, shadows, shine) and change only its color, inside soft masks */
+function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);return mc.getImageData(0,0,S,S).data}
+const hexRgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
+function recolor(d,m,hex,strength,kind){const [tr,tg,tb]=hexRgb(hex),Lt=Math.max(1,.299*tr+.587*tg+.114*tb);
+  let sum=0,cnt=0;for(let i=3;i<m.length;i+=4)if(m[i]>170){sum+=.299*d[i-3]+.587*d[i-2]+.114*d[i-1];cnt++}
+  const Lm=Math.max(1,cnt?sum/cnt:128);
+  for(let i=0;i<d.length;i+=4){const a=m[i+3]/255*strength;if(a<.004)continue;
+    const r=d[i],g=d[i+1],b=d[i+2],L=.299*r+.587*g+.114*b;let nr,ng,nb;
+    if(kind==="lip"){const k=Math.pow(L/Lm,.9);nr=tr*k;ng=tg*k;nb=tb*k;
+      const sp=Math.min(1,Math.max(0,(L/Lm-1.18)/.4));nr+=(r-nr)*sp*.6;ng+=(g-ng)*sp*.6;nb+=(b-nb)*sp*.6}
+    else if(kind==="balm"){const k=L/Lt;nr=tr*k*.5+r*.5;ng=tg*k*.5+g*.5;nb=tb*k*.5+b*.5;const sp=Math.max(0,(L/Lm-1.05));nr+=sp*60;ng+=sp*60;nb+=sp*60}
+    else{const k=L/Lt,w=kind==="eye"?.6:.3;nr=tr*k*(1-w)+r*tr/255*w;ng=tg*k*(1-w)+g*tg/255*w;nb=tb*k*(1-w)+b*tb/255*w}
+    d[i]=r+(Math.min(255,nr)-r)*a;d[i+1]=g+(Math.min(255,ng)-g)*a;d[i+2]=b+(Math.min(255,nb)-b)*a}}
 function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pts[234][0],pts[454][1]-pts[234][1]);
-  const layer=(draw,blur,ops)=>{const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);
-    ctx.save();ops.forEach(([op,a])=>{ctx.globalCompositeOperation=op;ctx.globalAlpha=Math.min(1,a*T2.amt);ctx.drawImage(m,0,0)});ctx.restore()};
-  if(sel.blush){const c=P[sel.blush].c;layer(mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
-    g.addColorStop(0,c);g.addColorStop(1,c+"00");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.15,r*.85,0,0,7);mc.fill()}),Math.max(3,faceW/40),[["multiply",.5],["soft-light",.35],["color",.2]])}
-  if(sel.eye){const c=P[sel.eye].c,shim=sel.eye==="btGlitter";
-    /* Lid shadow: densest at the lash line, fading toward the crease, tapering to nothing at both corners */
+  const img=ctx.getImageData(0,0,S,S),d=img.data;
+  if(sel.blush){const m=maskOf(S,Math.max(3,faceW/30),mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
+      g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.6,"rgba(255,255,255,.55)");g.addColorStop(1,"rgba(255,255,255,0)");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.2,r*.85,0,0,7);mc.fill()}));
+    recolor(d,m,P[sel.blush].c,Math.min(1,T2.amt*.75),"blush")}
+  if(sel.eye){const shim=sel.eye==="btGlitter";
+    const m=maskOf(S,0,()=>{});const mm=new Uint8ClampedArray(m.length);
     [[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const E=eye.map(i=>pts[i]),B=brow.map(i=>pts[i]);
       const avg=(A,j)=>A.reduce((a,p)=>a+p[j],0)/A.length,ecx=avg(E,0),ecy=avg(E,1),bcx=avg(B,0),bcy=avg(B,1);
       const eyeW=Math.hypot(E[E.length-1][0]-E[0][0],E[E.length-1][1]-E[0][1]);
-      let ux=bcx-ecx,uy=bcy-ecy;const ul=Math.hypot(ux,uy)||1;ux/=ul;uy/=ul;
-      const H=Math.min(ul*.62,eyeW*.55);
+      let ux=bcx-ecx,uy=bcy-ecy;const ul=Math.hypot(ux,uy)||1;ux/=ul;uy/=ul;const H=Math.min(ul*.62,eyeW*.55);
       const top=E.map(([x,y],k)=>{const t=k/(E.length-1),h=H*Math.pow(Math.sin(Math.PI*t),.8);return [x+ux*h,y+uy*h]});
-      layer(mc=>{const g=mc.createLinearGradient(ecx,ecy,ecx+ux*H,ecy+uy*H);g.addColorStop(0,c);g.addColorStop(.5,c+"a8");g.addColorStop(1,c+"00");
-        mc.fillStyle=g;mc.beginPath();E.forEach(([x,y],k)=>k?mc.lineTo(x,y):mc.moveTo(x,y));top.slice().reverse().forEach(([x,y])=>mc.lineTo(x,y));mc.closePath();mc.fill()},
-        Math.max(2,eyeW/8),shim?[["screen",.45],["soft-light",.4]]:[["multiply",.75],["soft-light",.4],["color",.25]])})}
-  if(sel.lip){const c=P[sel.lip].c,lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
-    layer(mc=>{mc.fillStyle=c;mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")},Math.max(1.2,lipW/30),
-      sel.lip==="lipbalm"?[["soft-light",.5],["screen",.12]]:[["soft-light",.4],["color",.85],["multiply",.2+.6*(1-lumOf(c))]])}}
+      const one=maskOf(S,Math.max(2,eyeW/7),mc=>{const g=mc.createLinearGradient(ecx,ecy,ecx+ux*H,ecy+uy*H);g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.5,"rgba(255,255,255,.6)");g.addColorStop(1,"rgba(255,255,255,0)");
+        mc.fillStyle=g;mc.beginPath();E.forEach(([x,y],k)=>k?mc.lineTo(x,y):mc.moveTo(x,y));top.slice().reverse().forEach(([x,y])=>mc.lineTo(x,y));mc.closePath();mc.fill()});
+      for(let i=3;i<mm.length;i+=4)mm[i]=Math.max(mm[i],one[i])});
+    recolor(d,mm,P[sel.eye].c,Math.min(1,T2.amt*(shim?.6:1.05)),shim?"balm":"eye");
+    if(shim){let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=3;i<mm.length;i+=4)if(mm[i]>90&&rnd()<.012){const v=200+rnd()*55;d[i-3]=Math.max(d[i-3],v);d[i-2]=Math.max(d[i-2],v*.95);d[i-1]=Math.max(d[i-1],v*.85)}}}
+  if(sel.lip){const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
+    const m=maskOf(S,Math.max(1,lipW/45),mc=>{mc.fillStyle="#fff";mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")});
+    const balm=sel.lip==="lipbalm";recolor(d,m,P[sel.lip].c,balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt),balm?"balm":"lip")}
+  ctx.putImageData(img,0,0)}
 function drawTry(){const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
   const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;raw.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
@@ -1156,7 +1171,7 @@ function renderTryOn(){
   $("tryprod").querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"studio","amazon")));
   $("tryillus").innerHTML=swatchArt(T2.sel,"#efe3dd","Your look");
   if(!selfieBlob){T2.src=null;$("trycv").getContext("2d").clearRect(0,0,9999,9999);studioReady(false);
-    tryMsg(`<span><b>See it on your face</b>Add a front-facing selfie in good light.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
+    tryMsg(`<span><b>See it on your face</b>Hold your phone at eye level, face the camera, in good light.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
   if(T2.forBlob!==selfieBlob)loadTryOn();else drawTry()}
 $("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");if(!t)return;const a=t.dataset.try;
   if(a==="pick")$("tryfile").click();
