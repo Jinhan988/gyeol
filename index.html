@@ -71,7 +71,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .card h3{font-size:18px;line-height:1.2}
 .card .ko{color:var(--muted);font-size:13px}
-.art{aspect-ratio:4/5;max-width:100%;border-radius:12px;overflow:hidden;background:var(--sunk)}
+.art{aspect-ratio:4/5;max-width:100%;border-radius:12px;overflow:hidden;background:var(--sunk);position:relative}
+.aibadge{position:absolute;left:8px;bottom:8px;font-size:10px;font-weight:700;letter-spacing:.04em;color:#fff;background:rgba(20,10,15,.55);border-radius:999px;padding:2px 8px}
 .art svg,.art img{width:100%;height:100%;display:block;object-fit:cover}
 .compact{aspect-ratio:1.6;max-width:100%;border-radius:12px;background:var(--sunk);position:relative;overflow:hidden}
 .compact b{position:absolute;border-radius:50%}
@@ -779,7 +780,7 @@ function compact(c){return `<b style="width:62%;height:100%;left:-6%;top:12%;bac
   <b style="width:44%;height:70%;left:58%;top:40%;background:radial-gradient(circle at 50% 50%,${c[2]} 20%,transparent 72%)"></b>`}
 
 /* Look art: a licensed photo when LOOKS[].img is set, otherwise an illustrated face wearing the look */
-function lookArt(l){if(l.img)return `<img class="lookimg" src="${esc(l.img)}" alt="${esc(l.en)} makeup look" loading="lazy">`;
+function lookArt(l){if(l.img)return `<img class="lookimg" src="${esc(l.img)}" alt="${esc(l.en)} makeup look on an AI-generated model" loading="lazy"><span class="aibadge">AI model</span>`;
   const pr=lookParts(l),F=FACE,id="la"+(++fcId),lip=pr.lip?P[pr.lip].c:"#e7a3a8";
   return `<svg class="lookart" viewBox="0 0 120 150" role="img" aria-label="${esc(l.en)} makeup look illustration">
     <defs><linearGradient id="${id}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l.cmp[0]}"/><stop offset="1" stop-color="${l.cmp[1]}"/></linearGradient>
