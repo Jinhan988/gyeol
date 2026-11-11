@@ -834,18 +834,22 @@ function compact(c){return `<b style="width:62%;height:100%;left:-6%;top:12%;bac
 
 /* Look art: a licensed photo when LOOKS[].img is set, otherwise an illustrated face wearing the look */
 function lookArt(l){if(l.img)return `<img class="lookimg" src="${esc(l.img)}" alt="${esc(l.en)} makeup look on an AI-generated model" loading="lazy"><span class="aibadge">AI model</span>`;
-  const pr=lookParts(l),F=FACE,id="la"+(++fcId),lip=pr.lip?P[pr.lip].c:"#e7a3a8";
-  return `<svg class="lookart" viewBox="0 0 120 150" role="img" aria-label="${esc(l.en)} makeup look illustration">
-    <defs><linearGradient id="${id}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l.cmp[0]}"/><stop offset="1" stop-color="${l.cmp[1]}"/></linearGradient>
-    <radialGradient id="${id}c"><stop offset="0" stop-color="${pr.cheek||"#000"}" stop-opacity="${pr.cheek?.75:0}"/><stop offset="1" stop-color="${pr.cheek||"#000"}" stop-opacity="0"/></radialGradient></defs>
-    <rect width="120" height="150" fill="url(#${id}b)"/>
-    <path d="M60 4C27 4 11 32 12 66L14 150H36L35 62C35 36 45 20 60 20S85 36 85 62L84 150H106L108 66C109 32 93 4 60 4Z" fill="#3b2a25"/>
-    <g transform="translate(0 6)"><path d="${F.outline}" fill="#efd3bf"/><path d="M47 127V150H73V127" fill="#efd3bf"/>
-    ${pr.eye?`<path d="${F.lidL}" fill="${pr.eye}" opacity=".85"/><path d="${F.lidR}" fill="${pr.eye}" opacity=".85"/>`:""}
-    <ellipse cx="32" cy="80" rx="13" ry="9" fill="url(#${id}c)"/><ellipse cx="88" cy="80" rx="13" ry="9" fill="url(#${id}c)"/>
-    <g fill="none" stroke="#5a4038" stroke-width="1.2" stroke-linecap="round"><path d="${F.browL}" stroke-width="2.2"/><path d="${F.browR}" stroke-width="2.2"/><path d="${F.eyeL}"/><path d="${F.eyeR}"/><path d="${F.nose}" stroke="#c99f88"/></g>
-    <circle cx="42" cy="59.5" r="2.6" fill="#3b2a25"/><circle cx="78" cy="59.5" r="2.6" fill="#3b2a25"/>
-    <path d="${F.lipU}" fill="${lip}"/><path d="${F.lipL}" fill="${lip}"/><path d="M50 98.5Q60 100.5 70 98.5" stroke="#000" stroke-opacity=".18" fill="none"/></g></svg>`}
+  const ls=LOOK_SEL[l.id]||{};return swatchArt({lip:ls.lip,blush:ls.blush,eye:ls.eye},l.cmp[0],l.en)}
+/* Swatch art: a lipstick stroke, a blush pan and an eyeshadow palette in the real product shades */
+function swatchArt(sel,bg,label){const id="sw"+(++fcId),c=k=>sel[k]?P[sel[k]].c:null,lip=c("lip"),blush=c("blush"),eye=c("eye");
+  const sheer=sel.lip==="lipbalm",glitter=sel.eye==="btGlitter";
+  const pans=eye?[shadeMix(eye,.45),shadeMix(eye,.18),eye,shadeMix(eye,-.28)]:null;
+  return `<svg class="swart" viewBox="0 0 120 150" role="img" aria-label="${esc(label||"Makeup")} shades">
+    <defs><linearGradient id="${id}bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${shadeMix(bg||"#f3e6e0",.35)}"/><stop offset="1" stop-color="${bg||"#f3e6e0"}"/></linearGradient>
+      <radialGradient id="${id}bl" cx=".45" cy=".4"><stop offset="0" stop-color="${blush?shadeMix(blush,.18):"#fff"}"/><stop offset="1" stop-color="${blush||"#fff"}"/></radialGradient>
+      <linearGradient id="${id}lp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lip?shadeMix(lip,.15):"#fff"}"/><stop offset=".55" stop-color="${lip||"#fff"}"/><stop offset="1" stop-color="${lip?shadeMix(lip,-.18):"#fff"}"/></linearGradient>
+      <filter id="${id}sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#000" flood-opacity=".14"/></filter></defs>
+    <rect width="120" height="150" fill="url(#${id}bg)"/>
+    ${pans?`<g filter="url(#${id}sh)"><rect x="12" y="16" width="52" height="52" rx="7" fill="#2b1d24"/>${pans.map((p,i)=>`<circle cx="${25+(i%2)*26}" cy="${29+Math.floor(i/2)*26}" r="10.5" fill="${p}"/><ellipse cx="${22+(i%2)*26}" cy="${25+Math.floor(i/2)*26}" rx="4" ry="2.4" fill="#fff" opacity="${glitter?.55:.18}"/>`).join("")}</g>`:""}
+    ${blush?`<g filter="url(#${id}sh)"><circle cx="${pans?88:60}" cy="${pans?50:44}" r="${pans?22:26}" fill="#f7f1ee"/><circle cx="${pans?88:60}" cy="${pans?50:44}" r="${pans?17.5:21}" fill="url(#${id}bl)"/></g>`:""}
+    ${lip?(sheer?`<path d="M16 112C34 98 58 120 80 104S104 98 106 102" stroke="${lip}" stroke-width="15" stroke-linecap="round" fill="none" opacity=".75"/><path d="M26 106C40 99 56 110 72 102" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".7"/>${[[96,74],[30,82],[84,128]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.2" fill="#fff" opacity=".8"/><circle cx="${x-1}" cy="${y-1}" r="1" fill="#fff"/>`).join("")}`
+      :`<path d="M14 118C30 100 54 124 78 106S102 98 108 104" stroke="url(#${id}lp)" stroke-width="18" stroke-linecap="round" fill="none"/><path d="M24 110C38 103 52 114 70 104" stroke="#fff" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".45"/>`):""}
+    ${!lip&&!blush&&!pans?`<circle cx="60" cy="75" r="26" fill="#fff" opacity=".6"/>`:""}</svg>`}
 function renderShelf(){
   const list=LOOKS.filter(l=>state.filter==="all"||l.tones.includes(state.filter));
   if(!list.find(l=>l.id===state.look)&&list[0])state.look=list[0].id;
@@ -1088,7 +1092,7 @@ function renderTryOn(){
     <div class="studioacts"><button class="primary" type="button" data-try="shop">Shop this look</button><button class="bagbtn" type="button" data-try="save">Save look</button></div>`
     :`<p class="note">Pick a lip, blush or eye shade to build your look.</p>`;
   $("tryprod").querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"studio","amazon")));
-  $("tryillus").innerHTML=selArt(T2.sel);
+  $("tryillus").innerHTML=swatchArt(T2.sel,"#efe3dd","Your look");
   if(!selfieBlob){T2.src=null;$("trycv").getContext("2d").clearRect(0,0,9999,9999);studioReady(false);
     tryMsg(`<span><b>See it on your face</b>Add a front-facing selfie in good light.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
   if(T2.forBlob!==selfieBlob)loadTryOn();else drawTry()}
