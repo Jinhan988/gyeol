@@ -335,6 +335,39 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .fbpick .dotc{width:12px;height:12px;border-radius:50%;display:inline-block}
 .lownote{margin:10px 0 0;font-size:14px;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:8px 12px}
 .reclook .art{aspect-ratio:4/5;margin-bottom:4px}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:32px;align-items:start;padding-block:20px 32px}
+.hero h1{font-size:clamp(32px,4.6vw,52px);line-height:1.06}
+.hero p{color:var(--muted);max-width:46ch;margin:14px 0 0}
+.howsteps{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px}
+.howsteps li{display:flex;align-items:center;gap:12px;font-weight:600}
+.howsteps b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-size:13px}
+.studio{background:var(--surface);border:1.5px solid var(--accent);border-radius:22px;padding:16px;display:grid;gap:12px;min-width:0;box-shadow:0 10px 30px -18px var(--accent)}
+.studio .trystage{position:relative;border-radius:16px;overflow:hidden;background:var(--sunk);aspect-ratio:1;max-width:100%}
+.studio canvas{width:100%;height:100%;display:block;position:relative}
+.tryillus{position:absolute;inset:0;opacity:.55}
+.tryillus svg{width:100%;height:100%}
+.studio .trymsg{position:absolute;inset:0;display:grid;place-items:end center;padding:18px;text-align:center;font-size:13px;color:var(--muted)}
+.studio .trymsg span{display:grid;gap:8px;justify-items:center;background:var(--surface);border-radius:16px;padding:14px 16px;box-shadow:0 6px 20px rgba(0,0,0,.12);max-width:30ch}
+.studio .trymsg b{color:var(--ink);font-size:15px}
+.studio .compare{position:absolute;right:10px;top:10px}
+.splitrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.splitrow input{accent-color:var(--accent);width:100%}
+.studio .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;margin:0}
+.studio .trychips{max-height:190px;overflow:auto;padding:2px}
+.chipgroup{width:100%;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-top:4px}
+.tchip .star{font-style:normal;color:var(--accent);font-size:11px}
+.tchip.none i{background:repeating-linear-gradient(45deg,var(--sunk) 0 4px,var(--line) 4px 6px)}
+.studio .tryamt{margin:0}
+.studio .tryprod{display:grid;gap:10px;grid-template-columns:minmax(0,1fr);margin:0;padding-top:12px}
+.studio .crow{grid-template-columns:40px minmax(0,1fr) auto}
+.studio .crow a{font-size:12px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.studio .crow span{display:block}
+.studioacts{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.studioacts .primary{border-radius:999px;padding:12px;font-size:15px}
+.studioacts .bagbtn{justify-content:center}
+.studio .note{margin:0;text-align:center}
+.h1b{font-size:clamp(26px,3.6vw,38px);line-height:1.1;margin:6px 0 0}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr);gap:20px}.howsteps{grid-auto-flow:column;grid-auto-columns:1fr;font-size:13px}.howsteps li{flex-direction:column;text-align:center;gap:6px}}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -361,19 +394,43 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
     <div style="display:flex;gap:8px"><a class="bagbtn navlink" href="#skincare">Skincare</a><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
   </header>
 
-  <section class="intro">
+  <section class="hero">
+    <div class="herotext">
+      <div class="label">Korean makeup studio</div>
+      <h1>Try Korean makeup on your own face before you buy.</h1>
+      <p>Add a selfie, try real lip, blush and eye shades, then shop the exact products.</p>
+      <ol class="howsteps"><li><b>1</b>Add a selfie</li><li><b>2</b>Try shades and looks</li><li><b>3</b>Shop what you love</li></ol>
+    </div>
+    <section class="studio" id="tryon" aria-label="Makeup studio">
+      <div class="trystage">
+        <div class="tryillus" id="tryillus" aria-hidden="true"></div>
+        <canvas id="trycv" width="480" height="480" aria-label="Your selfie wearing the selected makeup"></canvas>
+        <div class="trymsg" id="trymsg"></div>
+        <button class="compare" id="trycompare" type="button" hidden>Hold for before</button>
+      </div>
+      <label class="splitrow" id="splitrow" for="trysplit" hidden><span>Before</span><input type="range" id="trysplit" min="0" max="100" value="0" aria-label="Drag to compare before and after"><span>After</span></label>
+      <div class="seg" id="tryseg" role="tablist" aria-label="Makeup category"><button type="button" role="tab" data-m="lip">Lips</button><button type="button" role="tab" data-m="blush">Blush</button><button type="button" role="tab" data-m="eye">Eyes</button><button type="button" role="tab" data-m="looks">Looks</button></div>
+      <div class="trychips" id="trychips" role="radiogroup" aria-label="Shades"></div>
+      <label class="tryamt" for="tryamt">Intensity <input type="range" id="tryamt" min="30" max="100" value="70"></label>
+      <div class="tryprod" id="tryprod"></div>
+      <input type="file" id="tryfile" class="sr" accept="image/*">
+      <p class="note">The studio runs on your device. Your photo isn't uploaded.</p>
+    </section>
+  </section>
+
+  <section class="intro" id="colors">
     <div>
-      <div class="label">AI personal color analysis</div>
-      <h1>Upload a selfie. Get the K-beauty look made for your coloring.</h1>
-      <p>Find your personal color, then shop the Korean makeup that suits you.</p>
+      <div class="label">Optional · AI personal color</div>
+      <h2 class="h1b">Not sure what suits you?</h2>
+      <p>Gyeol's AI suggests your personal color season. Shades for your season then show up first in the studio, marked with ★.</p>
     </div>
     <div class="col">
     <div class="selfie" id="selfie">
       <div class="qhead"><span class="rec">Recommended</span><span class="tag">Beta</span></div>
-      <h2 class="shead">AI Personal Color Analysis</h2>
+      <h2 class="shead">Find my colors</h2>
       <label class="drop big" for="selfiefile">
         <img id="selfieimg" alt="Your selfie" hidden>
-        <span class="ph" id="dropcopy"><span class="wheel" aria-hidden="true"></span><b>Add a selfie</b><small>Front-facing photo</small></span>
+        <span class="ph" id="dropcopy"><span class="wheel" aria-hidden="true"></span><b>Add a selfie</b><small>Or use the one in the studio</small></span>
       </label>
       <input type="file" id="selfiefile" class="sr" accept="image/*">
       <p class="sdesc">Best in daylight, with no filter and little makeup.</p>
@@ -396,25 +453,6 @@ footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-si
   </section>
 
   <section class="rescard" id="result" hidden aria-live="polite"></section>
-  <section class="rescard tryon" id="tryon" hidden>
-    <div class="label">Virtual try-on · Beta</div>
-    <h2 class="tryh">Try it on</h2>
-    <div class="trygrid">
-      <div class="trystage">
-        <canvas id="trycv" width="480" height="480" aria-label="Your selfie with the selected lip color"></canvas>
-        <div class="trymsg" id="trymsg"></div>
-        <button class="compare" id="trycompare" type="button" hidden>Hold to compare</button>
-      </div>
-      <div class="trypanel">
-        <div class="seg" id="tryseg" role="tablist" aria-label="Try-on mode"><button type="button" role="tab" data-m="lips">Lip shades</button><button type="button" role="tab" data-m="look">Full looks</button></div>
-        <div class="trychips" id="trychips" role="radiogroup" aria-label="Lip shades"></div>
-        <div class="tryprod" id="tryprod"></div>
-        <label class="tryamt" for="tryamt">Intensity <input type="range" id="tryamt" min="30" max="100" value="70"></label>
-        <input type="file" id="tryfile" class="sr" accept="image/*">
-        <p class="note">Try-on runs on your device. Your photo isn't uploaded.</p>
-      </div>
-    </div>
-  </section>
 
   <div class="filters" id="filters" role="group" aria-label="Filter looks by personal color"></div>
 
@@ -517,6 +555,21 @@ const P={
   liner:{b:"CLIO",n:"Sharp, So Simple Waterproof Pencil Liner",s:"brown",fam:true,c:"#5a3a2e"},
   peripBlush:{b:"Peripera",n:"Pure Blushed Sunshine Cheek",s:"a peach or coral shade",fam:true,c:"#f4a79a"},
   dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"},
+  /* studio: blush */
+  btcN01:{b:"rom&nd",n:"Better Than Cheek",s:"N01 Nutty Nude",c:"#c99a85"},
+  btcN02:{b:"rom&nd",n:"Better Than Cheek",s:"N02 Vine Nude",c:"#c4908f"},
+  btcW02:{b:"rom&nd",n:"Better Than Cheek",s:"W02 Strawberry Milk",c:"#f0a2b0"},
+  btcW03:{b:"rom&nd",n:"Better Than Cheek",s:"W03 Apricot Milk",c:"#f3a888"},
+  btcC01:{b:"rom&nd",n:"Better Than Cheek",s:"C01 Peach Chip",c:"#f2a28c"},
+  btcC02:{b:"rom&nd",n:"Better Than Cheek",s:"C02 Blueberry Chip",c:"#c9a2bd"},
+  btcC03:{b:"rom&nd",n:"Better Than Cheek",s:"C03 Fig Chip",c:"#c47f88"},
+  dqWarm:{b:"dasique",n:"Blending Mood Cheek",s:"01 Warm Blending",c:"#f0a07f"},
+  dqCool:{b:"dasique",n:"Blending Mood Cheek",s:"02 Cool Blending",c:"#e3a5c2"},
+  dqPeach:{b:"dasique",n:"Blending Mood Cheek",s:"03 Peach Blending",c:"#f5a68a"},
+  /* studio: eyes */
+  dqSugar:{b:"dasique",n:"Shadow Palette",s:"01 Sugar Brownie",c:"#9a6b55"},
+  dqRosePetal:{b:"dasique",n:"Shadow Palette",s:"02 Rose Petal",c:"#c98a8f"},
+  dqMilkLatte:{b:"dasique",n:"Shadow Palette",s:"07 Milk Latte",c:"#b89a85"},
   /* skincare */
   banila:{b:"BANILA CO",n:"Clean it Zero Cleansing Balm Original",c:"#f4c6cf"},
   cosrxGel:{b:"COSRX",n:"Low pH Good Morning Gel Cleanser",c:"#cfe6d3"},
@@ -541,7 +594,7 @@ const P={
 };
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
 /* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
-const TYPE={banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
+const TYPE={btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
   amuse:"tint",etudeBrow:"pencil",liner:"pencil",peripBlush:"blush",dasiqueBlush:"blush",rosemilktea:"palette"};
 const ptype=id=>TYPE[id]||(/^bt/.test(id)?"palette":"tint");
 function shadeMix(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
@@ -757,7 +810,7 @@ function renderResult(){const el=$("result");
   el.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{const k=b.dataset.pick;
     send("season_feedback",{verdict:"different",from:state.season,to:k,source:state.seasonSrc,confidence:ai&&ai.confidence});
     state.season=k;state.seasonSrc="user";store.set("gy-season",k);store.set("gy-src","user");state.filter=k;
-    const f=LOOKS.find(x=>x.tones.includes(k)&&x.tones.length<4);if(f)state.look=f.id;T2.shade=null;if(T2.mode==="look")T2.look=null;renderAll()});
+    const f=LOOKS.find(x=>x.tones.includes(k)&&x.tones.length<4);if(f)state.look=f.id;T2.touched=false;renderAll()});
   $("sharebtn").onclick=openShare;
   $("buildlist").onclick=()=>{const ids=[];recs.forEach(l=>l.steps.forEach(st=>st[2].forEach(id=>{if(!ids.includes(id))ids.push(id)})));
     const fresh=ids.filter(id=>!state.bag.includes(id));fresh.forEach(id=>track.add(id));
@@ -865,7 +918,7 @@ async function analyzeImage(blob,signal){const image=await toJpeg(blob);
 $("selfiefile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
   if(f.size>maxBytes){$("aiout").innerHTML=`<div class="err">That photo is too large. Try a smaller one or a screenshot of it.</div>`;return}
   selfieBlob=f;const img=$("selfieimg");img.src=URL.createObjectURL(f);img.hidden=false;$("dropcopy").hidden=true;
-  $("aiout").innerHTML="";$("changephoto").hidden=false;$("analyze").click()};
+  $("aiout").innerHTML="";$("changephoto").hidden=false;T2.forBlob=null;renderTryOn();$("analyze").click()};
 $("changephoto").onclick=()=>$("selfiefile").click();
 /* The analysis prompt lives on the server: api/analyze.js */
 /* Confidence is computed here from the checks, not taken from the model's say-so. */
@@ -933,12 +986,28 @@ const track={
   click(pid,look,via){send("shop_click",{product:pid,brand:P[pid]&&P[pid].b,shade:P[pid]&&P[pid].s,look,store:via,season:state.season})}
 };
 
-/* ---------- Virtual lip try-on: MediaPipe Face Landmarker, runs in the browser ---------- */
+/* ---------- Makeup studio: MediaPipe Face Landmarker in the browser; lips, blush and eyes ---------- */
 const MP="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 const MP_MODEL="https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
 const LIP_OUT=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185];
 const LIP_IN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191];
-const T2={mode:"lips",look:null,src:null,lm:null,shade:null,amt:.7,before:false,forBlob:null,busy:false};
+const EYE_UP_L=[33,246,161,160,159,158,157,173,133],EYE_UP_R=[263,466,388,387,386,385,384,398,362],BROW_L=[70,63,105,66,107],BROW_R=[300,293,334,296,336];
+const STUDIO={
+  lip:["jujube","peachme","vitcoral","snowstraw","figfig","almondrose","joseonfig","celebrose","goodbrick","eatdotori","plumcoke","lipbalm"],
+  blush:["btcW03","btcC01","dqPeach","dqWarm","btcN01","btcW02","btcN02","btcC02","btcC03","dqCool"],
+  eye:["btPeach","btPampas","dqMilkLatte","btMahogany","dqSugar","dqRosePetal","rosemilktea","btDusty","btBerry","btGlitter"]};
+const CAT={lip:"Lips",blush:"Blush",eye:"Eyes"};
+const FIT={jujube:["spring"],peachme:["spring"],vitcoral:["spring"],snowstraw:["summer"],figfig:["summer"],almondrose:["summer"],joseonfig:["summer","autumn"],celebrose:["winter","summer"],goodbrick:["autumn"],eatdotori:["autumn"],plumcoke:["winter"],lipbalm:["spring","summer","autumn","winter"],
+  btcW03:["spring"],btcC01:["spring"],dqPeach:["spring"],dqWarm:["spring","autumn"],btcN01:["autumn"],btcW02:["summer"],btcN02:["summer","autumn"],btcC02:["summer","winter"],btcC03:["summer","autumn"],dqCool:["summer","winter"],
+  btPeach:["spring"],btPampas:["spring","autumn"],dqMilkLatte:["spring","autumn"],btMahogany:["autumn"],dqSugar:["autumn"],dqRosePetal:["summer"],rosemilktea:["summer"],btDusty:["summer","autumn"],btBerry:["winter"],btGlitter:["spring","summer","autumn","winter"]};
+const LOOK_SEL={glass:{lip:"lipbalm",blush:null,eye:null},peach:{lip:"jujube",blush:"btcW03",eye:"btPeach"},mlbb:{lip:"figfig",blush:"btcN02",eye:"rosemilktea"},gradient:{lip:"snowstraw",blush:"btcW02",eye:null},
+  fig:{lip:"goodbrick",blush:null,eye:"btMahogany"},taupe:{lip:"joseonfig",blush:"btcC03",eye:"btDusty"},berry:{lip:"plumcoke",blush:null,eye:"btBerry"},aegyo:{lip:"lipbalm",blush:"btcW02",eye:"btGlitter"}};
+const fits=id=>!!state.season&&(FIT[id]||[]).includes(state.season);
+const sorted=cat=>STUDIO[cat].slice().sort((a,b)=>fits(b)-fits(a));
+function defaultSel(){if(state.season){const l=LOOKS.find(x=>x.tones.includes(state.season)&&x.tones.length<4);if(l&&LOOK_SEL[l.id])return Object.assign({},LOOK_SEL[l.id])}
+  return {lip:"jujube",blush:"btcC01",eye:"btPeach"}}
+const T2={tab:"lip",sel:defaultSel(),touched:false,amt:.7,split:0,before:false,src:null,lm:null,forBlob:null,busy:false};
+const savedLooks=()=>{const v=store.get("gy-looks",[]);return Array.isArray(v)?v.filter(x=>x&&typeof x==="object"):[]};
 let landmarker=null,lmLoading=null;
 function getLandmarker(){if(window.__gyeolTestLandmarker)return Promise.resolve(window.__gyeolTestLandmarker);
   if(landmarker)return Promise.resolve(landmarker);
@@ -946,80 +1015,96 @@ function getLandmarker(){if(window.__gyeolTestLandmarker)return Promise.resolve(
     const make=d=>v.FaceLandmarker.createFromOptions(files,{baseOptions:{modelAssetPath:MP_MODEL,delegate:d},runningMode:"IMAGE",numFaces:1});
     try{landmarker=await make("GPU")}catch(e){landmarker=await make("CPU")}return landmarker})().catch(e=>{lmLoading=null;throw e});
   return lmLoading}
-function lipShades(){const seasonIds=[],all=[];
-  LOOKS.forEach(l=>l.steps.forEach(st=>{if(st[0]==="Lips")st[2].forEach(id=>{if(P[id].fam||id==="lipbalm")return;
-    if(state.season&&l.tones.includes(state.season)&&l.tones.length<4&&!seasonIds.includes(id))seasonIds.push(id);if(!all.includes(id))all.push(id)})}));
-  return seasonIds.concat(all.filter(id=>!seasonIds.includes(id))).map(id=>({id,fit:seasonIds.includes(id)}))}
+function lipShades(){return sorted("lip").filter(id=>id!=="lipbalm").map(id=>({id,fit:fits(id)}))}
 function downscale(blob){return new Promise((ok,no)=>{const url=URL.createObjectURL(blob),img=new Image();
   img.onload=()=>{const sc=Math.min(1,1280/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement("canvas");
     c.width=Math.round(img.naturalWidth*sc);c.height=Math.round(img.naturalHeight*sc);c.getContext("2d").drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);ok(c)};
   img.onerror=()=>{URL.revokeObjectURL(url);no(new Error("decode"))};img.src=url})}
 function tryMsg(html){$("trymsg").innerHTML=html;$("trymsg").hidden=!html}
-async function loadTryOn(){if(!selfieBlob||T2.busy||T2.forBlob===selfieBlob)return;T2.busy=true;T2.lm=null;
-  tryMsg(`<span>Finding your lips…</span>`);$("trycompare").hidden=true;
+function studioReady(on){$("trycompare").hidden=!on;$("splitrow").hidden=!on;$("tryillus").hidden=on}
+async function loadTryOn(){if(!selfieBlob||T2.busy||T2.forBlob===selfieBlob)return;T2.busy=true;T2.lm=null;studioReady(false);
+  tryMsg(`<span><b>Finding your face…</b>The first time can take a few seconds.</span>`);
   try{const [lm,src]=await Promise.all([getLandmarker(),downscale(selfieBlob)]);const r=lm.detect(src);
-    if(!r||!r.faceLandmarks||!r.faceLandmarks.length){T2.src=null;tryMsg(`<span>We couldn't find a face in this photo. <button class="linkbtn" type="button" data-try="pick">Try another photo</button></span>`);return}
-    T2.src=src;T2.lm=r.faceLandmarks[0];T2.forBlob=selfieBlob;tryMsg("");$("trycompare").hidden=false;drawTry()}
-  catch(e){tryMsg(`<span>Try-on couldn't load on this device. Check your connection and <button class="linkbtn" type="button" data-try="retry">try again</button>.</span>`)}
+    if(!r||!r.faceLandmarks||!r.faceLandmarks.length){T2.src=null;tryMsg(`<span><b>We couldn't find a face in this photo.</b>Try a front-facing selfie in good light.<button class="primary sm" type="button" data-try="pick">Try another photo</button></span>`);return}
+    T2.src=src;T2.lm=r.faceLandmarks[0];T2.forBlob=selfieBlob;tryMsg("");studioReady(true);send("studio_ready",{});drawTry()}
+  catch(e){tryMsg(`<span><b>The studio couldn't load on this device.</b>Check your connection and try again.<button class="primary sm" type="button" data-try="retry">Try again</button></span>`)}
   finally{T2.busy=false}}
 function lipPath(ctx,pts,idx){idx.forEach((i,k)=>{const [x,y]=pts[i];k?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath()}
+function lumOf(hex){const h=parseInt(hex.slice(1),16);return (.299*(h>>16)+.587*(h>>8&255)+.114*(h&255))/255}
+function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pts[234][0],pts[454][1]-pts[234][1]);
+  const layer=(draw,blur,ops)=>{const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);
+    ctx.save();ops.forEach(([op,a])=>{ctx.globalCompositeOperation=op;ctx.globalAlpha=Math.min(1,a*T2.amt);ctx.drawImage(m,0,0)});ctx.restore()};
+  if(sel.blush){const c=P[sel.blush].c;layer(mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
+    g.addColorStop(0,c);g.addColorStop(1,c+"00");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.15,r*.85,0,0,7);mc.fill()}),Math.max(2,faceW/60),[["multiply",.45],["color",.25]])}
+  if(sel.eye){const c=P[sel.eye].c,shim=sel.eye==="btGlitter";layer(mc=>[[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const by=brow.reduce((a,i)=>a+pts[i][1],0)/brow.length;
+    mc.fillStyle=c;mc.beginPath();eye.forEach((i,k)=>{const [x,y]=pts[i];k?mc.lineTo(x,y):mc.moveTo(x,y)});
+    [...eye].reverse().forEach(i=>{const [x,y]=pts[i];mc.lineTo(x,y-(y-by)*.55)});mc.closePath();mc.fill()}),Math.max(1.5,faceW/45),shim?[["screen",.45]]:[["multiply",.55],["color",.2]])}
+  if(sel.lip){const c=P[sel.lip].c,lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
+    layer(mc=>{mc.fillStyle=c;mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")},Math.max(1,lipW/45),
+      sel.lip==="lipbalm"?[["color",.35],["screen",.15]]:[["color",1],["multiply",.3+.75*(1-lumOf(c))]])}}
 function drawTry(){const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
   const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
   let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;raw.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
   const side=Math.min(Math.max(x1-x0,y1-y0)*1.35,Math.max(W,H)),cx=(x0+x1)/2,cy=(y0+y1)/2;
   const S=Math.min(720,Math.max(320,Math.round(side)));cv.width=S;cv.height=S;const k=S/side,ox=cx-side/2,oy=cy-side/2;
-  ctx.fillStyle=getComputedStyle(document.body).backgroundColor;ctx.fillRect(0,0,S,S);
-  ctx.drawImage(T2.src,ox,oy,side,side,0,0,S,S);
-  if(T2.before)return;
-  const pts=raw.map(([x,y])=>[(x-ox)*k,(y-oy)*k]);
-  if(T2.mode==="look")paintLook(ctx,pts,S);
-  if(!T2.shade)return;
-  const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");
-  const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
-  mc.filter=`blur(${Math.max(1,lipW/45).toFixed(1)}px)`;mc.fillStyle=P[T2.shade].c;mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd");
-  ctx.save();ctx.globalCompositeOperation="color";ctx.globalAlpha=T2.amt;ctx.drawImage(m,0,0);
-  const h=parseInt(P[T2.shade].c.slice(1),16),lum=(.299*(h>>16)+.587*(h>>8&255)+.114*(h&255))/255;
-  ctx.globalCompositeOperation="multiply";ctx.globalAlpha=Math.min(1,T2.amt*(.3+.75*(1-lum)));ctx.drawImage(m,0,0);ctx.restore()}
-const EYE_UP_L=[33,246,161,160,159,158,157,173,133],EYE_UP_R=[263,466,388,387,386,385,384,398,362],BROW_L=[70,63,105,66,107],BROW_R=[300,293,334,296,336];
+  const base=()=>{ctx.fillStyle=getComputedStyle(document.body).backgroundColor;ctx.fillRect(0,0,S,S);ctx.drawImage(T2.src,ox,oy,side,side,0,0,S,S)};
+  base();if(T2.before)return;
+  paintMakeup(ctx,raw.map(([x,y])=>[(x-ox)*k,(y-oy)*k]),S);
+  if(T2.split>0){const sx=Math.round(S*T2.split);ctx.save();ctx.beginPath();ctx.rect(0,0,sx,S);ctx.clip();base();ctx.restore();
+    ctx.fillStyle="#fff";ctx.fillRect(sx-1.5,0,3,S);ctx.font=`700 ${Math.round(S/30)}px Figtree,system-ui,sans-serif`;ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=6;
+    if(sx>S*.18){ctx.textAlign="left";ctx.fillText("BEFORE",12,S-14)}if(sx<S*.82){ctx.textAlign="right";ctx.fillText("AFTER",S-12,S-14)}ctx.shadowBlur=0}}
+function selArt(sel){const F=FACE,c=k=>sel[k]?P[sel[k]].c:null,id="sa"+(++fcId);
+  return `<svg viewBox="0 0 120 150"><rect width="120" height="150" fill="var(--sunk)"/><path d="M60 4C27 4 11 32 12 66L14 150H36L35 62C35 36 45 20 60 20S85 36 85 62L84 150H106L108 66C109 32 93 4 60 4Z" fill="#3b2a25"/>
+    <defs><radialGradient id="${id}"><stop offset="0" stop-color="${c("blush")||"#000"}" stop-opacity="${c("blush")?.8:0}"/><stop offset="1" stop-color="${c("blush")||"#000"}" stop-opacity="0"/></radialGradient></defs>
+    <g transform="translate(0 6)"><path d="${F.outline}" fill="#efd3bf"/><path d="M47 127V150H73V127" fill="#efd3bf"/>
+    ${c("eye")?`<path d="${F.lidL}" fill="${c("eye")}" opacity=".85"/><path d="${F.lidR}" fill="${c("eye")}" opacity=".85"/>`:""}
+    <ellipse cx="32" cy="80" rx="13" ry="9" fill="url(#${id})"/><ellipse cx="88" cy="80" rx="13" ry="9" fill="url(#${id})"/>
+    <g fill="none" stroke="#5a4038" stroke-width="1.2" stroke-linecap="round"><path d="${F.browL}" stroke-width="2.2"/><path d="${F.browR}" stroke-width="2.2"/><path d="${F.eyeL}"/><path d="${F.eyeR}"/><path d="${F.nose}" stroke="#c99f88"/></g>
+    <circle cx="42" cy="59.5" r="2.6" fill="#3b2a25"/><circle cx="78" cy="59.5" r="2.6" fill="#3b2a25"/>
+    <path d="${F.lipU}" fill="${c("lip")||"#e7a3a8"}"/><path d="${F.lipL}" fill="${c("lip")||"#e7a3a8"}"/></g></svg>`}
+const shortName=id=>P[id].s?P[id].s.replace(/^[#A-Z]*\d+\s*/,""):P[id].n.replace(/^Lip /,"");
 function lookParts(l){const st=n=>l.steps.find(x=>x[0]===n),lp=st("Lips"),ey=st("Eyes"),ch=st("Cheeks");
-  return {lip:lp&&lp[2].find(id=>!P[id].fam&&id!=="lipbalm")||null,eye:ey?P[ey[2].find(id=>id!=="liner")||ey[2][0]].c:null,cheek:ch?P[ch[2][0]].c:null}}
-function paintLook(ctx,pts,S){const l=LOOKS.find(x=>x.id===T2.look);if(!l)return;const parts=lookParts(l);
-  const faceW=Math.hypot(pts[454][0]-pts[234][0],pts[454][1]-pts[234][1]);
-  const layer=(draw,blur,ops)=>{const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);
-    ctx.save();ops.forEach(([op,a])=>{ctx.globalCompositeOperation=op;ctx.globalAlpha=Math.min(1,a*T2.amt);ctx.drawImage(m,0,0)});ctx.restore()};
-  if(parts.cheek)layer(mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
-    g.addColorStop(0,parts.cheek);g.addColorStop(1,parts.cheek+"00");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.15,r*.85,0,0,7);mc.fill()}),Math.max(2,faceW/60),[["multiply",.45],["color",.25]]);
-  if(parts.eye)layer(mc=>[[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const by=brow.reduce((a,i)=>a+pts[i][1],0)/brow.length;
-    mc.fillStyle=parts.eye;mc.beginPath();eye.forEach((i,k)=>{const [x,y]=pts[i];k?mc.lineTo(x,y):mc.moveTo(x,y)});
-    [...eye].reverse().forEach(i=>{const [x,y]=pts[i];mc.lineTo(x,y-(y-by)*.55)});mc.closePath();mc.fill()}),Math.max(1.5,faceW/45),[["multiply",.55],["color",.2]])}
-function seasonLooks(){return LOOKS.filter(l=>l.tones.includes(state.season)).sort((a,b)=>a.tones.length-b.tones.length)}
-function renderTryOn(){const box=$("tryon");if(!state.season){box.hidden=true;return}box.hidden=false;
-  const list=lipShades();if(T2.mode==="lips"&&(!T2.shade||!P[T2.shade]))T2.shade=list[0]&&list[0].id;
-  $("tryseg").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-selected",b.dataset.m===T2.mode);b.onclick=()=>{T2.mode=b.dataset.m;
-    if(T2.mode==="look"){const l=seasonLooks().find(x=>x.id===T2.look)||seasonLooks()[0];T2.look=l.id;T2.shade=lookParts(l).lip}
-    else if(!T2.shade)T2.shade=list[0]&&list[0].id;send("tryon_mode",{mode:T2.mode});renderTryOn();drawTry()}});
-  if(T2.mode==="look"){const looks=seasonLooks();
-    $("trychips").innerHTML=looks.map(l=>`<button class="tchip fit" type="button" role="radio" aria-checked="${l.id===T2.look}" data-look="${l.id}"><i style="background:linear-gradient(135deg,${l.cmp[1]},${l.cmp[2]})"></i><span>${esc(l.en)}</span></button>`).join("");
-    $("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.look=b.dataset.look;T2.shade=lookParts(LOOKS.find(x=>x.id===T2.look)).lip;send("tryon_look",{look:T2.look,season:state.season});renderTryOn();drawTry()});
-  } else
-  $("trychips").innerHTML=list.map(({id,fit})=>`<button class="tchip${fit?" fit":""}" type="button" role="radio" aria-checked="${id===T2.shade}" data-id="${id}" title="${esc(P[id].b+" "+P[id].s)}"><i style="background:${P[id].c}"></i><span>${esc(P[id].s.replace(/^#?\d+\s*/,""))}</span></button>`).join("");
-  if(T2.mode==="lips")$("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.shade=b.dataset.id;send("tryon_shade",{product:T2.shade,season:state.season});renderTryOn();drawTry()});
-  const p=P[T2.shade],fit=list.find(x=>x.id===T2.shade),on=state.bag.includes(T2.shade);
-  const lk=T2.mode==="look"&&LOOKS.find(x=>x.id===T2.look);
-  $("tryprod").innerHTML=(lk?`<div class="lookline"><b>${esc(lk.en)}</b> <span class="ko">${esc(lk.ko)}</span><span>Lips, blush and eyes from this look. <button class="linkbtn" type="button" data-try="steps">See the steps</button></span></div>`:"")+(p?`<div class="pimg">${pack(T2.shade)}</div><div style="min-width:0"><div class="pbrand">${esc(p.b)}</div><div class="pname">${esc(p.n)}</div><div class="shade">Shade <b>${esc(p.s)}</b></div>
-    <div class="tag ${fit&&fit.fit?"match":""}" style="display:inline-block;margin-top:4px">${fit&&fit.fit?"Made for your season":"A bolder pick for you"}</div>
-    <div class="ptact" style="justify-content:flex-start;gap:14px"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${T2.shade}">Shop ↗</a><button class="add" type="button" id="tryadd" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div></div>`:"");
-  const a=$("tryprod").querySelector("a");if(a)a.addEventListener("click",()=>track.click(T2.shade,null,"amazon"));
-  const ad=$("tryadd");if(ad)ad.onclick=()=>{const id=T2.shade;if(!state.bag.includes(id))track.add(id);
-    state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderBag();renderSheet();renderTryOn()};
-  if(!selfieBlob){T2.src=null;const ctx=$("trycv").getContext("2d");ctx.clearRect(0,0,9999,9999);$("trycompare").hidden=true;
-    tryMsg(`<span><b>Add a selfie to see these shades on you.</b><button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
+  const ls=LOOK_SEL[l.id];
+  return {lip:ls?ls.lip:(lp&&lp[2].find(id=>!P[id].fam&&id!=="lipbalm")||null),eye:ls&&ls.eye?P[ls.eye].c:(ey?P[ey[2].find(id=>id!=="liner")||ey[2][0]].c:null),cheek:ls&&ls.blush?P[ls.blush].c:(ch?P[ch[2][0]].c:null)}}
+function renderTryOn(){
+  if(!T2.touched&&state.season)T2.sel=defaultSel();
+  const tab=T2.tab;
+  $("tryseg").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-selected",b.dataset.m===tab);
+    b.onclick=()=>{T2.tab=b.dataset.m;send("studio_tab",{tab:T2.tab});renderTryOn()}});
+  const star=id=>fits(id)?`<em class="star" title="For your season">★</em>`:"";
+  if(tab==="looks"){const mine=savedLooks(),looks=LOOKS.slice().sort((a,b)=>(state.season?(b.tones.includes(state.season)-a.tones.includes(state.season)):0));
+    const tri=sel=>`<i style="background:conic-gradient(${[sel.lip,sel.blush,sel.eye].map(id=>id?P[id].c:"var(--sunk)").map((c,i)=>`${c} ${i*120}deg ${(i+1)*120}deg`).join(",")})"></i>`;
+    $("trychips").innerHTML=(mine.length?`<div class="chipgroup">My looks</div>`+mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}">${tri(m)}<span>My look ${i+1}</span></button>`).join(""):"")
+      +`<div class="chipgroup">Gyeol looks</div>`+looks.map(l=>`<button class="tchip fit" type="button" data-look="${l.id}">${tri(LOOK_SEL[l.id])}<span>${esc(l.en)}${state.season&&l.tones.includes(state.season)?" ★":""}</span></button>`).join("");
+    $("trychips").querySelectorAll("[data-look]").forEach(b=>b.onclick=()=>{T2.sel=Object.assign({},LOOK_SEL[b.dataset.look]);T2.touched=true;T2.lookId=b.dataset.look;send("tryon_look",{look:b.dataset.look});renderTryOn();drawTry()});
+    $("trychips").querySelectorAll("[data-mine]").forEach(b=>b.onclick=()=>{const m=mine[+b.dataset.mine];T2.sel={lip:m.lip||null,blush:m.blush||null,eye:m.eye||null};T2.touched=true;T2.lookId=null;renderTryOn();drawTry()});
+  } else {
+    $("trychips").innerHTML=`<button class="tchip none" type="button" role="radio" aria-checked="${!T2.sel[tab]}" data-id=""><i></i><span>None</span></button>`+sorted(tab).map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${T2.sel[tab]===id}" data-id="${id}" title="${esc(P[id].b+" "+P[id].n+(P[id].s?" "+P[id].s:""))}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${star(id)}</button>`).join("");
+    $("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.sel[tab]=b.dataset.id||null;T2.touched=true;T2.lookId=null;send("tryon_select",{cat:tab,product:b.dataset.id||"none",season:state.season});renderTryOn();drawTry()});}
+  const rows=["lip","blush","eye"].filter(k=>T2.sel[k]).map(k=>{const id=T2.sel[k],p=P[id];
+    return `<div class="crow"><div class="pimg sm">${pack(id)}</div><div style="min-width:0"><b>${CAT[k]}</b><span>${esc(p.b)} ${esc(p.n)}${p.s?" · "+esc(p.s):""}</span>${fits(id)?`<span class="tag match" style="justify-self:start;margin-top:2px">★ For your season</span>`:""}</div><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}">Shop ↗</a></div>`});
+  const lk=T2.lookId&&LOOKS.find(x=>x.id===T2.lookId);
+  $("tryprod").innerHTML=rows.length?`<div class="label">${lk?esc(lk.en):"Your look"}${lk?` · <button class="linkbtn" type="button" data-try="steps">How to apply</button>`:""}</div>${rows.join("")}
+    <div class="studioacts"><button class="primary" type="button" data-try="shop">Shop this look</button><button class="bagbtn" type="button" data-try="save">Save look</button></div>`
+    :`<p class="note">Pick a lip, blush or eye shade to build your look.</p>`;
+  $("tryprod").querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"studio","amazon")));
+  $("tryillus").innerHTML=selArt(T2.sel);
+  if(!selfieBlob){T2.src=null;$("trycv").getContext("2d").clearRect(0,0,9999,9999);studioReady(false);
+    tryMsg(`<span><b>See it on your face</b>Add a front-facing selfie in good light.<button class="primary sm" type="button" data-try="pick">Add a selfie</button></span>`);return}
   if(T2.forBlob!==selfieBlob)loadTryOn();else drawTry()}
-$("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");if(!t)return;
-  if(t.dataset.try==="pick")$("tryfile").click();
-  if(t.dataset.try==="steps"&&T2.look){state.look=T2.look;state.filter="all";renderFilters();renderShelf();renderSheet();$("sheet").scrollIntoView({behavior:"smooth",block:"start"})}if(t.dataset.try==="retry"){T2.forBlob=null;loadTryOn()}});
-$("tryfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;selfieBlob=f;T2.forBlob=null;e.target.value="";renderTryOn()};
+$("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");if(!t)return;const a=t.dataset.try;
+  if(a==="pick")$("tryfile").click();
+  if(a==="retry"){T2.forBlob=null;loadTryOn()}
+  if(a==="steps"&&T2.lookId){state.look=T2.lookId;state.filter="all";renderFilters();renderShelf();renderSheet();$("sheet").scrollIntoView({behavior:"smooth",block:"start"})}
+  if(a==="shop"){const ids=["lip","blush","eye"].map(k=>T2.sel[k]).filter(Boolean);ids.forEach(id=>{if(!state.bag.includes(id)){track.add(id);state.bag.push(id)}});
+    store.set("gy-bag",state.bag);send("shop_look",{look:T2.lookId||"custom",source:"studio"});renderBag();openBag(true)}
+  if(a==="save"){const m=savedLooks();const cur={lip:T2.sel.lip,blush:T2.sel.blush,eye:T2.sel.eye};
+    if(!m.some(x=>x.lip===cur.lip&&x.blush===cur.blush&&x.eye===cur.eye)){m.unshift(cur);m.splice(12);store.set("gy-looks",m);send("look_save",cur)}
+    t.textContent="Saved ✓";t.disabled=true}});
+$("tryfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;selfieBlob=f;T2.forBlob=null;e.target.value="";
+  const img=$("selfieimg");img.src=URL.createObjectURL(f);img.hidden=false;$("dropcopy").hidden=true;$("changephoto").hidden=false;renderTryOn()};
 $("tryamt").oninput=e=>{T2.amt=e.target.value/100;drawTry()};
+$("trysplit").oninput=e=>{T2.split=e.target.value/100;drawTry()};
 const cmp=$("trycompare"),setBefore=v=>{T2.before=v;drawTry()};
 cmp.addEventListener("pointerdown",e=>{e.preventDefault();setBefore(true)});["pointerup","pointerleave","pointercancel"].forEach(ev=>cmp.addEventListener(ev,()=>setBefore(false)));
 cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter")setBefore(true)});cmp.addEventListener("keyup",()=>setBefore(false));
