@@ -1049,7 +1049,7 @@ const MP="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
 const MP_MODEL="https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
 const LIP_OUT=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,40,185];
 const LIP_IN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191];
-const EYE_UP_L=[33,246,161,160,159,158,157,173,133],EYE_UP_R=[263,466,388,387,386,385,384,398,362],BROW_L=[70,63,105,66,107],BROW_R=[300,293,334,296,336];
+const EYE_UP_L=[33,246,161,160,159,158,157,173,133],EYE_UP_R=[263,466,388,387,386,385,384,398,362],EYE_LO_L=[33,7,163,144,145,153,154,155,133],EYE_LO_R=[263,249,390,373,374,380,381,382,362],BROW_L=[70,63,105,66,107],BROW_R=[300,293,334,296,336];
 const STUDIO={
   lip:["jujube","peachme","vitcoral","snowstraw","figfig","almondrose","joseonfig","celebrose","goodbrick","eatdotori","plumcoke","lipbalm"],
   blush:["btcW03","btcC01","dqPeach","dqWarm","btcN01","btcW02","btcN02","btcC02","btcC03","dqCool"],
@@ -1092,21 +1092,29 @@ function lumOf(hex){const h=parseInt(hex.slice(1),16);return (.299*(h>>16)+.587*
 /* Realistic recolor: keep each pixel's own brightness (texture, shadows, shine) and change only its color, inside soft masks */
 function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;m.height=S;const mc=m.getContext("2d");mc.filter=`blur(${blur.toFixed(1)}px)`;draw(mc);return mc.getImageData(0,0,S,S).data}
 const hexRgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
-function recolor(d,m,hex,strength,kind){const [tr,tg,tb]=hexRgb(hex),Lt=Math.max(1,.299*tr+.587*tg+.114*tb);
+const FINISH=id=>id==="lipbalm"?"balm":/^(goodbrick|celebrose|vitcoral)$/.test(id)?"velvet":"glossy";
+/* Light cast: compare the cheeks' color to a typical skin chroma, so shades sit in the photo's own lighting */
+function lightCast(d,S,pts){const ref=[1.2,.98,.82];let r=0,g=0,b=0,n=0;
+  [50,280].forEach(i=>{const [cx,cy]=pts[i],rad=Math.max(3,S*.015)|0;for(let y=-rad;y<=rad;y+=2)for(let x=-rad;x<=rad;x+=2){const px=(cx+x)|0,py=(cy+y)|0;if(px<0||py<0||px>=S||py>=S)continue;const k=(py*S+px)*4;r+=d[k];g+=d[k+1];b+=d[k+2];n++}});
+  if(!n)return [1,1,1];r/=n;g/=n;b/=n;const L=(r+g+b)/3||1;
+  return [r/L/ref[0],g/L/ref[1],b/L/ref[2]].map(v=>Math.min(1.12,Math.max(.88,1+(v-1)*.6)))}
+function recolor(d,m,hex,strength,kind,cast,finish){let [tr,tg,tb]=hexRgb(hex);if(cast){tr=Math.min(255,tr*cast[0]);tg=Math.min(255,tg*cast[1]);tb=Math.min(255,tb*cast[2])}
+  const Lt=Math.max(1,.299*tr+.587*tg+.114*tb);
   let sum=0,cnt=0;for(let i=3;i<m.length;i+=4)if(m[i]>170){sum+=.299*d[i-3]+.587*d[i-2]+.114*d[i-1];cnt++}
   const Lm=Math.max(1,cnt?sum/cnt:128);
   for(let i=0;i<d.length;i+=4){const a=m[i+3]/255*strength;if(a<.004)continue;
     const r=d[i],g=d[i+1],b=d[i+2],L=.299*r+.587*g+.114*b;let nr,ng,nb;
-    if(kind==="lip"){const k=Math.pow(L/Lm,.9);nr=tr*k;ng=tg*k;nb=tb*k;
-      const sp=Math.min(1,Math.max(0,(L/Lm-1.18)/.4));nr+=(r-nr)*sp*.6;ng+=(g-ng)*sp*.6;nb+=(b-nb)*sp*.6}
+    if(kind==="lip"){const vel=finish==="velvet",k=Math.pow(L/Lm,vel?.6:.95);nr=tr*k;ng=tg*k;nb=tb*k;
+      const sp=Math.min(1,Math.max(0,(L/Lm-(vel?1.3:1.12))/.4));const keep=vel?.2:.75;nr+=(r-nr)*sp*keep;ng+=(g-ng)*sp*keep;nb+=(b-nb)*sp*keep;
+      if(!vel&&sp>0){const gl=sp*sp*70;nr+=gl;ng+=gl;nb+=gl}}
     else if(kind==="balm"){const k=L/Lt;nr=tr*k*.5+r*.5;ng=tg*k*.5+g*.5;nb=tb*k*.5+b*.5;const sp=Math.max(0,(L/Lm-1.05));nr+=sp*60;ng+=sp*60;nb+=sp*60}
     else{const k=L/Lt,w=kind==="eye"?.6:.3;nr=tr*k*(1-w)+r*tr/255*w;ng=tg*k*(1-w)+g*tg/255*w;nb=tb*k*(1-w)+b*tb/255*w}
     d[i]=r+(Math.min(255,nr)-r)*a;d[i+1]=g+(Math.min(255,ng)-g)*a;d[i+2]=b+(Math.min(255,nb)-b)*a}}
 function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pts[234][0],pts[454][1]-pts[234][1]);
-  const img=ctx.getImageData(0,0,S,S),d=img.data;
+  const img=ctx.getImageData(0,0,S,S),d=img.data,cast=lightCast(d,S,pts);
   if(sel.blush){const m=maskOf(S,Math.max(3,faceW/30),mc=>[50,280].forEach(i=>{const [x,y]=pts[i],r=faceW*.13,g=mc.createRadialGradient(x,y,0,x,y,r*1.1);
       g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.6,"rgba(255,255,255,.55)");g.addColorStop(1,"rgba(255,255,255,0)");mc.fillStyle=g;mc.beginPath();mc.ellipse(x,y,r*1.2,r*.85,0,0,7);mc.fill()}));
-    recolor(d,m,P[sel.blush].c,Math.min(1,T2.amt*.75),"blush")}
+    recolor(d,m,P[sel.blush].c,Math.min(1,T2.amt*.75),"blush",cast)}
   if(sel.eye){const shim=sel.eye==="btGlitter";
     const m=maskOf(S,0,()=>{});const mm=new Uint8ClampedArray(m.length);
     [[EYE_UP_L,BROW_L],[EYE_UP_R,BROW_R]].forEach(([eye,brow])=>{const E=eye.map(i=>pts[i]),B=brow.map(i=>pts[i]);
@@ -1117,11 +1125,14 @@ function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pt
       const one=maskOf(S,Math.max(2,eyeW/7),mc=>{const g=mc.createLinearGradient(ecx,ecy,ecx+ux*H,ecy+uy*H);g.addColorStop(0,"rgba(255,255,255,1)");g.addColorStop(.5,"rgba(255,255,255,.6)");g.addColorStop(1,"rgba(255,255,255,0)");
         mc.fillStyle=g;mc.beginPath();E.forEach(([x,y],k)=>k?mc.lineTo(x,y):mc.moveTo(x,y));top.slice().reverse().forEach(([x,y])=>mc.lineTo(x,y));mc.closePath();mc.fill()});
       for(let i=3;i<mm.length;i+=4)mm[i]=Math.max(mm[i],one[i])});
-    recolor(d,mm,P[sel.eye].c,Math.min(1,T2.amt*(shim?.6:1.05)),shim?"balm":"eye");
+    /* keep shadow out of the eye opening */
+    [[EYE_UP_L,EYE_LO_L],[EYE_UP_R,EYE_LO_R]].forEach(([up,lo])=>{const op=maskOf(S,1,mc=>{mc.fillStyle="#fff";mc.beginPath();up.forEach((i,k)=>{const [x,y]=pts[i];k?mc.lineTo(x,y):mc.moveTo(x,y)});lo.slice().reverse().forEach(i=>{const [x,y]=pts[i];mc.lineTo(x,y)});mc.closePath();mc.fill()});
+      for(let i=3;i<mm.length;i+=4)mm[i]=mm[i]*(1-op[i]/255)});
+    recolor(d,mm,P[sel.eye].c,Math.min(1,T2.amt*(shim?.6:1.05)),shim?"balm":"eye",cast);
     if(shim){let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=3;i<mm.length;i+=4)if(mm[i]>90&&rnd()<.012){const v=200+rnd()*55;d[i-3]=Math.max(d[i-3],v);d[i-2]=Math.max(d[i-2],v*.95);d[i-1]=Math.max(d[i-1],v*.85)}}}
   if(sel.lip){const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
     const m=maskOf(S,Math.max(1,lipW/45),mc=>{mc.fillStyle="#fff";mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")});
-    const balm=sel.lip==="lipbalm";recolor(d,m,P[sel.lip].c,balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt),balm?"balm":"lip")}
+    const balm=sel.lip==="lipbalm";recolor(d,m,P[sel.lip].c,balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt),balm?"balm":"lip",cast,FINISH(sel.lip))}
   ctx.putImageData(img,0,0)}
 function drawTry(){const cv=$("trycv"),ctx=cv.getContext("2d");if(!T2.src||!T2.lm)return;
   const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
@@ -1163,7 +1174,7 @@ function renderTryOn(){
     $("trychips").innerHTML=`<button class="tchip none" type="button" role="radio" aria-checked="${!T2.sel[tab]}" data-id=""><i></i><span>None</span></button>`+sorted(tab).map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${T2.sel[tab]===id}" data-id="${id}" title="${esc(P[id].b+" "+P[id].n+(P[id].s?" "+P[id].s:""))}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${star(id)}</button>`).join("");
     $("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.sel[tab]=b.dataset.id||null;T2.touched=true;T2.lookId=null;send("tryon_select",{cat:tab,product:b.dataset.id||"none",season:state.season});renderTryOn();drawTry()});}
   const rows=["lip","blush","eye"].filter(k=>T2.sel[k]).map(k=>{const id=T2.sel[k],p=P[id];
-    return `<div class="crow"><div class="pimg sm">${pack(id)}</div><div style="min-width:0"><b>${CAT[k]}</b><span>${esc(p.b)} ${esc(p.n)}${p.s?" · "+esc(p.s):""}</span>${fits(id)?`<span class="tag match" style="justify-self:start;margin-top:2px">★ For your season</span>`:""}</div><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}">Shop ↗</a></div>`});
+    return `<div class="crow"><div class="pimg sm">${pack(id)}</div><div style="min-width:0"><b>${CAT[k]}${k==="lip"?` · ${{glossy:"Glossy",velvet:"Velvet",balm:"Sheer"}[FINISH(id)]}`:""}</b><span>${esc(p.b)} ${esc(p.n)}${p.s?" · "+esc(p.s):""}</span>${fits(id)?`<span class="tag match" style="justify-self:start;margin-top:2px">★ For your season</span>`:""}</div><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}">Shop ↗</a></div>`});
   const lk=T2.lookId&&LOOKS.find(x=>x.id===T2.lookId);
   $("tryprod").innerHTML=rows.length?`<div class="label">${lk?esc(lk.en):"Your look"}${lk?` · <button class="linkbtn" type="button" data-try="steps">How to apply</button>`:""}</div>${rows.join("")}
     <div class="studioacts"><button class="primary" type="button" data-try="shop">Shop this look</button><button class="bagbtn" type="button" data-try="save">Save look</button></div>`
