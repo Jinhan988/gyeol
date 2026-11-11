@@ -71,6 +71,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;pa
 .card[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .card h3{font-size:18px;line-height:1.2}
 .card .ko{color:var(--muted);font-size:13px}
+.art{aspect-ratio:4/5;max-width:100%;border-radius:12px;overflow:hidden;background:var(--sunk)}
+.art svg,.art img{width:100%;height:100%;display:block;object-fit:cover}
 .compact{aspect-ratio:1.6;max-width:100%;border-radius:12px;background:var(--sunk);position:relative;overflow:hidden}
 .compact b{position:absolute;border-radius:50%}
 .tags{display:flex;gap:4px;flex-wrap:wrap}
@@ -320,6 +322,18 @@ a.navlink{text-decoration:none;color:var(--ink)}
 .seg button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .lookline{grid-column:1/-1;display:grid;gap:2px;font-size:13px;color:var(--muted);margin-bottom:4px}
 .lookline b{font-size:16px;color:var(--ink);font-family:var(--display);font-weight:400}
+.complete{margin-top:16px;padding:14px;border-radius:14px;background:var(--tile);display:grid;gap:10px}
+.crow{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:center;font-size:13px}
+.crow b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.crow .pimg.sm{background:var(--surface)}
+.shoplook{border-radius:999px;padding:13px;font-size:15px;margin-top:4px}
+.fb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px;font-size:14px;color:var(--muted)}
+.fbb{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600}
+.fbb:hover{border-color:var(--accent)}
+.fbpick{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;font-size:14px;color:var(--muted)}
+.fbpick .dotc{width:12px;height:12px;border-radius:50%;display:inline-block}
+.lownote{margin:10px 0 0;font-size:14px;color:var(--ink);background:var(--accent-soft);border-radius:10px;padding:8px 12px}
+.reclook .art{aspect-ratio:4/5;margin-bottom:4px}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
 
 @media (max-width:860px){
@@ -648,6 +662,7 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v)
 let state={season:store.get("gy-season",null),filter:null,look:"glass",answers:[],bag:store.get("gy-bag",[])};
 state.bag=state.bag.filter(id=>P[id]);
 state.ai=store.get("gy-ai",null);
+state.seasonSrc=store.get("gy-src",null);state.fbDone=false;
 state.filter=state.season||"all";
 if(state.season){const f=LOOKS.find(l=>l.tones.includes(state.season)&&l.tones.length<4);if(f)state.look=f.id}
 
@@ -674,7 +689,7 @@ function renderQuiz(){
   el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
     state.answers.push(q.o[+b.dataset.k][1]);
     if(state.answers.length===4){state.season=score(state.answers);state.answers=[];state.quizOpen=false;state.ai=null;store.set("gy-ai",null);
-      store.set("gy-season",state.season);state.filter=state.season;track.season(state.season,"quiz");
+      store.set("gy-season",state.season);state.filter=state.season;track.season(state.season,"quiz");state.seasonSrc="quiz";store.set("gy-src","quiz");state.fbDone=false;
       const f=LOOKS.find(l=>l.tones.includes(state.season)&&l.tones.length<4);if(f)state.look=f.id;renderAll();showResult()}
     else renderQuiz()})}
 
@@ -687,10 +702,15 @@ function renderResult(){const el=$("result");
   const recs=LOOKS.filter(l=>l.tones.includes(state.season)).sort((a,b)=>a.tones.length-b.tones.length).slice(0,3);
   const picks=[];recs.forEach(l=>l.steps.forEach(st=>{if(["Lips","Eyes","Cheeks"].includes(st[0]))st[2].forEach(id=>{if(!picks.includes(id)&&!P[id].fam)picks.push(id)})}));
   picks.splice(6);
-  const conf=ai?`<span class="conf c-${esc(ai.confidence)}">${{high:"Strong match",medium:"Solid match",low:"Good start"}[ai.confidence]||"Solid match"}</span>`:`<span class="conf">From the 4-question check</span>`;
+  const conf=state.seasonSrc==="user"?`<span class="conf">Your pick</span>`:ai?`<span class="conf c-${esc(ai.confidence)}">${{high:"Strong match",medium:"Solid match",low:"Good start"}[ai.confidence]||"Solid match"}</span>`:`<span class="conf">From the 4-question check</span>`;
+  const fb=state.seasonSrc==="user"?`<div class="fb"><span>You picked this season.</span><button class="linkbtn" type="button" data-fb="change">Change</button></div>`
+    :state.fbDone?`<div class="fb"><span>Thanks! That helps Gyeol get better.</span></div>`
+    :`<div class="fb"><span>Does this feel right?</span><button class="fbb" type="button" data-fb="yes">Yes, looks right</button><button class="fbb" type="button" data-fb="change">I'm a different season</button><button class="fbb" type="button" data-fb="all">Explore all looks</button></div>`;
+  const fbpick=`<div class="fbpick" id="fbpick" hidden><span>Which season feels like you?</span>${Object.entries(SEASONS).map(([k,v])=>`<button class="chip" type="button" data-pick="${k}" aria-pressed="${k===state.season}"><i class="dotc" style="background:${v.sw[1]}"></i>${v.en} <span class="ko">${v.ko}</span></button>`).join("")}</div>`;
+  const lowNote=ai&&ai.confidence==="low"&&state.seasonSrc!=="user"?`<p class="lownote">We're not fully sure yet, so every look is open below. Pick the ones you love.</p>`:"";
   el.innerHTML=`<div class="reshead"><div class="label">Your personal color result</div>
       <h2 class="season" style="color:${s.sc}">${s.en}</h2>
-      <div class="resub"><span class="ko">${s.ko}</span><span>·</span><span>${s.tag}</span>${conf}</div></div>
+      <div class="resub"><span class="ko">${s.ko}</span><span>·</span><span>${s.tag}</span>${conf}</div>${fb}${fbpick}${lowNote}</div>
     <div class="resgrid">
       <div class="rcol">
         <p class="consult">${esc(ai&&ai.note?ai.note:s.consult)}</p>
@@ -712,7 +732,7 @@ function renderResult(){const el=$("result");
           <div class="ptact"><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon">Shop ↗</a>
           <button class="add" type="button" data-p="${id}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div></div>`}).join("")}</div>
         <h3 class="rh">Looks made for you</h3>
-        <div class="reclooks">${recs.map(l=>`<button class="reclook" type="button" data-id="${l.id}"><div class="compact">${compact(l.cmp)}</div><b>${l.en}</b><span class="ko">${l.ko}</span></button>`).join("")}</div>
+        <div class="reclooks">${recs.map(l=>`<button class="reclook" type="button" data-id="${l.id}"><div class="art">${lookArt(l)}</div><b>${l.en}</b><span class="ko">${l.ko}</span></button>`).join("")}</div>
         <div class="resacts"><button class="primary" id="buildlist" type="button">Build my shopping list</button><button class="bagbtn sharebtn" id="sharebtn" type="button">Share my result</button><button class="bagbtn" id="explore" type="button">Explore Korean makeup products ↓</button></div>
         <div class="note" id="buildnote" aria-live="polite"></div>
       </div>
@@ -729,6 +749,14 @@ function renderResult(){const el=$("result");
     state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);
     const on=state.bag.includes(id);b.setAttribute("aria-pressed",on);b.textContent=on?"Added":"+ Add";renderBag();renderSheet()});
   $("explore").onclick=()=>$("filters").scrollIntoView({behavior:"smooth",block:"start"});
+  el.querySelectorAll("[data-fb]").forEach(b=>b.onclick=()=>{const v=b.dataset.fb;
+    if(v==="yes"){state.fbDone=true;send("season_feedback",{verdict:"right",season:state.season,source:state.seasonSrc,confidence:ai&&ai.confidence});renderResult()}
+    if(v==="change"){$("fbpick").hidden=false}
+    if(v==="all"){send("season_feedback",{verdict:"explore_all",season:state.season});state.filter="all";renderFilters();renderShelf();$("filters").scrollIntoView({behavior:"smooth",block:"start"})}});
+  el.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{const k=b.dataset.pick;
+    send("season_feedback",{verdict:"different",from:state.season,to:k,source:state.seasonSrc,confidence:ai&&ai.confidence});
+    state.season=k;state.seasonSrc="user";store.set("gy-season",k);store.set("gy-src","user");state.filter=k;
+    const f=LOOKS.find(x=>x.tones.includes(k)&&x.tones.length<4);if(f)state.look=f.id;T2.shade=null;if(T2.mode==="look")T2.look=null;renderAll()});
   $("sharebtn").onclick=openShare;
   $("buildlist").onclick=()=>{const ids=[];recs.forEach(l=>l.steps.forEach(st=>st[2].forEach(id=>{if(!ids.includes(id))ids.push(id)})));
     const fresh=ids.filter(id=>!state.bag.includes(id));fresh.forEach(id=>track.add(id));
@@ -750,13 +778,27 @@ function compact(c){return `<b style="width:62%;height:100%;left:-6%;top:12%;bac
   <b style="width:48%;height:78%;left:34%;top:-14%;background:radial-gradient(circle at 50% 50%,${c[1]},transparent 70%)"></b>
   <b style="width:44%;height:70%;left:58%;top:40%;background:radial-gradient(circle at 50% 50%,${c[2]} 20%,transparent 72%)"></b>`}
 
+/* Look art: a licensed photo when LOOKS[].img is set, otherwise an illustrated face wearing the look */
+function lookArt(l){if(l.img)return `<img class="lookimg" src="${esc(l.img)}" alt="${esc(l.en)} makeup look" loading="lazy">`;
+  const pr=lookParts(l),F=FACE,id="la"+(++fcId),lip=pr.lip?P[pr.lip].c:"#e7a3a8";
+  return `<svg class="lookart" viewBox="0 0 120 150" role="img" aria-label="${esc(l.en)} makeup look illustration">
+    <defs><linearGradient id="${id}b" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l.cmp[0]}"/><stop offset="1" stop-color="${l.cmp[1]}"/></linearGradient>
+    <radialGradient id="${id}c"><stop offset="0" stop-color="${pr.cheek||"#000"}" stop-opacity="${pr.cheek?.75:0}"/><stop offset="1" stop-color="${pr.cheek||"#000"}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="120" height="150" fill="url(#${id}b)"/>
+    <path d="M60 4C27 4 11 32 12 66L14 150H36L35 62C35 36 45 20 60 20S85 36 85 62L84 150H106L108 66C109 32 93 4 60 4Z" fill="#3b2a25"/>
+    <g transform="translate(0 6)"><path d="${F.outline}" fill="#efd3bf"/><path d="M47 127V150H73V127" fill="#efd3bf"/>
+    ${pr.eye?`<path d="${F.lidL}" fill="${pr.eye}" opacity=".85"/><path d="${F.lidR}" fill="${pr.eye}" opacity=".85"/>`:""}
+    <ellipse cx="32" cy="80" rx="13" ry="9" fill="url(#${id}c)"/><ellipse cx="88" cy="80" rx="13" ry="9" fill="url(#${id}c)"/>
+    <g fill="none" stroke="#5a4038" stroke-width="1.2" stroke-linecap="round"><path d="${F.browL}" stroke-width="2.2"/><path d="${F.browR}" stroke-width="2.2"/><path d="${F.eyeL}"/><path d="${F.eyeR}"/><path d="${F.nose}" stroke="#c99f88"/></g>
+    <circle cx="42" cy="59.5" r="2.6" fill="#3b2a25"/><circle cx="78" cy="59.5" r="2.6" fill="#3b2a25"/>
+    <path d="${F.lipU}" fill="${lip}"/><path d="${F.lipL}" fill="${lip}"/><path d="M50 98.5Q60 100.5 70 98.5" stroke="#000" stroke-opacity=".18" fill="none"/></g></svg>`}
 function renderShelf(){
   const list=LOOKS.filter(l=>state.filter==="all"||l.tones.includes(state.filter));
   if(!list.find(l=>l.id===state.look)&&list[0])state.look=list[0].id;
   $("shelf").innerHTML=list.length?list.map(l=>{
     const all=l.tones.length===4;
     return `<button class="card" type="button" data-id="${l.id}" aria-current="${l.id===state.look}">
-      <div class="compact">${compact(l.cmp)}</div>
+      <div class="art">${lookArt(l)}</div>
       <div><h3>${l.en}</h3><div class="ko">${l.ko}</div></div>
       <div class="tags">${all?`<span class="tag${state.season?" match":""}">All tones</span>`:l.tones.map(t=>`<span class="tag${t===state.season?" match":""}">${SEASONS[t].en}</span>`).join("")}</div></button>`}).join("")
     :`<div class="empty">No looks for this tone yet.</div>`;
@@ -769,6 +811,10 @@ function renderSheet(){
   $("sheet").innerHTML=`<div class="hero"><div class="compact">${compact(l.cmp)}</div>
     <div style="min-width:0"><h2>${l.en}</h2><div class="sub">${l.ko}</div>${fit?`<div class="tags" style="margin-top:8px">${fit}</div>`:""}</div></div>
     <p class="desc">${l.desc}</p>
+    ${(()=>{const pr=lookParts(l),st=n=>l.steps.find(x=>x[0]===n),pick=(n,f)=>{const x=st(n);return x?x[2].find(f||(id=>id!=="liner")):null};
+      const rows=[["Lip",pick("Lips",id=>!P[id].fam&&id!=="lipbalm")||pick("Lips")],["Eyes",pick("Eyes")],["Blush",pick("Cheeks")],["Base",pick("Base")]].filter(r=>r[1]);
+      return `<div class="complete"><div class="label">Your complete look</div>${rows.map(([k,id])=>`<div class="crow"><div class="pimg sm">${pack(id)}</div><div style="min-width:0"><b>${k}</b><span>${esc(P[id].b)} ${esc(P[id].n)}${P[id].s&&!P[id].fam?" · "+esc(P[id].s):""}</span></div></div>`).join("")}
+        <button class="primary shoplook" type="button" id="shoplook">Shop This Look</button></div>`})()}
     <ol class="steps">${l.steps.map((s,i)=>`<li class="step"><div class="num">STEP ${String(i+1).padStart(2,"0")}</div><div style="min-width:0">
       <div class="stepname">${s[0]} <span class="ko">${s[1]}</span></div>
       <div class="how"><div class="fchart">${faceChart(l,s)}</div><p class="why">${s[3]}</p></div>
@@ -779,6 +825,8 @@ function renderSheet(){
           <button class="add" type="button" data-p="${pid}" aria-pressed="${on}">${on?"Added":"+ Add"}</button></div>`}).join("")}
       </div></li>`).join("")}</ol>
     <div class="tip"><b>Tip.</b> ${l.tip}</div>`;
+  const sl=$("shoplook");if(sl)sl.onclick=()=>{const ids=[];l.steps.forEach(st=>st[2].forEach(id=>{if(!ids.includes(id))ids.push(id)}));
+    ids.forEach(id=>{if(!state.bag.includes(id)){track.add(id);state.bag.push(id)}});store.set("gy-bag",state.bag);send("shop_look",{look:l.id,season:state.season});renderBag();renderSheet();openBag(true)};
   $("sheet").querySelectorAll(".shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,l.id,a.dataset.s)));
   $("sheet").querySelectorAll(".add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;
     if(!state.bag.includes(id))track.add(id);
@@ -864,6 +912,7 @@ $("analyze").onclick=async()=>{if(!selfieBlob){$("selfiefile").click();return}
     store.set("gy-ai",state.ai);
     state.season=r.season;state.answers=[];state.quizOpen=false;store.set("gy-season",r.season);state.filter=r.season;track.season(r.season,"selfie");
     const f=LOOKS.find(l=>l.tones.includes(r.season)&&l.tones.length<4);if(f)state.look=f.id;
+    state.seasonSrc="ai";store.set("gy-src","ai");state.fbDone=false;if(A.confidence==="low")state.filter="all";
     $("aiout").innerHTML=checklist(A.checks)+`<div class="okline">Your result is ready ↓</div>`;
     renderAll();showResult();
 
