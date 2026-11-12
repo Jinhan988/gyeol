@@ -8,22 +8,24 @@
 <meta property="og:description" content="Find your personal color season from a selfie and shop Korean makeup made for you.">
 <title>Gyeol K-Beauty Looks</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap">
 <style>
 /* Layout: a compact quiz strip up top, then a shelf of "cushion compact" look cards beside a step-by-step product sheet */
 :root{
-  --bg:#ffffff; --surface:#f5f5f7; --sunk:#ececef; --line:#e6e6ea;
-  --ink:#111113; --muted:#76767e; --accent:#e5334b; --accent-ink:#ffffff; --accent-soft:#fde9ec; --pack:#1b1b1e; --tile:#efeff2;
+  --bg:#faf6f3; --surface:#f3eae7; --sunk:#ebdfdc; --line:#e6d8d4;
+  --ink:#2a2124; --muted:#8a7a7e; --accent:#7f2f46; --accent-ink:#ffffff; --accent-soft:#f3e0e4; --pack:#2a2124; --tile:#fffcfa;
+  --rose:#c48b98; --serif:"Cormorant Garamond","Times New Roman",Georgia,serif;
   --display:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
   --body:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",sans-serif;
   --ko:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f0f11; --surface:#1a1a1d; --sunk:#242428; --line:#2c2c31;
-  --ink:#f4f4f6; --muted:#9b9ba4; --accent:#ff5c72; --accent-ink:#0f0f11; --accent-soft:#3a1a21; --pack:#050506; --tile:#242428; color-scheme:dark}}
+  --bg:#171214; --surface:#221a1d; --sunk:#2c2326; --line:#382d31;
+  --ink:#f6eef0; --muted:#b5a4a9; --accent:#e29aae; --accent-ink:#171214; --accent-soft:#40232c; --pack:#0b0809; --tile:#1d1618; --rose:#d7a3b0; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f0f11; --surface:#1a1a1d; --sunk:#242428; --line:#2c2c31;
-  --ink:#f4f4f6; --muted:#9b9ba4; --accent:#ff5c72; --accent-ink:#0f0f11; --accent-soft:#3a1a21; --pack:#050506; --tile:#242428; color-scheme:dark}
+  --bg:#171214; --surface:#221a1d; --sunk:#2c2326; --line:#382d31;
+  --ink:#f6eef0; --muted:#b5a4a9; --accent:#e29aae; --accent-ink:#171214; --accent-soft:#40232c; --pack:#0b0809; --tile:#1d1618; --rose:#d7a3b0; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
@@ -443,23 +445,180 @@ section.hero p{font-size:17px;color:var(--muted)}
 .splitrow{text-transform:none;letter-spacing:0;font-size:13px}
 .alt h3{font-weight:800}
 footer{border-top:0;text-align:center}
+
+/* ---------- Premium redesign: ivory + dusty rose app ---------- */
+body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:1080px}
+.appbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:14px 10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.appbar .brand{display:grid;gap:1px;text-decoration:none;color:var(--ink)}
+.appbar .brand b{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.appbar .brand small{font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.hicons{display:flex;gap:4px}
+.icobtn{position:relative;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--accent);background:transparent;border:0;text-decoration:none}
+.icobtn:hover{background:var(--surface)}
+.icobtn svg{width:24px;height:24px}
+.icobtn em{position:absolute;right:2px;top:2px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-size:10px;font-style:normal;font-weight:700;display:grid;place-items:center}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:18;display:grid;grid-template-columns:repeat(4,1fr);background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  padding:8px max(8px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+.tabbar a{display:grid;justify-items:center;gap:3px;color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:600;padding:4px 0;border-radius:12px}
+.tabbar a svg{width:24px;height:24px}
+.tabbar a[aria-current="page"]{color:var(--accent)}
+.view{padding-block:8px 24px;animation:none}
+@media (prefers-reduced-motion:no-preference){.view:not([hidden]){animation:vin .25s ease-out}}
+@keyframes vin{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+.vhead{margin:10px 0 18px}
+.vtitle{font-size:clamp(28px,5vw,40px);line-height:1.08;letter-spacing:-.035em}
+.vhead p{margin:6px 0 0;color:var(--muted);font-size:15.5px}
+.back{display:inline-block;margin-top:6px;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
+.primary{background:var(--accent);color:var(--accent-ink)}
+a.primary{text-decoration:none;display:inline-flex;justify-content:center;align-items:center;gap:8px}
+.cta{border-radius:999px;padding:15px 22px;font-size:16px;font-weight:700;width:100%}
+.outline{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:13px 20px;font-size:15px;font-weight:700;width:100%}
+.outline[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.hrt{color:var(--accent);font-size:17px}
+/* home */
+.homehero{display:grid;grid-template-columns:minmax(0,1fr);gap:0;border-radius:28px;overflow:hidden;background:var(--surface)}
+.homeart{aspect-ratio:6/7;max-height:62vh;max-width:100%;position:relative;overflow:hidden}
+.homeart svg,.homeart img{width:100%;height:100%;display:block;object-fit:cover}
+.homecopy{padding:22px 22px 24px;display:grid;gap:10px}
+.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.display{font-family:var(--serif);font-weight:600;font-size:clamp(40px,8vw,64px);line-height:.98;letter-spacing:-.01em}
+.homecopy p{margin:0 0 6px;color:var(--muted);font-size:15.5px;max-width:42ch}
+.homecards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+.hcard{display:grid;gap:4px;align-content:start;text-align:left;text-decoration:none;color:var(--ink);background:var(--surface);border:0;border-radius:20px;padding:16px;min-width:0}
+.hcard b{font-size:15.5px;letter-spacing:-.02em}.hcard small{color:var(--muted);font-size:12.5px;line-height:1.35}
+.hico{width:34px;height:34px;border-radius:50%;background:var(--tile);color:var(--accent);display:grid;place-items:center;margin-bottom:6px}.hico svg{width:20px;height:20px}
+@media (min-width:860px){.homehero{grid-template-columns:1.05fr 1fr;align-items:center}.homeart{aspect-ratio:auto;height:100%;max-height:none;min-height:460px}.homecopy{padding:40px}.homecards{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* try-on */
+.studio{background:transparent;padding:0;border-radius:0;gap:14px}
+.studio .trystage{border-radius:24px;background:var(--surface);aspect-ratio:4/5}
+.studio canvas{object-fit:cover}
+#splitrow{display:none!important}
+.shadehead{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px}
+.shadehead h2{font-size:20px;letter-spacing:-.03em}
+.shadehead span{color:var(--accent);font-weight:600;font-size:14px;font-variant-numeric:tabular-nums}
+.studio .seg,.seg{background:var(--surface)}
+.seg button[aria-selected="true"]{background:var(--tile);color:var(--ink);box-shadow:0 1px 3px rgba(42,33,36,.12)}
+.studio .trychips,#cmpstrip,.cmpstrip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-height:none;overflow:visible}
+.cmpstrip:not(.wrapgrid){grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:84px;overflow-x:auto;padding:2px 2px 6px}
+.chipgroup{grid-column:1/-1}
+.tchip{display:grid;justify-items:center;align-content:start;gap:6px;padding:10px 4px 9px;border-radius:18px;background:var(--tile);border:1.5px solid var(--line);font-size:12px;font-weight:600;text-align:center;line-height:1.2;position:relative;min-width:0}
+.tchip i{width:38px;height:38px;border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.tchip span{overflow-wrap:anywhere}
+.tchip .star{position:absolute;top:4px;right:7px}
+.tchip[aria-checked="true"]{border-color:var(--rose);background:var(--accent-soft);box-shadow:none}
+.tchip:not(.fit){opacity:.55}
+.tchip .x{position:absolute;top:2px;right:6px;font-style:normal;color:var(--muted);font-size:15px}
+.selpanel{background:var(--surface);border-radius:22px;padding:18px;display:grid;gap:12px}
+.selname{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.selname h3{font-size:24px;letter-spacing:-.03em}.selname span{color:var(--muted);font-weight:600}
+.selsub{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14.5px;margin-top:6px}
+.selsub i{width:26px;height:26px;border-radius:50%;flex:none}
+.studio .tryprod{padding:0;border:0;display:block}
+.studio .tryamt{display:grid;gap:10px;font-size:15px;font-weight:700;color:var(--ink)}
+.studio .tryamt input{width:100%;accent-color:var(--ink)}
+.amtlabels{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-top:-4px}
+.tryacts{display:grid;gap:10px}
+.tryacts .primary{background:var(--ink);color:var(--bg)}
+.tryapplied{display:grid;gap:8px}
+.applist{display:flex;flex-wrap:wrap;gap:6px}
+.appchip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border-radius:999px;padding:5px 10px 5px 6px;font-size:12.5px;font-weight:600}
+.appchip i{width:16px;height:16px;border-radius:50%}
+.applinks{display:flex;gap:16px;flex-wrap:wrap}
+.applinks .linkbtn{color:var(--accent);font-weight:700;font-size:13.5px;text-decoration:none}
+.liverow .primary{background:var(--accent)}
+.studio .trymsg span{background:var(--tile)}
+@media (min-width:860px){#v-try-on .studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:row dense;column-gap:28px;align-items:start}
+  #v-try-on .studio>.trystage,#v-try-on .studio>.liverow{grid-column:1}#v-try-on .studio>*:not(.trystage):not(.liverow):not(#tryvideo){grid-column:2}
+  #v-try-on .studio>.trystage{grid-row:1/span 6}}
+/* compare */
+.cmpstage{position:relative;border-radius:24px;overflow:hidden;background:var(--surface);aspect-ratio:1;max-width:560px;margin:0 auto;touch-action:none;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.cmpstage canvas{width:100%;height:100%;display:block}
+.cmplab{position:absolute;top:12px;font-size:11px;font-weight:800;letter-spacing:.12em;background:rgba(255,255,255,.85);color:#2a2124;border-radius:999px;padding:5px 10px}
+.cmplab.l{left:12px}.cmplab.r{right:12px}
+.cmphandle{position:absolute;top:50%;left:50%;width:42px;height:42px;margin:-21px 0 0 -21px;border-radius:50%;background:#fff;color:#2a2124;display:grid;place-items:center;font-weight:800;box-shadow:0 2px 10px rgba(0,0,0,.25);pointer-events:none}
+.cmpstage .trymsg{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center}
+.cmpstage .trymsg span{display:grid;gap:10px;justify-items:center;background:var(--tile);border-radius:18px;padding:18px;max-width:30ch;color:var(--muted)}
+.cmpstage .trymsg b{color:var(--ink);font-size:16px}
+.cmpapplied{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(132px,1fr);gap:10px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px}
+.appcard{position:relative;display:grid;gap:3px;background:var(--surface);border-radius:18px;padding:12px;text-decoration:none;color:var(--ink);min-width:0}
+.appcard .n{position:absolute;top:10px;left:12px;font-size:11px;font-weight:800;color:var(--muted)}
+.appcard .pimg.sm{width:52px;height:52px;justify-self:center;margin:6px 0}.appcard .pimg.sm svg{width:42px;height:42px}
+.appcard b{font-size:13.5px}.appcard small{color:var(--muted);font-size:11.5px;line-height:1.3}
+#v-compare .tryacts{grid-template-columns:1.3fr 1fr}
+#v-compare .tryacts .primary{background:var(--accent);color:var(--accent-ink)}
+/* shop */
+.regionrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;font-size:14px;color:var(--muted);font-weight:600}
+.seg.mini{display:inline-grid;grid-auto-flow:column;margin:0}.seg.mini button{padding:7px 12px;font-size:12.5px}
+.seg.mini button[aria-checked="true"]{background:var(--tile);color:var(--ink);box-shadow:0 1px 3px rgba(42,33,36,.12)}
+.shoptabs{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto}
+.shoptabs button{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--surface);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13.5px}
+.shoptabs button i{width:14px;height:14px;border-radius:50%}
+.shoptabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.pdp{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.pdpimg{position:relative;background:var(--surface);border-radius:24px;aspect-ratio:1;max-width:100%;display:grid;place-items:center}
+.pimg.xl{width:62%;height:62%;background:transparent}.pimg.xl svg{width:100%;height:100%}
+.illus{position:absolute;left:12px;bottom:12px;font-size:11px;font-weight:600;color:var(--muted);background:var(--tile);border-radius:999px;padding:4px 10px}
+.pdpinfo{display:grid;gap:10px;align-content:start}
+.pdpinfo .pbrand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.pdpinfo h2{font-size:26px;letter-spacing:-.035em;line-height:1.1}
+.specs{margin:4px 0 6px;display:grid;gap:0;border-top:1px solid var(--line)}
+.specs div{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.specs dt{color:var(--muted)}.specs dd{margin:0;font-weight:700;display:flex;align-items:center;gap:8px;text-align:right}
+.specs dd i{width:16px;height:16px;border-radius:50%}.fitd{color:var(--accent)}
+.altbuy{display:flex;gap:18px;justify-content:center}
+.altbuy a{color:var(--accent);font-weight:700;font-size:14px;text-decoration:none}
+.disclose{margin:4px 0 0;font-size:12px;color:var(--muted);line-height:1.45}
+@media (min-width:860px){.pdp{grid-template-columns:1fr 1fr;gap:32px;align-items:start}}
+.empty{background:var(--surface);border-radius:22px;padding:28px 20px;text-align:center;display:grid;gap:8px;justify-items:center}
+.empty b{font-size:18px}.empty p{margin:0 0 6px;color:var(--muted);max-width:34ch}
+.empty .cta{width:auto;padding:13px 26px}
+.cmpstrip.wrapgrid{grid-template-columns:repeat(auto-fill,minmax(84px,1fr))}
+/* existing sections inside views */
+#v-color .intro{padding-top:6px}
+#v-looks .filters{padding-top:0}
+#v-skincare .skin{margin-top:8px;padding-top:0}
+.card,.sheet,.rescard,.selfie,.quiz:not(.collapsed),.rcolumn,.estile,.panel{background:var(--surface)}
+.reclook,.ptile,.how,.complete,.crow .pimg.sm,.pimg,.fbb,.add,.opt,.chip,.tchip.none{background:var(--tile)}
+.chip[aria-pressed="true"],.add[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.rec{background:var(--accent);color:var(--accent-ink)}
+.bagbtn{background:var(--surface)}
+footer{padding-bottom:8px}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
 <body>
 
 <div class="wrap">
-  <header>
-    <div class="brand"><b>gyeol</b><span>결</span></div>
-    <div style="display:flex;gap:8px"><a class="bagbtn navlink" href="#skincare">Skincare</a><button class="bagbtn" id="bagbtn" type="button">Shopping list <em id="bagcount">0</em></button></div>
+  <header class="appbar">
+    <a class="brand" href="#home" aria-label="Gyeol home"><b>Gyeol.</b><small>Your Color. Your Beauty.</small></a>
+    <nav class="hicons" aria-label="Shortcuts">
+      <a class="icobtn" href="#color" aria-label="Personal color"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
+      <a class="icobtn" href="#saved" aria-label="Saved shades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><em id="favcount" hidden>0</em></a>
+      <button class="icobtn" id="bagbtn" type="button" aria-label="Shopping list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><em id="bagcount">0</em></button>
+    </nav>
   </header>
 
-  <section class="hero">
-    <div class="herotext">
-            <h1>Try K-beauty on your face before you buy.</h1>
-      <p>Real lip, blush and eye shades on your selfie. Love it? Shop the exact product.</p>
-      <ol class="howsteps"><li><b>1</b>Add a selfie</li><li><b>2</b>Try shades and looks</li><li><b>3</b>Shop what you love</li></ol>
+  <section class="view" data-view="home" id="v-home" aria-label="Home">
+    <div class="homehero">
+      <div class="homeart" id="homeart"></div>
+      <div class="homecopy">
+        <div class="kicker">Korean beauty, on your face</div>
+        <h1 class="display">Define your shade.</h1>
+        <p>Try real Korean lip shades on your own photo, compare before and after, then shop the exact product.</p>
+        <a class="primary cta" href="#try-on">Try On Now</a>
+      </div>
     </div>
+    <div class="homecards">
+      <a class="hcard" href="#color"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span><b>Personal Color</b><small>Find your season with AI or a 4-question quiz</small></a>
+      <a class="hcard" href="#looks"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11c2.5-3 5-4 7-3l2 1 2-1c2-1 4.5 0 7 3-2.5 4-5.5 6-9 6s-6.5-2-9-6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 11c3 .8 6 1 9 1s6-.2 9-1" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span><b>Look Library</b><small>8 Korean looks, step by step</small></a>
+      <button class="hcard" type="button" id="homebag"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span><b>Shopping List</b><small id="homebagn">Empty</small></button>
+      <a class="hcard" href="#skincare"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><b>Skincare</b><small>Your 3 essentials</small></a>
+    </div>
+  </section>
+
+  <section class="view" data-view="try-on" id="v-try-on" aria-label="Virtual try-on" hidden>
+    <div class="vhead"><h1 class="vtitle">Find Your Lip Color</h1><p>Discover your next favorite Korean lip shade.</p></div>
     <section class="studio" id="tryon" aria-label="Makeup studio">
       <div class="trystage">
         <div class="tryillus" id="tryillus" aria-hidden="true"></div>
@@ -472,15 +631,44 @@ footer{border-top:0;text-align:center}
       <div class="liverow"><button class="primary" type="button" id="liveon">Live camera</button><button class="bagbtn" type="button" id="liveupload" data-try="pick">Upload a photo</button>
         <button class="primary" type="button" id="liveshot" hidden>Take photo</button><button class="bagbtn" type="button" id="liveoff" hidden>Stop camera</button></div>
       <label class="splitrow" id="splitrow" for="trysplit" hidden><span>Before</span><input type="range" id="trysplit" min="0" max="100" value="0" aria-label="Drag to compare before and after"><span>After</span></label>
+      <div class="shadehead"><h2>Choose your shade</h2><span id="shadecount"></span></div>
       <div class="seg" id="tryseg" role="tablist" aria-label="Makeup category"><button type="button" role="tab" data-m="lip">Lips</button><button type="button" role="tab" data-m="blush">Blush</button><button type="button" role="tab" data-m="eye">Eyes</button><button type="button" role="tab" data-m="looks">Looks</button></div>
       <div class="trychips" id="trychips" role="radiogroup" aria-label="Shades"></div>
-      <label class="tryamt" for="tryamt">Intensity <input type="range" id="tryamt" min="20" max="100" value="60"></label>
-      <div class="tryprod" id="tryprod"></div>
+      <div class="selpanel">
+        <div class="tryprod" id="tryprod"></div>
+        <label class="tryamt" for="tryamt"><span>Color intensity</span><input type="range" id="tryamt" min="20" max="100" value="60"></label>
+        <div class="amtlabels"><span>Sheer</span><span id="amtval">Full color · 60%</span></div>
+      </div>
+      <div class="tryacts"><a class="primary cta" href="#compare">Compare Before &amp; After <span aria-hidden="true">→</span></a><button class="outline" type="button" id="savefav">Save This Shade <span class="hrt" aria-hidden="true">♡</span></button></div>
+      <div class="tryapplied" id="tryapplied"></div>
       <input type="file" id="tryfile" class="sr" accept="image/*">
       <p class="note">The studio runs on your device. Your photo isn't uploaded.</p>
     </section>
   </section>
 
+  <section class="view" data-view="compare" id="v-compare" aria-label="Compare before and after" hidden>
+    <div class="vhead"><h1 class="vtitle">Compare Your Look</h1><p>Drag across your photo to see before and after.</p></div>
+    <div class="cmpstage" id="cmpstage">
+      <canvas id="cmpcv" width="480" height="480" aria-label="Your photo, before on the left and after on the right"></canvas>
+      <span class="cmplab l">Before</span><span class="cmplab r">After</span>
+      <div class="cmphandle" id="cmphandle" role="slider" tabindex="0" aria-label="Before and after divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span aria-hidden="true">‹ ›</span></div>
+      <div class="trymsg" id="cmpmsg" hidden></div>
+    </div>
+    <div class="shadehead"><h2>Switch shade</h2><span id="cmpcount"></span></div>
+    <div class="cmpstrip" id="cmpstrip" role="radiogroup" aria-label="Lip shades"></div>
+    <div class="label" style="margin-top:18px">Products applied</div>
+    <div class="cmpapplied" id="cmpapplied"></div>
+    <div class="tryacts"><a class="primary cta" href="#shop">Shop This Look</a><button class="outline" type="button" id="cmpsave">Save Look</button></div>
+  </section>
+
+  <section class="view" data-view="shop" id="v-shop" aria-label="Shop" hidden>
+    <div class="vhead"><h1 class="vtitle">Shop Your Look</h1><p>The exact products and shades from your try-on.</p></div>
+    <div class="regionrow"><span>Shopping in</span><div class="seg mini" id="regionseg" role="radiogroup" aria-label="Shopping region"><button type="button" role="radio" data-r="US">United States</button><button type="button" role="radio" data-r="CA">Canada</button></div></div>
+    <div id="shopmain"></div>
+  </section>
+
+  <section class="view" data-view="color" id="v-color" aria-label="Personal color" hidden>
+    <a class="back" href="#home">‹ Home</a>
   <section class="intro" id="colors">
     <div>
       <div class="label">Optional · AI personal color</div>
@@ -516,15 +704,22 @@ footer{border-top:0;text-align:center}
   </section>
 
   <section class="rescard" id="result" hidden aria-live="polite"></section>
+  </section>
 
+  <section class="view" data-view="looks" id="v-looks" aria-label="Look library" hidden>
+    <a class="back" href="#home">‹ Home</a>
+    <div class="vhead"><h1 class="vtitle">Look Library</h1><p>Korean makeup looks with the exact products, step by step.</p></div>
   <div class="filters" id="filters" role="group" aria-label="Filter looks by personal color"></div>
 
   <section class="main">
     <div class="shelf" id="shelf"></div>
     <article class="sheet" id="sheet"></article>
   </section>
+  </section>
 
-  <section class="skin" id="skincare">
+  <section class="view" data-view="skincare" id="v-skincare" aria-label="Skincare" hidden>
+    <a class="back" href="#home">‹ Home</a>
+  <section class="skin" id="skinsec">
     <div class="label">Skincare for you</div>
     <h2 class="skinh">Your 3 skincare essentials</h2>
     <p class="skinsub">What bothers your skin most?</p>
@@ -536,9 +731,23 @@ footer{border-top:0;text-align:center}
     </details>
     <p class="note" id="sknote"></p>
   </section>
+  </section>
+
+  <section class="view" data-view="saved" id="v-saved" aria-label="Saved" hidden>
+    <a class="back" href="#home">‹ Home</a>
+    <div class="vhead"><h1 class="vtitle">Saved</h1><p>Your favorite shades and looks.</p></div>
+    <div id="savedbody"></div>
+  </section>
 
   <footer>Gyeol beta · Photos are never stored · Some links are affiliate links</footer>
 </div>
+<nav class="tabbar" id="tabbar" aria-label="Main">
+  <a href="#home" data-v="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8.5H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19.5v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Home</span></a>
+  <a href="#try-on" data-v="try-on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg><span>Try On</span></a>
+  <a href="#compare" data-v="compare"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 5v14" stroke="currentColor" stroke-width="1.6"/><path d="M4 5h8v14H4z" fill="currentColor" opacity=".25"/></svg><span>Compare</span></a>
+  <a href="#shop" data-v="shop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Shop</span></a>
+</nav>
+
 
 
 <div class="scrim" id="scrim" hidden></div>
@@ -583,7 +792,10 @@ const Q=[
 ];
 /* Affiliate tags: fill in once approved (e.g. amazon: "gyeol-20"). Links work without them. */
 const AFF={amazon:"",yesstyle:""};
-const amz=q=>"https://www.amazon.com/s?k="+encodeURIComponent(q)+(AFF.amazon?"&tag="+encodeURIComponent(AFF.amazon):"");
+const CA_TZ=/^America\/(Toronto|Vancouver|Edmonton|Winnipeg|Halifax|Regina|St_Johns|Montreal|Moncton|Whitehorse|Yellowknife|Iqaluit|Glace_Bay|Goose_Bay|Dawson_Creek|Swift_Current)$/;
+const region=()=>{try{const r=localStorage.getItem("gy-region");if(r)return JSON.parse(r)}catch(e){}try{return CA_TZ.test(Intl.DateTimeFormat().resolvedOptions().timeZone)?"CA":"US"}catch(e){return "US"}};
+const amzHost=()=>region()==="CA"?"www.amazon.ca":"www.amazon.com";
+const amz=q=>`https://${amzHost()}/s?k=`+encodeURIComponent(q)+(AFF.amazon?"&tag="+encodeURIComponent(AFF.amazon):"");
 const ys=q=>"https://www.yesstyle.com/en/list.html?q="+encodeURIComponent(q)+(AFF.yesstyle?"&rco="+encodeURIComponent(AFF.yesstyle):"");
 const ggl=q=>"https://www.google.com/search?tbm=shop&q="+encodeURIComponent(q);
 /* s = official shade name; fam:true = shade depends on the person, so we name a shade family instead */
@@ -618,6 +830,12 @@ const P={
   liner:{b:"CLIO",n:"Sharp, So Simple Waterproof Pencil Liner",s:"brown",fam:true,c:"#5a3a2e"},
   peripBlush:{b:"Peripera",n:"Pure Blushed Sunshine Cheek",s:"a peach or coral shade",fam:true,c:"#f4a79a"},
   dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"},
+  /* studio: matte lipstick */
+  zm01:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#01 Dusty Pink",c:"#c07f86"},
+  zm02:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#02 All That Jazz",c:"#9e4a3c"},
+  zm08:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#08 Adorable",c:"#e0705f"},
+  zm13:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#13 Red Carpet",c:"#b0233a"},
+  zm15:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#15 Midnight",c:"#6b2236"},
   /* studio: blush */
   btcN01:{b:"rom&nd",n:"Better Than Cheek",s:"N01 Nutty Nude",c:"#c99a85"},
   btcN02:{b:"rom&nd",n:"Better Than Cheek",s:"N02 Vine Nude",c:"#c4908f"},
@@ -657,7 +875,7 @@ const P={
 };
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
 /* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
-const TYPE={btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
+const TYPE={zm01:"stick",zm02:"stick",zm08:"stick",zm13:"stick",zm15:"stick",btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
   amuse:"tint",etudeBrow:"pencil",liner:"pencil",peripBlush:"blush",dasiqueBlush:"blush",rosemilktea:"palette"};
 const ptype=id=>TYPE[id]||(/^bt/.test(id)?"palette":"tint");
 function shadeMix(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
@@ -673,6 +891,7 @@ function pack(id){const p=P[id],c=p.c,K='class="pk"',L='stroke="var(--line)" str
     blush:`<circle ${K} cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="18" fill="${c}"/><circle cx="32" cy="32" r="9" fill="${shadeMix(c,.25)}" opacity=".7"/>`,
     jar:`<rect ${K} x="14" y="16" width="36" height="10" rx="3"/><rect x="12" y="26" width="40" height="26" rx="6" fill="${c}" ${L}/><rect x="18" y="33" width="28" height="9" rx="2" fill="#fff" opacity=".5"/>`,
     patch:`<rect x="10" y="12" width="44" height="40" rx="6" fill="#fff" ${L}/>${[[22,24],[32,24],[42,24],[22,34],[32,34],[42,34],[27,44],[37,44]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="4" fill="${c}" stroke="var(--muted)" stroke-width=".6"/>`).join("")}`,
+    stick:`<rect ${K} x="24" y="34" width="16" height="26" rx="2"/><rect x="25.5" y="27" width="13" height="8" rx="1" fill="#c9b8a8"/><path d="M26.5 27V12l11-5v20z" fill="${c}"/>`,
     bottle:`<rect ${K} x="26" y="9" width="12" height="11" rx="2"/><rect x="18" y="20" width="28" height="38" rx="7" fill="${c}" ${L}/><rect x="22" y="32" width="20" height="12" rx="2" fill="#fff" opacity=".5"/>`,
     dropper:`<rect ${K} x="27" y="4" width="10" height="22" rx="5"/><rect x="20" y="25" width="24" height="33" rx="5" fill="${c}" ${L}/><rect x="24" y="34" width="16" height="10" rx="2" fill="#fff" opacity=".5"/>`};
   return `<svg viewBox="0 0 64 64" aria-hidden="true">${shapes[ptype(id)]}</svg>`}
@@ -812,7 +1031,7 @@ function renderQuiz(){
 
 const cap=x=>String(x||"").charAt(0).toUpperCase()+String(x||"").slice(1);
 function showResult(){const el=$("result");if(el.hidden)return;
-  el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})}
+  go("color","result")}
 function renderResult(){const el=$("result");
   if(!state.season){el.hidden=true;return}el.hidden=false;
   const s=SEASONS[state.season],ai=state.ai&&state.ai.season===state.season&&state.ai.why?state.ai:null;
@@ -859,17 +1078,17 @@ function renderResult(){const el=$("result");
       <button class="primary" id="retryphoto" type="button">${ai?"Retake My Photo":"Analyze a selfie"}</button></div>`}
     <div class="resfoot">${ai&&ai.confidence==="high"?`<button class="linkbtn" id="retryphoto" type="button">Try another photo</button>`:""}<button class="linkbtn" id="retakequiz" type="button">Take the 4-question check</button></div>`;
   el.querySelectorAll(".reclook").forEach(b=>b.onclick=()=>{state.look=b.dataset.id;state.filter=state.season;track.look(state.look);renderFilters();renderShelf();renderSheet();
-    $("sheet").scrollIntoView({behavior:"smooth",block:"start"})});
+    go("looks","sheet")});
   el.querySelectorAll(".ptile a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,null,"amazon")));
   el.querySelectorAll(".ptile .add").forEach(b=>b.onclick=()=>{const id=b.dataset.p;
     if(!state.bag.includes(id))track.add(id);
     state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);
     const on=state.bag.includes(id);b.setAttribute("aria-pressed",on);b.textContent=on?"Added":"+ Add";renderBag();renderSheet()});
-  $("explore").onclick=()=>$("filters").scrollIntoView({behavior:"smooth",block:"start"});
+  $("explore").onclick=()=>go("looks");
   el.querySelectorAll("[data-fb]").forEach(b=>b.onclick=()=>{const v=b.dataset.fb;
     if(v==="yes"){state.fbDone=true;send("season_feedback",{verdict:"right",season:state.season,source:state.seasonSrc,confidence:ai&&ai.confidence});renderResult()}
     if(v==="change"){$("fbpick").hidden=false}
-    if(v==="all"){send("season_feedback",{verdict:"explore_all",season:state.season});state.filter="all";renderFilters();renderShelf();$("filters").scrollIntoView({behavior:"smooth",block:"start"})}});
+    if(v==="all"){send("season_feedback",{verdict:"explore_all",season:state.season});state.filter="all";renderFilters();renderShelf();go("looks")}});
   el.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{const k=b.dataset.pick;
     send("season_feedback",{verdict:"different",from:state.season,to:k,source:state.seasonSrc,confidence:ai&&ai.confidence});
     state.season=k;state.seasonSrc="user";store.set("gy-season",k);store.set("gy-src","user");state.filter=k;
@@ -953,7 +1172,7 @@ function renderSheet(){
     if(!state.bag.includes(id))track.add(id);
     state.bag=state.bag.includes(id)?state.bag.filter(x=>x!==id):state.bag.concat(id);store.set("gy-bag",state.bag);renderSheet();renderBag()})}
 
-function renderBag(){
+function renderBag(){if($("homebagn")){const n=state.bag.length;$("homebagn").textContent=n?`${n} item${n>1?"s":""}`:"Empty"}
   $("bagcount").textContent=state.bag.length;
   $("baglist").innerHTML=state.bag.length?state.bag.map(id=>{const p=P[id];return `<li><div class="pimg sm">${pack(id)}</div>
     <div style="min-width:0"><div class="pname">${esc(p.n)}${p.s&&!p.fam?" · "+esc(p.s):""}</div><div class="pbrand">${esc(p.b)} · <a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}" data-s="amazon" class="bagshop" style="color:var(--accent)">Shop ↗</a></div></div>
@@ -1060,11 +1279,11 @@ const LIP_OUT=[61,146,91,181,84,17,314,405,321,375,291,409,270,269,267,0,37,39,4
 const LIP_IN=[78,95,88,178,87,14,317,402,318,324,308,415,310,311,312,13,82,81,80,191];
 const EYE_UP_L=[33,246,161,160,159,158,157,173,133],EYE_UP_R=[263,466,388,387,386,385,384,398,362],EYE_LO_L=[33,7,163,144,145,153,154,155,133],EYE_LO_R=[263,249,390,373,374,380,381,382,362],BROW_L=[70,63,105,66,107],BROW_R=[300,293,334,296,336];
 const STUDIO={
-  lip:["jujube","peachme","vitcoral","snowstraw","figfig","almondrose","joseonfig","celebrose","goodbrick","eatdotori","plumcoke","lipbalm"],
+  lip:["jujube","zm08","peachme","vitcoral","snowstraw","zm01","figfig","almondrose","joseonfig","celebrose","zm13","goodbrick","zm02","eatdotori","plumcoke","zm15","lipbalm"],
   blush:["btcW03","btcC01","dqPeach","dqWarm","btcN01","btcW02","btcN02","btcC02","btcC03","dqCool"],
   eye:["btPeach","btPampas","dqMilkLatte","btMahogany","dqSugar","dqRosePetal","rosemilktea","btDusty","btBerry","btGlitter"]};
 const CAT={lip:"Lips",blush:"Blush",eye:"Eyes"};
-const FIT={jujube:["spring"],peachme:["spring"],vitcoral:["spring"],snowstraw:["summer"],figfig:["summer"],almondrose:["summer"],joseonfig:["summer","autumn"],celebrose:["winter","summer"],goodbrick:["autumn"],eatdotori:["autumn"],plumcoke:["winter"],lipbalm:["spring","summer","autumn","winter"],
+const FIT={zm01:["summer"],zm02:["autumn"],zm08:["spring"],zm13:["winter"],zm15:["winter"],jujube:["spring"],peachme:["spring"],vitcoral:["spring"],snowstraw:["summer"],figfig:["summer"],almondrose:["summer"],joseonfig:["summer","autumn"],celebrose:["winter","summer"],goodbrick:["autumn"],eatdotori:["autumn"],plumcoke:["winter"],lipbalm:["spring","summer","autumn","winter"],
   btcW03:["spring"],btcC01:["spring"],dqPeach:["spring"],dqWarm:["spring","autumn"],btcN01:["autumn"],btcW02:["summer"],btcN02:["summer","autumn"],btcC02:["summer","winter"],btcC03:["summer","autumn"],dqCool:["summer","winter"],
   btPeach:["spring"],btPampas:["spring","autumn"],dqMilkLatte:["spring","autumn"],btMahogany:["autumn"],dqSugar:["autumn"],dqRosePetal:["summer"],rosemilktea:["summer"],btDusty:["summer","autumn"],btBerry:["winter"],btGlitter:["spring","summer","autumn","winter"]};
 const LOOK_SEL={glass:{lip:"lipbalm",blush:null,eye:null},peach:{lip:"jujube",blush:"btcW03",eye:"btPeach"},mlbb:{lip:"figfig",blush:"btcN02",eye:"rosemilktea"},gradient:{lip:"snowstraw",blush:"btcW02",eye:null},
@@ -1105,7 +1324,8 @@ function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;
     for(let pass=0;pass<2;pass++){tc.clearRect(0,0,w,w);tc.drawImage(m,0,0,w,w);mc.clearRect(0,0,S,S);mc.drawImage(t,0,0,S,S)}}
   return mc.getImageData(0,0,S,S).data}
 const hexRgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
-const FINISH=id=>id==="lipbalm"?"balm":/^(goodbrick|celebrose|vitcoral)$/.test(id)?"velvet":"glossy";
+const FINISH=id=>id==="lipbalm"?"balm":/^zm/.test(id)?"matte":/^(goodbrick|celebrose|vitcoral)$/.test(id)?"velvet":"glossy";
+const FIN_LABEL={glossy:"Glossy",velvet:"Velvet",matte:"Matte",balm:"Sheer"};
 /* Light cast: compare the cheeks' color to a typical skin chroma, so shades sit in the photo's own lighting */
 function lightCast(d,S,pts){const ref=[1.2,.98,.82];let r=0,g=0,b=0,n=0;
   [50,280].forEach(i=>{const [cx,cy]=pts[i],rad=Math.max(3,S*.015)|0;for(let y=-rad;y<=rad;y+=2)for(let x=-rad;x<=rad;x+=2){const px=(cx+x)|0,py=(cy+y)|0;if(px<0||py<0||px>=S||py>=S)continue;const k=(py*S+px)*4;r+=d[k];g+=d[k+1];b+=d[k+2];n++}});
@@ -1117,8 +1337,8 @@ function recolor(d,m,hex,strength,kind,cast,finish){let [tr,tg,tb]=hexRgb(hex);i
   const Lm=Math.max(1,cnt?sum/cnt:128);
   for(let i=0;i<d.length;i+=4){const a=m[i+3]/255*strength;if(a<.004)continue;
     const r=d[i],g=d[i+1],b=d[i+2],L=.299*r+.587*g+.114*b;let nr,ng,nb;
-    if(kind==="lip"){const vel=finish==="velvet",k=Math.pow(L/Lm,vel?.6:.95);nr=tr*k;ng=tg*k;nb=tb*k;
-      const sp=Math.min(1,Math.max(0,(L/Lm-(vel?1.3:1.12))/.4));const keep=vel?.2:.75;nr+=(r-nr)*sp*keep;ng+=(g-ng)*sp*keep;nb+=(b-nb)*sp*keep;
+    if(kind==="lip"){const vel=finish==="velvet"||finish==="matte",k=Math.pow(L/Lm,finish==="matte"?.5:vel?.6:.95);nr=tr*k;ng=tg*k;nb=tb*k;
+      const sp=Math.min(1,Math.max(0,(L/Lm-(vel?1.3:1.12))/.4));const keep=finish==="matte"?.08:vel?.2:.75;nr+=(r-nr)*sp*keep;ng+=(g-ng)*sp*keep;nb+=(b-nb)*sp*keep;
       if(!vel&&sp>0){const gl=sp*sp*70;nr+=gl;ng+=gl;nb+=gl}}
     else if(kind==="balm"){const k=L/Lt;nr=tr*k*.5+r*.5;ng=tg*k*.5+g*.5;nb=tb*k*.5+b*.5;const sp=Math.max(0,(L/Lm-1.05));nr+=sp*60;ng+=sp*60;nb+=sp*60}
     else{const k=L/Lt,w=kind==="eye"?.6:.3;nr=tr*k*(1-w)+r*tr/255*w;ng=tg*k*(1-w)+g*tg/255*w;nb=tb*k*(1-w)+b*tb/255*w}
@@ -1202,6 +1422,9 @@ const shortName=id=>P[id].s?P[id].s.replace(/^[#A-Z]*\d+\s*/,""):P[id].n.replace
 function lookParts(l){const st=n=>l.steps.find(x=>x[0]===n),lp=st("Lips"),ey=st("Eyes"),ch=st("Cheeks");
   const ls=LOOK_SEL[l.id];
   return {lip:ls?ls.lip:(lp&&lp[2].find(id=>!P[id].fam&&id!=="lipbalm")||null),eye:ls&&ls.eye?P[ls.eye].c:(ey?P[ey[2].find(id=>id!=="liner")||ey[2][0]].c:null),cheek:ls&&ls.blush?P[ls.blush].c:(ch?P[ch[2][0]].c:null)}}
+const catOf=id=>Object.keys(STUDIO).find(k=>STUDIO[k].includes(id));
+const favs=()=>{const v=store.get("gy-favs",[]);return Array.isArray(v)?v.filter(id=>P[id]):[]};
+function parseShade(p){const m=String(p.s||"").match(/^(#?[A-Z]?\d+)\s+(.+)$/);return m?{num:m[1],name:m[2]}:{num:"",name:p.s||""}}
 function renderTryOn(){
   if(!T2.touched&&state.season)T2.sel=defaultSel();
   const tab=T2.tab;
@@ -1210,35 +1433,46 @@ function renderTryOn(){
   const star=id=>fits(id)?`<em class="star" title="For your season">★</em>`:"";
   if(tab==="looks"){const mine=savedLooks(),looks=LOOKS.slice().sort((a,b)=>(state.season?(b.tones.includes(state.season)-a.tones.includes(state.season)):0));
     const tri=sel=>`<i style="background:conic-gradient(${[sel.lip,sel.blush,sel.eye].map(id=>id?P[id].c:"var(--sunk)").map((c,i)=>`${c} ${i*120}deg ${(i+1)*120}deg`).join(",")})"></i>`;
+    $("shadecount").textContent=`${looks.length+mine.length} looks`;
     $("trychips").innerHTML=(mine.length?`<div class="chipgroup">My looks</div>`+mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}">${tri(m)}<span>My look ${i+1}</span></button>`).join(""):"")
-      +`<div class="chipgroup">Gyeol looks</div>`+looks.map(l=>`<button class="tchip fit" type="button" data-look="${l.id}">${tri(LOOK_SEL[l.id])}<span>${esc(l.en)}${state.season&&l.tones.includes(state.season)?" ★":""}</span></button>`).join("");
+      +`<div class="chipgroup">Gyeol looks</div>`+looks.map(l=>`<button class="tchip fit" type="button" aria-checked="${T2.lookId===l.id}" data-look="${l.id}">${tri(LOOK_SEL[l.id])}<span>${esc(l.en)}</span>${state.season&&l.tones.includes(state.season)&&l.tones.length<4?`<em class="star">★</em>`:""}</button>`).join("");
     $("trychips").querySelectorAll("[data-look]").forEach(b=>b.onclick=()=>{T2.sel=Object.assign({},LOOK_SEL[b.dataset.look]);T2.touched=true;T2.lookId=b.dataset.look;send("tryon_look",{look:b.dataset.look});renderTryOn();drawTry()});
     $("trychips").querySelectorAll("[data-mine]").forEach(b=>b.onclick=()=>{const m=mine[+b.dataset.mine];T2.sel={lip:m.lip||null,blush:m.blush||null,eye:m.eye||null};T2.touched=true;T2.lookId=null;renderTryOn();drawTry()});
   } else {
-    $("trychips").innerHTML=`<button class="tchip none" type="button" role="radio" aria-checked="${!T2.sel[tab]}" data-id=""><i></i><span>None</span></button>`+sorted(tab).map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${T2.sel[tab]===id}" data-id="${id}" title="${esc(P[id].b+" "+P[id].n+(P[id].s?" "+P[id].s:""))}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${star(id)}</button>`).join("");
+    const list=sorted(tab),idx=list.indexOf(T2.sel[tab]);
+    $("shadecount").textContent=idx>=0?`${String(idx+1).padStart(2,"0")} / ${list.length}`:`${list.length} shades`;
+    $("trychips").innerHTML=`<button class="tchip none" type="button" role="radio" aria-checked="${!T2.sel[tab]}" data-id=""><i></i><span>None</span></button>`+list.map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${T2.sel[tab]===id}" data-id="${id}" title="${esc(P[id].b+" "+P[id].n+(P[id].s?" "+P[id].s:""))}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${star(id)}</button>`).join("");
     $("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.sel[tab]=b.dataset.id||null;T2.touched=true;T2.lookId=null;send("tryon_select",{cat:tab,product:b.dataset.id||"none",season:state.season});renderTryOn();drawTry()});}
-  const rows=["lip","blush","eye"].filter(k=>T2.sel[k]).map(k=>{const id=T2.sel[k],p=P[id];
-    return `<div class="crow"><div class="pimg sm">${pack(id)}</div><div style="min-width:0"><b>${CAT[k]}${k==="lip"?` · ${{glossy:"Glossy",velvet:"Velvet",balm:"Sheer"}[FINISH(id)]}`:""}</b><span>${esc(p.b)} ${esc(p.n)}${p.s?" · "+esc(p.s):""}</span>${fits(id)?`<span class="tag match" style="justify-self:start;margin-top:2px">★ For your season</span>`:""}</div><a href="${amz(pq(p))}" target="_blank" rel="noopener" data-p="${id}">Shop ↗</a></div>`});
+  // selected product panel (current category; lips when browsing looks)
+  const cat=tab==="looks"?(["lip","blush","eye"].find(k=>T2.sel[k])||"lip"):tab,id=T2.sel[cat],p=id&&P[id],fv=favs();
+  if(p){const sh=parseShade(p);
+    $("tryprod").innerHTML=`<div class="selname"><h3>${esc(sh.name||shortName(id))}</h3><span>${cat==="lip"?FIN_LABEL[FINISH(id)]:CAT[cat]}</span></div>
+      <div class="selsub"><i style="background:${p.c}"></i><span>${esc(p.b)} · ${esc(p.n)}${sh.num?` · ${esc(sh.num)}`:""}</span></div>
+      ${fits(id)?`<div class="tag match" style="display:inline-block;margin-top:8px">★ Made for your ${SEASONS[state.season].en}</div>`:""}`;
+    $("savefav").hidden=false;const on=fv.includes(id);$("savefav").setAttribute("aria-pressed",on);$("savefav").innerHTML=on?`Saved <span class="hrt" aria-hidden="true">♥</span>`:`Save This Shade <span class="hrt" aria-hidden="true">♡</span>`;$("savefav").dataset.id=id}
+  else{$("tryprod").innerHTML=`<div class="selname"><h3>No ${CAT[cat]==="Lips"?"lip color":CAT[cat].toLowerCase()}</h3><span></span></div><div class="selsub"><span>Pick a shade above to try it on.</span></div>`;$("savefav").hidden=true}
+  $("amtval").textContent=`${T2.amt>=.85?"Full color":T2.amt>=.5?"Natural":"Sheer"} · ${Math.round(T2.amt*100)}%`;
+  const rows=["lip","blush","eye"].filter(k=>T2.sel[k]);
   const lk=T2.lookId&&LOOKS.find(x=>x.id===T2.lookId);
-  $("tryprod").innerHTML=rows.length?`<div class="label">${lk?esc(lk.en):"Your look"}${lk?` · <button class="linkbtn" type="button" data-try="steps">How to apply</button>`:""}</div>${rows.join("")}
-    <div class="studioacts"><button class="primary" type="button" data-try="shop">Shop this look</button><button class="bagbtn" type="button" data-try="save">Save look</button></div>`
-    :`<p class="note">Pick a lip, blush or eye shade to build your look.</p>`;
-  $("tryprod").querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"studio","amazon")));
+  $("tryapplied").innerHTML=rows.length?`<div class="label">${lk?esc(lk.en)+" · ":""}Applied now</div>
+    <div class="applist">${rows.map(k=>{const q=P[T2.sel[k]];return `<span class="appchip"><i style="background:${q.c}"></i>${CAT[k]}: ${esc(shortName(T2.sel[k]))}</span>`}).join("")}</div>
+    <div class="applinks"><a class="linkbtn" href="#shop">Shop this look</a><button class="linkbtn" type="button" data-try="save">Save look</button>${lk?`<button class="linkbtn" type="button" data-try="steps">How to apply</button>`:""}</div>`:"";
   $("tryillus").innerHTML=swatchArt(T2.sel,"#efe3dd","Your look");
+  if(LIVE.on){tryMsg("");return}
   if(!selfieBlob){T2.src=null;$("trycv").getContext("2d").clearRect(0,0,9999,9999);studioReady(false);
-    if(LIVE.on){tryMsg("");return}
     tryMsg(`<span><b>See it on your face</b>Turn on the live camera, or add a selfie. Face the camera at eye level, in good light.</span>`);return}
-  if(LIVE.on){stopLive()}
   if(T2.forBlob!==selfieBlob)loadTryOn();else drawTry()}
 $("tryon").addEventListener("click",e=>{const t=e.target.closest("[data-try]");if(!t)return;const a=t.dataset.try;
   if(a==="pick")$("tryfile").click();
   if(a==="retry"){T2.forBlob=null;loadTryOn()}
-  if(a==="steps"&&T2.lookId){state.look=T2.lookId;state.filter="all";renderFilters();renderShelf();renderSheet();$("sheet").scrollIntoView({behavior:"smooth",block:"start"})}
+  if(a==="steps"&&T2.lookId){state.look=T2.lookId;state.filter="all";renderFilters();renderShelf();renderSheet();go("looks","sheet")}
   if(a==="shop"){const ids=["lip","blush","eye"].map(k=>T2.sel[k]).filter(Boolean);ids.forEach(id=>{if(!state.bag.includes(id)){track.add(id);state.bag.push(id)}});
     store.set("gy-bag",state.bag);send("shop_look",{look:T2.lookId||"custom",source:"studio"});renderBag();openBag(true)}
   if(a==="save"){const m=savedLooks();const cur={lip:T2.sel.lip,blush:T2.sel.blush,eye:T2.sel.eye};
     if(!m.some(x=>x.lip===cur.lip&&x.blush===cur.blush&&x.eye===cur.eye)){m.unshift(cur);m.splice(12);store.set("gy-looks",m);send("look_save",cur)}
-    t.textContent="Saved ✓";t.disabled=true}});
+    t.textContent="Saved ✓";t.disabled=true;renderFavCount()}});
+$("savefav").onclick=()=>{const id=$("savefav").dataset.id;if(!id)return;const f=favs();const i=f.indexOf(id);
+  if(i>=0)f.splice(i,1);else{f.unshift(id);send("shade_save",{product:id,season:state.season})}store.set("gy-favs",f.slice(0,40));renderFavCount();renderTryOn()};
 $("tryfile").onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;selfieBlob=f;T2.forBlob=null;e.target.value="";
   const img=$("selfieimg");img.src=URL.createObjectURL(f);img.hidden=false;$("dropcopy").hidden=true;$("changephoto").hidden=false;renderTryOn()};
 $("tryamt").oninput=e=>{T2.amt=e.target.value/100;drawTry()};
@@ -1295,7 +1529,7 @@ function renderSkin(){const c=skState.con,t=skType();
   if(c==="aging")notes.unshift("The full routine adds retinol at night: wear sunscreen every morning, and if you're pregnant or breastfeeding, ask your doctor first.");
   if(c==="breakouts")notes.unshift("For painful or lasting breakouts, see a dermatologist.");
   $("sknote").textContent=notes.join(" ");
-  const sec=$("skincare");
+  const sec=$("skinsec");
   $("skcon").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{skState.con=b.dataset.c;skState.type=null;store.set("gy-skin",skState);send("skin_concern",{concern:skState.con});renderSkin()});
   $("sktype").querySelectorAll(".chip").forEach(b=>b.onclick=()=>{skState.type=b.dataset.t;store.set("gy-skin",skState);send("skin_type",{type:skState.type});renderSkin()});
   sec.querySelectorAll("#essentials a,#routine .shop a").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"skincare",a.dataset.s)));
@@ -1348,8 +1582,109 @@ $("sharego").onclick=async()=>{if(!shareBlob)return;const file=new File([shareBl
   else{saveShare();$("sharenote").textContent="Saved. Now post it from your photos."}};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")$("sharewrap").hidden=true});
 
-function renderAll(){renderSkin();renderResult();renderTryOn();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
-renderAll();
+/* ---------- Compare view: same photo, before on the left, after on the right ---------- */
+const CMP={split:.5,before:null,after:null,S:0};
+function renderPhotoTo(cv,before){const ctx=cv.getContext("2d");const W=T2.src.width,H=T2.src.height,raw=T2.lm.map(p=>[p.x*W,p.y*H]);
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;raw.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
+  const side=Math.min(Math.max(x1-x0,y1-y0)*1.35,Math.max(W,H)),cx=(x0+x1)/2,cy=(y0+y1)/2;
+  const S=Math.min(720,Math.max(320,Math.round(side)));cv.width=S;cv.height=S;const k=S/side,ox=cx-side/2,oy=cy-side/2;
+  ctx.fillStyle=getComputedStyle(document.body).backgroundColor;ctx.fillRect(0,0,S,S);ctx.drawImage(T2.src,ox,oy,side,side,0,0,S,S);
+  if(!before)paintMakeup(ctx,raw.map(([x,y])=>[(x-ox)*k,(y-oy)*k]),S);return S}
+function drawCmp(){const cv=$("cmpcv");if(!CMP.after)return;const S=CMP.S,ctx=cv.getContext("2d");if(cv.width!==S){cv.width=S;cv.height=S}
+  ctx.drawImage(CMP.after,0,0);const sx=Math.round(S*CMP.split);ctx.drawImage(CMP.before,0,0,sx,S,0,0,sx,S);
+  ctx.fillStyle="#fff";ctx.fillRect(sx-1,0,2,S);
+  const h=$("cmphandle");h.style.left=(CMP.split*100)+"%";h.setAttribute("aria-valuenow",Math.round(CMP.split*100))}
+function renderCompare(){const msg=$("cmpmsg");
+  const list=sorted("lip"),cur=T2.sel.lip;
+  $("cmpcount").textContent=cur?`${String(list.indexOf(cur)+1).padStart(2,"0")} / ${list.length}`:"";
+  $("cmpstrip").innerHTML=list.map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${cur===id}" data-id="${id}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${fits(id)?`<em class="star">★</em>`:""}</button>`).join("");
+  $("cmpstrip").querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>{T2.sel.lip=b.dataset.id;T2.touched=true;T2.lookId=null;send("compare_shade",{product:b.dataset.id});renderCompare()});
+  const rows=["lip","blush","eye"].filter(k=>T2.sel[k]);
+  $("cmpapplied").innerHTML=rows.length?rows.map((k,i)=>{const id=T2.sel[k],q=P[id],sh=parseShade(q);return `<a class="appcard" href="#shop" data-shop="${id}"><span class="n">${i+1}</span><div class="pimg sm">${pack(id)}</div><b>${esc(sh.name||shortName(id))}</b><small>${esc(q.b)} ${esc(q.n)}</small><small>${k==="lip"?FIN_LABEL[FINISH(id)]:CAT[k]}${sh.num?" · "+esc(sh.num):""}</small></a>`}).join(""):`<p class="note">No makeup applied yet.</p>`;
+  $("cmpapplied").querySelectorAll("[data-shop]").forEach(a=>a.addEventListener("click",()=>{SHOP.id=a.dataset.shop}));
+  if(!T2.src||!T2.lm){CMP.after=null;const c=$("cmpcv");c.getContext("2d").clearRect(0,0,c.width,c.height);$("cmphandle").hidden=true;
+    msg.hidden=false;msg.innerHTML=`<span><b>Add your photo first</b>Compare uses the same photo you try shades on.<a class="primary sm" href="#try-on">Go to Try On</a></span>`;return}
+  msg.hidden=true;$("cmphandle").hidden=false;
+  CMP.before=document.createElement("canvas");CMP.after=document.createElement("canvas");
+  CMP.S=renderPhotoTo(CMP.before,true);renderPhotoTo(CMP.after,false);drawCmp()}
+(()=>{const st=$("cmpstage");let drag=false;const set=e=>{const r=st.getBoundingClientRect();CMP.split=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));drawCmp()};
+  st.addEventListener("pointerdown",e=>{if(!CMP.after)return;drag=true;st.setPointerCapture(e.pointerId);set(e)});
+  st.addEventListener("pointermove",e=>{if(drag)set(e)});["pointerup","pointercancel"].forEach(ev=>st.addEventListener(ev,()=>{if(drag)send("compare_drag",{});drag=false}));
+  $("cmphandle").addEventListener("keydown",e=>{const d={ArrowLeft:-.05,ArrowRight:.05}[e.key];if(d){e.preventDefault();CMP.split=Math.min(1,Math.max(0,CMP.split+d));drawCmp()}})})();
+$("cmpsave").onclick=()=>{const m=savedLooks(),cur={lip:T2.sel.lip,blush:T2.sel.blush,eye:T2.sel.eye};
+  if(!m.some(x=>x.lip===cur.lip&&x.blush===cur.blush&&x.eye===cur.eye)){m.unshift(cur);m.splice(12);store.set("gy-looks",m);send("look_save",cur)}
+  $("cmpsave").textContent="Saved ✓";setTimeout(()=>{$("cmpsave").textContent="Save Look"},1600)};
+
+/* ---------- Shop view ---------- */
+const SHOP={id:null};
+const FORM={blush:"Powder blush",eye:"Eyeshadow palette"};
+function renderShop(){const r=region();
+  $("regionseg").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-checked",b.dataset.r===r);b.setAttribute("aria-selected",b.dataset.r===r);
+    b.onclick=()=>{store.set("gy-region",b.dataset.r);send("region",{region:b.dataset.r});renderShop();renderBag()}});
+  const items=["lip","blush","eye"].map(k=>T2.sel[k]).filter(Boolean);
+  if(!items.length){$("shopmain").innerHTML=`<div class="empty"><b>Nothing to shop yet</b><p>Try on a shade first, then come back for the exact product.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`;return}
+  if(!items.includes(SHOP.id))SHOP.id=items[0];
+  const id=SHOP.id,p=P[id],cat=catOf(id),sh=parseShade(p),q=pq(p),on=state.bag.includes(id);
+  const siblings=Object.keys(P).filter(k=>P[k].b===p.b&&P[k].n===p.n&&!P[k].fam&&catOf(k));
+  $("shopmain").innerHTML=`${items.length>1?`<div class="shoptabs" role="tablist">${items.map(k=>`<button type="button" role="tab" aria-selected="${k===id}" data-sid="${k}"><i style="background:${P[k].c}"></i>${CAT[catOf(k)]}</button>`).join("")}</div>`:""}
+    <article class="pdp">
+      <div class="pdpimg"><div class="pimg xl">${pack(id)}</div><span class="illus">Illustration · shade color</span></div>
+      <div class="pdpinfo">
+        <div class="pbrand">${esc(p.b)}</div>
+        <h2>${esc(p.n)}</h2>
+        <dl class="specs"><div><dt>Shade</dt><dd><i style="background:${p.c}"></i>${esc(sh.name)}</dd></div>${sh.num?`<div><dt>Shade no.</dt><dd>${esc(sh.num)}</dd></div>`:""}
+          <div><dt>${cat==="lip"?"Finish":"Type"}</dt><dd>${cat==="lip"?FIN_LABEL[FINISH(id)]:FORM[cat]}</dd></div>
+          ${fits(id)?`<div><dt>Match</dt><dd class="fitd">★ Made for your ${SEASONS[state.season].en}</dd></div>`:""}</dl>
+        <a class="primary cta" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${id}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
+        <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${id}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${id}" data-s="compare">Compare stores ↗</a></div>
+        <button class="outline" type="button" id="pdpadd" aria-pressed="${on}">${on?"On your shopping list ✓":"+ Add to Shopping List"}</button>
+        <p class="disclose">Prices and availability are set by each retailer. Gyeol may earn a commission when you buy through these links, at no extra cost to you.</p>
+      </div>
+    </article>
+    ${siblings.length>1?`<div class="label" style="margin-top:22px">More shades of ${esc(p.n)}</div><div class="cmpstrip">${siblings.map(k=>`<button class="tchip fit" type="button" aria-checked="${k===id}" data-sib="${k}"><i style="background:${P[k].c}"></i><span>${esc(shortName(k))}</span>${fits(k)?`<em class="star">★</em>`:""}</button>`).join("")}</div>`:""}`;
+  const m=$("shopmain");
+  m.querySelectorAll("[data-sid]").forEach(b=>b.onclick=()=>{SHOP.id=b.dataset.sid;renderShop()});
+  m.querySelectorAll("[data-sib]").forEach(b=>b.onclick=()=>{const k=b.dataset.sib;T2.sel[catOf(k)]=k;T2.touched=true;SHOP.id=k;renderShop()});
+  m.querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"shop",a.dataset.s)));
+  $("pdpadd").onclick=()=>{if(!state.bag.includes(id)){track.add(id);state.bag.push(id)}else state.bag=state.bag.filter(x=>x!==id);store.set("gy-bag",state.bag);renderBag();renderShop()}}
+
+/* ---------- Saved view ---------- */
+function renderFavCount(){const n=favs().length;$("favcount").textContent=n;$("favcount").hidden=!n}
+function renderSaved(){const f=favs(),mine=savedLooks();
+  $("savedbody").innerHTML=(f.length?`<div class="label">Favorite shades</div><div class="cmpstrip wrapgrid">${f.map(id=>`<button class="tchip fit" type="button" data-fav="${id}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span><em class="x" data-unfav="${id}" role="button" aria-label="Remove ${esc(shortName(id))}">×</em></button>`).join("")}</div>`
+      :`<div class="empty"><b>No saved shades yet</b><p>Tap Save This Shade in Try On to keep the ones you love.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`)
+    +(mine.length?`<div class="label" style="margin-top:22px">My looks</div><div class="cmpstrip wrapgrid">${mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}"><i style="background:conic-gradient(${[m.lip,m.blush,m.eye].map(x=>x?P[x].c:"var(--sunk)").map((c,j)=>`${c} ${j*120}deg ${(j+1)*120}deg`).join(",")})"></i><span>My look ${i+1}</span></button>`).join("")}</div>`:"");
+  const b=$("savedbody");
+  b.querySelectorAll("[data-unfav]").forEach(x=>x.onclick=e=>{e.stopPropagation();store.set("gy-favs",favs().filter(k=>k!==x.dataset.unfav));renderFavCount();renderSaved()});
+  b.querySelectorAll("[data-fav]").forEach(x=>x.onclick=()=>{const id=x.dataset.fav,c=catOf(id);T2.sel[c]=id;T2.tab=c;T2.touched=true;location.hash="try-on"});
+  b.querySelectorAll("[data-mine]").forEach(x=>x.onclick=()=>{const m=mine[+x.dataset.mine];T2.sel={lip:m.lip||null,blush:m.blush||null,eye:m.eye||null};T2.touched=true;location.hash="try-on"})}
+
+/* ---------- Home art: a licensed photo when HERO_IMG is set, otherwise a shade composition ---------- */
+const HERO_IMG="";
+function renderHome(){const n=state.bag.length;$("homebagn").textContent=n?`${n} item${n>1?"s":""}`:"Empty";
+  if($("homeart").dataset.done)return;$("homeart").dataset.done="1";
+  if(HERO_IMG){$("homeart").innerHTML=`<img src="${esc(HERO_IMG)}" alt="Korean makeup look"><span class="aibadge">AI model</span>`;return}
+  const shades=["jujube","zm01","figfig","goodbrick","zm13","plumcoke"].map(id=>P[id].c);
+  $("homeart").innerHTML=`<svg viewBox="0 0 360 420" role="img" aria-label="Korean lip shades"><defs><linearGradient id="hbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6ece8"/><stop offset="1" stop-color="#e9d6d3"/></linearGradient></defs>
+    <rect width="360" height="420" fill="url(#hbg)"/>
+    ${shades.map((c,i)=>`<path d="M${40+i*6} ${92+i*48}C${110+i*4} ${60+i*48} ${190} ${130+i*48} ${320-i*8} ${84+i*48}" stroke="${c}" stroke-width="30" stroke-linecap="round" fill="none"/><path d="M${60+i*6} ${86+i*48}C${120} ${70+i*48} ${170} ${108+i*48} ${230} ${92+i*48}" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".35"/>`).join("")}
+    <g transform="translate(250 250) rotate(18)"><rect x="0" y="54" width="44" height="96" rx="4" fill="#2b2125"/><rect x="4" y="34" width="36" height="22" rx="2" fill="#c9b8a8"/><path d="M7 34V-2l30-14v50z" fill="${shades[2]}"/></g></svg>`}
+
+/* ---------- Router ---------- */
+const VIEWS=["home","try-on","compare","shop","color","looks","skincare","saved"];
+const curView=()=>{const h=location.hash.slice(1);return VIEWS.includes(h)?h:"home"};
+function go(v,el){if(curView()!==v)location.hash=v;setTimeout(()=>{if(el&&$(el))$(el).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})},90)}
+function showView(){const v=curView();document.querySelectorAll(".view").forEach(x=>x.hidden=x.dataset.view!==v);
+  const tab=["color","looks","skincare","saved"].includes(v)?"home":v;
+  document.querySelectorAll("#tabbar a").forEach(a=>{if(a.dataset.v===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  if(v!=="try-on"&&LIVE.on)stopLive();
+  if(v==="home")renderHome();if(v==="try-on")renderTryOn();if(v==="compare")renderCompare();if(v==="shop")renderShop();if(v==="saved")renderSaved();
+  window.scrollTo(0,0);send("view",{view:v})}
+addEventListener("hashchange",showView);
+$("homebag").onclick=()=>openBag(true);
+
+function renderAll(){renderSkin();renderResult();renderTryOn();renderFavCount();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
+renderAll();showView();
 </script>
 
 </body>
