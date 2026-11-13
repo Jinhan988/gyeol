@@ -783,6 +783,22 @@ html,body{overflow-x:clip}
 .gcard dt{font-size:12px;font-weight:800;color:var(--muted)}.gcard dd{margin:0;font-size:13.5px;line-height:1.45}
 .gcgo{font-size:13px;font-weight:800;color:var(--accent);text-decoration:none}
 .gpicks{list-style:none;padding:0;margin:0;display:grid;gap:12px}.gpicks p{margin:0 0 4px;font-size:14.5px;line-height:1.45}.gpicks a{font-size:13px;font-weight:800;color:var(--accent);text-decoration:none}
+/* search */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.searchbar,.sbox{display:flex;align-items:center;gap:10px;background:var(--tile);border:1px solid var(--line);border-radius:999px;padding:11px 16px;color:var(--muted);text-decoration:none;margin-bottom:14px}
+.searchbar svg,.sbox svg{width:20px;height:20px;flex:none}
+.sbox{position:sticky;top:var(--appbar-h,64px);z-index:5;box-shadow:0 0 0 8px var(--bg)}
+.sbox:focus-within{border-color:var(--accent)}
+.sbox input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);outline:none}
+.sbox input::-webkit-search-cancel-button{display:none}
+#sclear{border:0;background:var(--surface);color:var(--ink);width:26px;height:26px;border-radius:50%;font-size:18px;line-height:1}
+.spop button{font-size:13.5px;padding:8px 13px}
+.slist{display:grid;gap:8px}
+.sres{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);background:var(--tile);border:1px solid var(--line);border-radius:18px;padding:10px 14px 10px 10px}
+.sres .pimg{width:56px;height:56px;background:var(--surface);border-radius:14px;padding:7px}.sres .pimg svg{width:100%;height:100%}
+.sres small{font-size:10.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:block}
+.sres b{font-size:14.5px;line-height:1.25;display:block}.sres span{font-size:12px;color:var(--muted)}.sres span em{font-style:normal;color:var(--accent);font-weight:700}
+.sres i{font-style:normal;color:var(--accent);font-weight:800}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -792,6 +808,7 @@ html,body{overflow-x:clip}
   <header class="appbar">
     <a class="brand" href="#home" aria-label="Gyeol home"><b>Gyeol.</b><small>Your Color. Your Beauty.</small></a>
     <nav class="hicons" aria-label="Shortcuts">
+      <a class="icobtn" href="#search" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a>
       <a class="icobtn" href="#color" aria-label="Personal color"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
       <a class="icobtn" href="#saved" aria-label="Saved shades"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><em id="favcount" hidden>0</em></a>
       <button class="icobtn" id="bagbtn" type="button" aria-label="Shopping list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><em id="bagcount">0</em></button>
@@ -864,12 +881,18 @@ html,body{overflow-x:clip}
   <section class="view" data-view="shop" id="v-shop" aria-label="Shop" hidden>
     <div class="vhead"><h1 class="vtitle">Shop</h1><p>Your try-on picks, plus five K-beauty categories to explore.</p></div>
     <div class="regionrow"><span>Shopping in</span><div class="seg mini" id="regionseg" role="radiogroup" aria-label="Shopping region"><button type="button" role="radio" data-r="US">United States</button><button type="button" role="radio" data-r="CA">Canada</button></div></div>
+    <a class="searchbar" href="#search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Search products, brands, ingredients…</span></a>
     <div id="shopcats"></div>
     <div class="label picklabel">My Try-on Picks</div>
     <div id="shopmain"></div>
   </section>
   <section class="view" data-view="cat" id="v-cat" aria-label="Category" hidden><div id="catbody"></div></section>
   <section class="view" data-view="product" id="v-product" aria-label="Product" hidden><div id="pbody"></div></section>
+  <section class="view" data-view="search" id="v-search" aria-label="Search" hidden>
+    <div class="vhead"><h1 class="vtitle">Find your K-Beauty</h1><p>Search products, brands, ingredients or skin concerns.</p></div>
+    <form class="sbox" id="sform" role="search"><label for="sq" class="sr">Search</label><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><input id="sq" type="search" placeholder="Try retinol, Anua, dryness…" autocomplete="off" enterkeyhint="search"><button type="button" id="sclear" aria-label="Clear" hidden>×</button></form>
+    <div id="sbody"></div>
+  </section>
   <section class="view" data-view="guide" id="v-guide" aria-label="Guide" hidden><div id="gbody"></div></section>
 
   <section class="view" data-view="color" id="v-color" aria-label="Personal color" hidden>
@@ -1969,6 +1992,41 @@ function renderGuide(){const id=CBY_ROUTE().gid,g=GUIDES[id];if(!g){location.has
   ${g.picks?`<section class="pblock"><h2>Which one?</h2><ul class="gpicks">${g.picks.map(([t,iid])=>{const p=P[itemPid(iid)];return `<li><p>${esc(t)}</p><a href="#p/${iid}">${esc(p.b)} · ${esc(p.n)} →</a></li>`}).join("")}</ul></section>`:""}
   <p class="note left">Product details in this guide come from each product's page on Gyeol, which links its source and check date. Gyeol doesn't rank products by commission.</p>
   ${g.sources?`<p class="note left srcnote">Sources: ${g.sources.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</p>`:""}`}
+/* Search: products, shades, brands, ingredients, concerns, skin types, guides (local data only) */
+const SYN={wrinkle:"aging",wrinkles:"aging","fine line":"aging","anti-aging":"aging",antiaging:"aging",dry:"dryness",acne:"breakouts",pimple:"breakouts",spf:"sunscreen",sun:"sunscreen",cica:"centella","vitamin a":"retinol",lipstick:"lips",tint:"lips","lip tint":"lips",blush:"cheeks",eyeshadow:"eyes",shadow:"eyes",cleanser:"cleansing","dark spot":"spots","dark spots":"spots",hyperpigmentation:"spots"};
+const norm=x=>String(x||"").toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9%+ ]+/g," ").replace(/\s+/g," ").trim();
+let SIDX=null;
+function searchIndex(){if(SIDX)return SIDX;SIDX=Object.keys(ITEMS).map(iid=>{const it=ITEMS[iid],pid=itemPid(iid),p=P[pid],C=CATBY[it.cat],t=itemTags(iid);
+  const places=[[it.cat,it.sub]].concat(it.also||[]).map(([c,sb])=>[CATBY[c].name,(CATBY[c].subs.find(x=>x[0]===sb)||[,""])[1]].join(" "));
+  const shades=(it.shades||[]).map(id=>[P[id].s,shortName(id)].join(" "));
+  const ings=(it.ing||[]).map(i=>ING[i]?ING[i][0]+" "+i:i);if((it.ing||[]).some(i=>i==="retinol"||i==="retinal"))ings.push("retinoid retinol vitamin a");
+  const extra=[];if(/(txa|arbutin)/.test((it.ing||[]).join()))extra.push("spots dark spots");if(it.type==="sunscreen")extra.push("sunscreen spf sun");
+  return {iid,pid,name:norm(p.n),brand:norm(p.b),ing:norm(ings.join(" ")),con:norm(t.cons.map(c=>SKC[c]+" "+c).concat(t.types.map(x=>SKT[x]+" skin "+x)).join(" ")),place:norm(places.join(" ")+" "+it.type+" "+extra.join(" ")),shade:norm(shades.join(" "))}});return SIDX}
+function searchRun(q){const raw=norm(q);if(!raw)return [];let terms=raw.split(" ");const full=SYN[raw];if(full)terms=[full];else terms=terms.map(w=>SYN[w]||w);
+  return searchIndex().map(r=>{let score=0,why="";for(const w of terms){let hit=0;
+      if(r.name.includes(w)){hit=6;why=why||"name"}else if(r.brand.includes(w)){hit=5;why=why||"brand"}else if(r.ing.includes(w)){hit=4;why=why||"ingredient"}else if(r.shade.includes(w)){hit=4;why=why||"shade"}else if(r.con.includes(w)){hit=3;why=why||"concern"}else if(r.place.includes(w)){hit=2;why=why||"type"}
+      if(!hit)return null;score+=hit}return {...r,score,why}}).filter(Boolean).sort((a,b)=>b.score-a.score)}
+const POPULAR=["Retinol","Niacinamide","Sunscreen","Centella","Lip tint","Dryness","Anua","Beauty of Joseon"];
+function renderSearch(fromRoute){const inp=$("sq"),h=decodeURIComponent(location.hash.slice(1));const q=fromRoute?(h.startsWith("search/")?h.slice(7):""):inp.value;
+  if(fromRoute&&inp.value!==q)inp.value=q;$("sclear").hidden=!q;
+  const b=$("sbody");
+  if(!norm(q)){b.innerHTML=`<div class="label">Popular searches</div><div class="fchips spop">${POPULAR.map(t=>`<button type="button" data-q="${esc(t)}">${esc(t)}</button>`).join("")}</div>
+    <div class="label" style="margin-top:20px">Browse by category</div>${catNav(null)}
+    <div class="label" style="margin-top:20px">Guides</div>${Object.keys(GUIDES).map(guideCard).join("")}`;}
+  else{const res=searchRun(q),gl=Object.keys(GUIDES).filter(k=>norm(GUIDES[k].title+" "+GUIDES[k].kicker).includes(norm(SYN[norm(q)]||q).split(" ")[0]));
+    const WHY={name:"Name",brand:"Brand",ingredient:"Contains",shade:"Shade",concern:"For",type:"Type"};
+    b.innerHTML=`<div class="filterbar"><span class="count" style="margin-left:0">${res.length} result${res.length===1?"":"s"} for "${esc(q)}"</span></div>
+    ${gl.map(guideCard).join("")}
+    ${res.length?`<div class="slist">${res.map(r=>{const it=ITEMS[r.iid],p=P[r.pid],C=CATBY[it.cat],sub=(C.subs.find(x=>x[0]===it.sub)||[,""])[1];
+      return `<a class="sres" href="#p/${r.iid}"><div class="pimg">${pack(r.pid)}</div><div><small>${esc(p.b)}</small><b>${esc(p.n)}</b><span>${esc(C.name)} · ${esc(sub)}${(it.ing||[]).length?" · "+esc(ING[it.ing[0]][0]):""}${tryable(r.iid)?` · <em>Try On</em>`:""}</span></div><i aria-hidden="true">→</i></a>`}).join("")}</div>`
+      :`<div class="empty"><b>Nothing found yet</b><p>Gyeol lists ${Object.keys(ITEMS).length} products so far. Try an ingredient like "retinol", a concern like "dryness", or browse a category.</p>${catNav(null)}</div>`}`;
+    clearTimeout(renderSearch.t);renderSearch.t=setTimeout(()=>send("search",{q:norm(q).slice(0,60),results:res.length}),800)}
+  b.querySelectorAll("[data-q]").forEach(x=>x.onclick=()=>{location.replace("#search/"+encodeURIComponent(x.dataset.q))});
+  if(fromRoute&&!q&&matchMedia("(hover:hover)").matches)setTimeout(()=>inp.focus(),50)}
+(function(){const inp=$("sq");if(!inp)return;
+  inp.addEventListener("input",()=>{history.replaceState(null,"","#search"+(inp.value?"/"+encodeURIComponent(inp.value):""));renderSearch(false)});
+  $("sform").addEventListener("submit",e=>{e.preventDefault();inp.blur()});
+  $("sclear").onclick=()=>{inp.value="";history.replaceState(null,"","#search");renderSearch(false);inp.focus()}})();
 /* Where to buy: verified retailer links by country (data/products.js GYEOL_BUY / GYEOL_STORES) */
 const BUY=window.GYEOL_BUY||{},STORES=window.GYEOL_STORES||{};
 const KIND_LABEL={product:"Product page",search:"Search results",brand:"Brand page"};
@@ -2006,16 +2064,16 @@ function routineHTML(){const ids=favs().map(pid=>itemOf(pid)).filter(iid=>iid&&I
 const CBY_ROUTE=()=>{const h=decodeURIComponent(location.hash.slice(1)).split("/");return h[0]==="c"?{cat:h[1]}:h[0]==="p"?{iid:h[1],shade:h[2]}:h[0]==="g"?{gid:h[1]}:{}};
 
 /* ---------- Router ---------- */
-const VIEWS=["home","try-on","compare","shop","color","looks","skincare","saved","cat","product","guide"];
-const curView=()=>{const h=location.hash.slice(1);if(/^c\//.test(h))return "cat";if(/^p\//.test(h))return "product";if(/^g\//.test(h))return "guide";return VIEWS.includes(h)&&!["cat","product","guide"].includes(h)?h:"home"};
+const VIEWS=["home","try-on","compare","shop","color","looks","skincare","saved","cat","product","guide","search"];
+const curView=()=>{const h=location.hash.slice(1);if(/^c\//.test(h))return "cat";if(/^p\//.test(h))return "product";if(/^g\//.test(h))return "guide";if(/^search(\/|$)/.test(h))return "search";return VIEWS.includes(h)&&!["cat","product","guide"].includes(h)?h:"home"};
 let LASTROUTE="";
 function go(v,el){if(curView()!==v)location.hash=v;setTimeout(()=>{if(el&&$(el))$(el).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})},90)}
 function showView(){const v=curView();document.querySelectorAll(".view").forEach(x=>x.hidden=x.dataset.view!==v);
-  const tab=["color","looks","skincare","saved"].includes(v)?"home":["cat","product","guide"].includes(v)?"shop":v;
+  const tab=["color","looks","skincare","saved"].includes(v)?"home":["cat","product","guide","search"].includes(v)?"shop":v;
   document.querySelectorAll("#tabbar a").forEach(a=>{if(a.dataset.v===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(v!=="try-on"&&LIVE.on)stopLive();
-  if(v==="home")renderHome();if(v==="try-on")renderTryOn();if(v==="compare")renderCompare();if(v==="shop")renderShop();if(v==="saved")renderSaved();if(v==="cat")renderCat();if(v==="product")renderProduct();if(v==="guide")renderGuide();
-  const rt=v==="product"?"p/"+(CBY_ROUTE().iid||""):location.hash;if(rt!==LASTROUTE)window.scrollTo(0,0);LASTROUTE=rt;
+  if(v==="home")renderHome();if(v==="try-on")renderTryOn();if(v==="compare")renderCompare();if(v==="shop")renderShop();if(v==="saved")renderSaved();if(v==="cat")renderCat();if(v==="product")renderProduct();if(v==="guide")renderGuide();if(v==="search")renderSearch(true);
+  const rt=v==="search"?"search":v==="product"?"p/"+(CBY_ROUTE().iid||""):location.hash;if(rt!==LASTROUTE)window.scrollTo(0,0);LASTROUTE=rt;
   send("view",{view:v,...(v==="cat"?{cat:CBY_ROUTE().cat}:{}),...(v==="product"?{product:CBY_ROUTE().iid}:{}),...(v==="guide"?{guide:CBY_ROUTE().gid}:{})})}
 addEventListener("hashchange",showView);
 $("homebag").onclick=()=>openBag(true);
