@@ -658,6 +658,8 @@ html,body{overflow-x:clip}
 .cattile:first-child{grid-column:1/-1;grid-template-rows:none;grid-template-columns:1.1fr 1fr}
 .catart{position:relative;aspect-ratio:4/3;overflow:hidden}
 .cattile:first-child .catart{aspect-ratio:auto;min-height:170px;order:2}
+.catart img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.credit{position:absolute;right:8px;bottom:6px;font-size:9.5px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.picklabel{margin:4px 0 8px}
 .catart-in{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;gap:0;padding:14px 10px 0}
 .catart .pimg{background:transparent;width:46%;aspect-ratio:1;height:auto;margin:0 -7%}.catart .pimg svg{width:100%;height:100%}
 .catart .cp1{transform:translateY(-10%) scale(1.08);z-index:1}.catart .cp2{transform:translateY(4%)}
@@ -822,9 +824,10 @@ html,body{overflow-x:clip}
   </section>
 
   <section class="view" data-view="shop" id="v-shop" aria-label="Shop" hidden>
-    <div class="vhead"><h1 class="vtitle">Shop Your Look</h1><p>The exact products and shades from your try-on.</p></div>
+    <div class="vhead"><h1 class="vtitle">Shop</h1><p>Your try-on picks, plus five K-beauty categories to explore.</p></div>
     <div class="regionrow"><span>Shopping in</span><div class="seg mini" id="regionseg" role="radiogroup" aria-label="Shopping region"><button type="button" role="radio" data-r="US">United States</button><button type="button" role="radio" data-r="CA">Canada</button></div></div>
     <div id="shopcats"></div>
+    <div class="label picklabel">My Try-on Picks</div>
     <div id="shopmain"></div>
   </section>
   <section class="view" data-view="cat" id="v-cat" aria-label="Category" hidden><div id="catbody"></div></section>
@@ -932,7 +935,7 @@ html,body{overflow-x:clip}
   <div class="note" id="copynote">Copies product names so you can paste them into a note or message.</div>
 </aside>
 
-<script src="data/products.js?v=3"></script>
+<script src="data/products.js?v=4"></script>
 <script>
 const SEASONS={
   spring:{mk:["Peach or coral blush","Clear coral or apricot lip tint","Light warm brown or peach eyeshadow"],en:"Spring Warm",ko:"봄웜",tag:"Bright & Warm",sc:"#cf6340",sw:["#f6c9a8","#f39a7c","#ffb07a"],desc:"Bright, warm, clear. Peach, coral and apricot make your skin glow.",
@@ -1837,7 +1840,7 @@ function catArt(cat){const pick={makeup:["mk_jlt","mk_btc","mk_btp"],skincare:["
   return `<div class="catart-in">${pick.map((iid,i)=>`<div class="pimg cp${i}">${pack(itemPid(iid))}</div>`).join("")}</div>`}
 function renderCatGrid(){const g=$("catgrid");if(!g||g.dataset.done)return;g.dataset.done="1";
   g.innerHTML=CATS.map((c,i)=>{const n=Object.keys(ITEMS).filter(k=>inCat(k,c.id)).length;
-    return `<a class="cattile ct-${c.id}" href="#c/${c.id}"><div class="catart">${catArt(c.id)}</div><div class="cattxt"><small>0${i+1}</small><b>${esc(c.name)}</b><span>${esc(c.tag)}</span><em>${n} products${c.id==="makeup"?" · Virtual Try-On":""} →</em></div></a>`}).join("")}
+    return `<a class="cattile ct-${c.id}" href="#c/${c.id}"><div class="catart">${c.img?`<img src="${esc(c.img)}" alt="" loading="lazy">${c.credit?`<span class="credit">${esc(c.credit)}</span>`:""}`:catArt(c.id)}</div><div class="cattxt"><small>0${i+1}</small><b>${esc(c.name)}</b><span>${esc(c.tag)}</span><em>${n} products${c.id==="makeup"?" · Virtual Try-On":""} →</em></div></a>`}).join("")}
 function catNav(active){return `<nav class="catnav" aria-label="Categories">${CATS.map(c=>`<a href="#c/${c.id}"${c.id===active?` aria-current="page"`:""}>${esc(c.name)}</a>`).join("")}</nav>`}
 
 function renderCat(){const cat=CBY_ROUTE().cat;const C=CATBY[cat];if(!C){location.hash="home";return}
@@ -1894,7 +1897,7 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
     ${(it.ing||[]).length?`<section class="pblock"><h2>Key ingredients</h2><dl class="inglist">${it.ing.map(i=>`<div><dt>${esc(ING[i][0])}</dt><dd>${esc(ING[i][1])}</dd></div>`).join("")}</dl><p class="note left">${it.src?"Highlighted on the product page.":"Named on the product."} Full ingredient list on the package.</p></section>`:""}
     ${how.length?`<section class="pblock"><div class="phead"><h2>How to use</h2><span class="whenpill">${esc(it.when||g.when||"")}</span></div><ol class="steps">${how.map((s,i)=>`<li><span>${i+1}</span><p>${esc(s)}</p></li>`).join("")}</ol><p class="note left">${it.how?"From the product page. Always follow the directions on your package.":"General guide for this type of product. Always follow the directions on your package."}</p></section>`:""}
     ${cautions.length?`<section class="pblock"><h2>Good to know</h2><ul class="cautions">${cautions.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></section>`:""}
-    ${it.src?`<p class="note left srcnote">Usage, key ingredients and cautions from <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.srcName||"the product page")}</a>, checked November 2026. Formulas change; your package is the final word.</p>`:""}
+    ${it.src?`<p class="note left srcnote">Usage, key ingredients and cautions from <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.srcName||"the product page")}</a>, checked ${it.checked?new Date(it.checked+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}):""}. Formulas change; your package is the final word.</p>`:""}
   </div>`;
   const b=$("pbody");
   b.querySelectorAll("[data-shade]").forEach(x=>x.onclick=()=>{location.replace("#p/"+iid+"/"+x.dataset.shade)});
