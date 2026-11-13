@@ -602,6 +602,55 @@ footer{padding-bottom:8px}
   #v-try-on .trychips .chipgroup{display:none}
   #v-try-on .selpanel{padding:14px;gap:10px}
 }
+/* premium polish: shade selectors, product card, nav */
+body{padding-bottom:calc(var(--tabbar-h,76px) + 16px)}
+.tabbar{background:color-mix(in srgb,var(--tile) 96%,transparent);border-top:1px solid var(--line);box-shadow:0 -8px 24px -18px rgba(42,33,36,.35);padding-top:6px}
+.tabbar a{font-size:11px;letter-spacing:.01em;gap:2px}
+.tabbar a svg{width:56px;height:30px;padding:3px 16px;box-sizing:border-box;border-radius:999px;transition:background .15s}
+.tabbar a[aria-current="page"]{color:var(--accent);font-weight:700}
+.tabbar a[aria-current="page"] svg{background:var(--accent-soft)}
+.studio .trychips{gap:4px 6px}
+.tchip{background:transparent;border:0;border-radius:14px;padding:4px 2px 2px;gap:7px;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:-.005em}
+.tchip i{width:50px;height:50px;border-radius:50%;border:0;position:relative;box-shadow:inset 0 0 0 1px rgba(42,33,36,.08);transition:box-shadow .15s,transform .15s}
+.tchip i::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 33% 27%,rgba(255,255,255,.55),rgba(255,255,255,0) 42%),radial-gradient(circle at 68% 82%,rgba(0,0,0,.14),rgba(0,0,0,0) 55%)}
+.tchip.none{background:transparent}
+.tchip.none i{background:linear-gradient(135deg,transparent 47%,var(--muted) 47.5% 52.5%,transparent 53%),var(--tile)!important;box-shadow:inset 0 0 0 1.5px var(--line)}
+.tchip.none i::after{display:none}
+.tchip[aria-checked="true"]{background:transparent;color:var(--ink);font-weight:700}
+.tchip[aria-checked="true"] i{box-shadow:0 0 0 2.5px var(--bg),0 0 0 4px var(--accent);transform:scale(1.04)}
+.tchip:not(.fit){opacity:.5}
+.tchip .star{top:0;right:calc(50% - 31px);font-size:11px;color:var(--accent)}
+#cmpstrip:not(.wrapgrid){grid-template-columns:none;grid-auto-columns:76px;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 2px 8px;scrollbar-width:none}
+#cmpstrip::-webkit-scrollbar{display:none}
+html,body{overflow-x:clip}
+.selpanel{background:var(--tile);border:1px solid var(--line);border-radius:24px;padding:16px;gap:14px}
+.selhead{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center}
+.selsw{width:52px;height:52px;border-radius:50%;position:relative;box-shadow:inset 0 0 0 1px rgba(42,33,36,.08)}
+.selsw::after{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 33% 27%,rgba(255,255,255,.5),rgba(255,255,255,0) 44%)}
+.selmeta{min-width:0}
+.selkick{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.selpanel .selname h3{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.02;letter-spacing:0;margin:2px 0 1px;overflow-wrap:anywhere}
+.selpanel .selsub{margin:0;font-size:13px;color:var(--muted);display:block}.selsub b{color:var(--ink);font-weight:700}
+.finpill{align-self:start;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--bg)}
+.selfit{display:inline-block;justify-self:start;margin-top:-4px}
+.studio .tryprod{display:grid;gap:12px}
+.shopcta{background:var(--accent)!important;color:var(--accent-ink)!important;padding:14px 20px;font-size:15.5px;box-shadow:0 10px 22px -14px var(--accent)}
+.studio .tryamt{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.studio .tryamt input{accent-color:var(--accent)}
+.studioacts2{grid-template-columns:1fr 1fr;gap:8px}
+.studioacts2 .outline,.studioacts2 a.outline{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 10px;font-size:14px;text-decoration:none;color:var(--ink);background:var(--tile)}
+.liverow button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.liverow button svg{flex:none}
+.studio .note{font-size:11.5px;line-height:1.5;color:var(--muted);max-width:46ch;justify-self:center}
+.appbar .brand b{letter-spacing:-.045em}
+@media (max-width:859px){
+  .appbar{padding-block:8px 6px}.appbar .brand b{font-size:24px}.appbar .brand small{font-size:9px;letter-spacing:.18em}.icobtn{width:38px;height:38px}.icobtn svg{width:22px;height:22px}
+  #v-try-on .studio .trychips{grid-auto-columns:68px}
+  #v-try-on .liverow button svg{width:16px;height:16px}
+  #v-compare .vhead,#v-shop .vhead{margin:4px 0 12px}#v-compare .vtitle,#v-shop .vtitle{font-size:26px}#v-compare .vhead p,#v-shop .vhead p{font-size:14px}
+  #v-compare .cmpstage{aspect-ratio:auto;height:min(46svh,92vw)}#v-compare .cmpstage canvas{object-fit:cover;object-position:50% 42%}#v-compare .shadehead{margin-top:2px}
+  .pdpimg{aspect-ratio:auto;height:min(30svh,64vw);display:flex;align-items:center;justify-content:center}.pdpimg .pimg.xl{width:auto;height:76%;aspect-ratio:1}
+}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -646,8 +695,8 @@ footer{padding-bottom:8px}
         <div class="trymsg" id="trymsg"></div>
         <button class="compare" id="trycompare" type="button" hidden>Hold for before</button>
       </div>
-      <div class="liverow"><button class="primary" type="button" id="liveon">Live camera</button><button class="bagbtn" type="button" id="liveupload" data-try="pick">Upload a photo</button>
-        <button class="primary" type="button" id="liveshot" hidden>Take photo</button><button class="bagbtn" type="button" id="liveoff" hidden>Stop camera</button></div>
+      <div class="liverow"><button class="primary" type="button" id="liveon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Live camera</button><button class="bagbtn" type="button" id="liveupload" data-try="pick"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9.5" cy="9.5" r="1.6"/><path d="m20 15-4.5-4.5L6 20"/></svg>Upload a photo</button>
+        <button class="primary" type="button" id="liveshot" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></svg>Take photo</button><button class="bagbtn" type="button" id="liveoff" hidden><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>Stop</button></div>
       <label class="splitrow" id="splitrow" for="trysplit" hidden><span>Before</span><input type="range" id="trysplit" min="0" max="100" value="0" aria-label="Drag to compare before and after"><span>After</span></label>
       <div class="shadehead"><h2>Choose your shade</h2><span id="shadecount"></span></div>
       <div class="seg" id="tryseg" role="tablist" aria-label="Makeup category"><button type="button" role="tab" data-m="lip">Lips</button><button type="button" role="tab" data-m="blush">Blush</button><button type="button" role="tab" data-m="eye">Eyes</button><button type="button" role="tab" data-m="looks">Looks</button></div>
@@ -657,10 +706,10 @@ footer{padding-bottom:8px}
         <label class="tryamt" for="tryamt"><span>Color intensity</span><input type="range" id="tryamt" min="20" max="100" value="60"></label>
         <div class="amtlabels"><span>Sheer</span><span id="amtval">Full color · 60%</span></div>
       </div>
-      <div class="tryacts"><a class="primary cta" href="#compare">Compare Before &amp; After <span aria-hidden="true">→</span></a><button class="outline" type="button" id="savefav">Save This Shade <span class="hrt" aria-hidden="true">♡</span></button></div>
+      <div class="tryacts studioacts2"><a class="outline" href="#compare">Before &amp; After</a><button class="outline" type="button" id="savefav">Save This Shade <span class="hrt" aria-hidden="true">♡</span></button></div>
       <div class="tryapplied" id="tryapplied"></div>
       <input type="file" id="tryfile" class="sr" accept="image/*">
-      <p class="note">The studio runs on your device. Your photo isn't uploaded.</p>
+      <p class="note">Virtual try-on is a preview. Real color varies with lighting, camera and your natural lip color. The studio runs on your device; your photo isn't uploaded.</p>
     </section>
   </section>
 
@@ -1465,9 +1514,10 @@ function renderTryOn(){
   // selected product panel (current category; lips when browsing looks)
   const cat=tab==="looks"?(["lip","blush","eye"].find(k=>T2.sel[k])||"lip"):tab,id=T2.sel[cat],p=id&&P[id],fv=favs();
   if(p){const sh=parseShade(p);
-    $("tryprod").innerHTML=`<div class="selname"><h3>${esc(sh.name||shortName(id))}</h3><span>${cat==="lip"?FIN_LABEL[FINISH(id)]:CAT[cat]}</span></div>
-      <div class="selsub"><i style="background:${p.c}"></i><span>${esc(p.b)} · ${esc(p.n)}${sh.num?` · ${esc(sh.num)}`:""}</span></div>
-      ${fits(id)?`<div class="tag match" style="display:inline-block;margin-top:8px">★ Made for your ${SEASONS[state.season].en}</div>`:""}`;
+    $("tryprod").innerHTML=`<div class="selhead"><i class="selsw" style="background:${p.c}"></i><div class="selmeta"><div class="selkick">${esc(p.b)}</div><div class="selname"><h3>${esc(sh.name||shortName(id))}</h3></div><div class="selsub">${esc(p.n)}${sh.num?` · <b>${esc(sh.num)}</b>`:""}</div></div><span class="finpill">${cat==="lip"?FIN_LABEL[FINISH(id)]:CAT[cat]}</span></div>
+      ${fits(id)?`<div class="tag match selfit">★ Made for your ${SEASONS[state.season].en}</div>`:""}
+      <a class="primary cta shopcta" href="#shop" data-shopid="${id}">Shop this exact shade <span aria-hidden="true">→</span></a>`;
+    $("tryprod").querySelector("[data-shopid]").onclick=e=>{SHOP.id=e.currentTarget.dataset.shopid;send("tryon_shop",{product:SHOP.id})};
     $("savefav").hidden=false;const on=fv.includes(id);$("savefav").setAttribute("aria-pressed",on);$("savefav").innerHTML=on?`Saved <span class="hrt" aria-hidden="true">♥</span>`:`Save This Shade <span class="hrt" aria-hidden="true">♡</span>`;$("savefav").dataset.id=id}
   else{$("tryprod").innerHTML=`<div class="selname"><h3>No ${CAT[cat]==="Lips"?"lip color":CAT[cat].toLowerCase()}</h3><span></span></div><div class="selsub"><span>Pick a shade above to try it on.</span></div>`;$("savefav").hidden=true}
   $("amtval").textContent=`${T2.amt>=.85?"Full color":T2.amt>=.5?"Natural":"Sheer"} · ${Math.round(T2.amt*100)}%`;
@@ -1704,6 +1754,7 @@ $("homebag").onclick=()=>openBag(true);
 
 function renderAll(){renderSkin();renderResult();renderTryOn();renderFavCount();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
 renderAll();showView();
+(function(){const tb=$("tabbar");if(!tb)return;const set=()=>document.documentElement.style.setProperty("--tabbar-h",Math.ceil(tb.getBoundingClientRect().height)+"px");set();try{new ResizeObserver(set).observe(tb)}catch(e){addEventListener("resize",set)}})();
 (function(){const bar=document.querySelector(".appbar");if(!bar)return;const set=()=>document.documentElement.style.setProperty("--appbar-h",Math.round(bar.getBoundingClientRect().height+parseFloat(getComputedStyle(bar).top||0)+4)+"px");set();try{new ResizeObserver(set).observe(bar)}catch(e){addEventListener("resize",set)}})();
 </script>
 
