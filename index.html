@@ -731,6 +731,7 @@ html,body{overflow-x:clip}
 .steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
 .steps li span{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;display:grid;place-items:center}
 .steps li p{margin:4px 0 0;font-size:14.5px;line-height:1.45}
+.srcnote a{color:var(--accent)}
 .cautions{margin:0;padding-left:18px;display:grid;gap:6px;font-size:13.5px;line-height:1.45}
 /* routine */
 .routinecols{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:8px}
@@ -931,7 +932,7 @@ html,body{overflow-x:clip}
   <div class="note" id="copynote">Copies product names so you can paste them into a note or message.</div>
 </aside>
 
-<script src="data/products.js?v=1"></script>
+<script src="data/products.js?v=3"></script>
 <script>
 const SEASONS={
   spring:{mk:["Peach or coral blush","Clear coral or apricot lip tint","Light warm brown or peach eyeshadow"],en:"Spring Warm",ko:"봄웜",tag:"Bright & Warm",sc:"#cf6340",sw:["#f6c9a8","#f39a7c","#ffb07a"],desc:"Bright, warm, clear. Peach, coral and apricot make your skin glow.",
@@ -964,7 +965,7 @@ const ggl=q=>"https://www.google.com/search?tbm=shop&q="+encodeURIComponent(q);
 const P=window.GYEOL_P;
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
 /* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
-const TYPE={zm01:"stick",zm02:"stick",zm08:"stick",zm13:"stick",zm15:"stick",btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
+const TYPE={cosrxRetinol:"jar",bojRevive:"dropper",medicubePdrn:"dropper",anuaOil:"bottle",skin1004Foam:"tube",zm01:"stick",zm02:"stick",zm08:"stick",zm13:"stick",zm15:"stick",btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
   amuse:"tint",etudeBrow:"pencil",liner:"pencil",peripBlush:"blush",dasiqueBlush:"blush",rosemilktea:"palette"};
 const ptype=id=>TYPE[id]||(/^bt/.test(id)?"palette":"tint");
 function shadeMix(hex,amt){const n=parseInt(hex.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;
@@ -1779,7 +1780,14 @@ const ING={
   ceramide:["Ceramides","Lipids that make up part of the skin barrier. Help lock in moisture."],
   birch:["Birch sap","Birch juice used as a watery base for light hydration."],
   rice:["Rice extract","Used for a soft, bright, even look."],
-  probiotics:["Probiotic ferments","Fermented ingredients used for a calm, balanced feel."]};
+  probiotics:["Probiotic ferments","Fermented ingredients used for a calm, balanced feel."],
+  panthenol:["Panthenol","Pro-vitamin B5. Helps soothe skin and hold in moisture."],
+  peptides:["Peptides","Short chains of amino acids used for a firmer, smoother look."],
+  pdrn:["PDRN (salmon DNA)","Sodium DNA from salmon, used in Korean skincare for a plump, revitalized look."],
+  madecassoside:["Madecassoside","A soothing compound from centella asiatica."],
+  teatree:["Tea tree oil","A plant oil used to help keep skin clear."],
+  arbutin:["Arbutin","Used to brighten the look of dark spots."],
+  squalane:["Squalane","A lightweight oil that softens skin and locks in moisture."]};
 /* General how-to by product type. Product-specific directions replace these once verified (item.how). */
 const GUIDE={
   tint:{what:"A lightweight liquid tint that stains lips with long-lasting color.",when:"Anytime",how:["Dot color on the center of your lips.","Blend outward with the applicator or a fingertip for a soft gradient.","Add a second layer for fuller color."]},
@@ -1797,6 +1805,7 @@ const GUIDE={
   retinoid:{what:"A vitamin A treatment for fine lines and texture.",when:"PM",how:["Use at night on clean, dry skin.","Apply a small amount over your face, avoiding the eyes and the corners of the nose and mouth.","Start 2–3 nights a week and increase slowly.","Follow with moisturizer."]},
   eye:{what:"A treatment made for the thin skin around the eyes.",when:"AM & PM",how:["Take a tiny amount on your ring finger.","Tap gently along the bone around the eye. Don't go too close to the lash line."]},
   cbalm:{what:"A solid cleansing balm that melts into oil to lift makeup and sunscreen.",when:"PM",how:["Scoop a little with the spatula onto dry hands.","Massage over your dry face to melt makeup and sunscreen.","Add a splash of water to turn it milky, then rinse.","Follow with a water-based cleanser (double cleanse)."]},
+  coil:{what:"A cleansing oil that dissolves makeup, sunscreen and excess oil.",when:"AM & PM",how:["Apply to a dry face with dry hands and massage gently.","Add a little water to emulsify, then rinse.","Follow with a water-based cleanser."]},
   foam:{what:"A water-based face cleanser for everyday washing.",when:"AM & PM",how:["Work a small amount into a lather with water.","Massage gently over a wet face for 30–60 seconds.","Rinse with lukewarm water."]},
   exfoliant:{what:"A leave-on chemical exfoliant that clears pores.",when:"PM",how:["After cleansing, apply with a cotton pad or your fingertips.","Avoid the eye area.","Continue with toner and moisturizer.","Start 2–3 times a week."]},
   sunscreen:{what:"Daily sun protection, the last step of your morning routine.",when:"AM",how:["Apply as the last step of your morning skincare.","Use about two finger-lengths for your face and neck.","Reapply at least every 2 hours outdoors, and after swimming or sweating."]},
@@ -1862,7 +1871,7 @@ function pcard(iid){const it=ITEMS[iid],pid=itemPid(iid),p=P[pid],sh=it.shades||
 
 function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!it){location.hash="home";return}
   const pid=itemPid(iid,shade),p=P[pid],C=CATBY[it.cat],g=GUIDE[it.type]||{},r=region(),q=pq(p),sh=parseShade(p),t=itemTags(iid);
-  const on=state.bag.includes(pid),fav=favs().includes(pid),how=it.how||g.how||[],cautions=(it.caution||[]).concat(CAUTION[it.type]||[],ingCaution(it)).filter((x,i,a)=>a.indexOf(x)===i);
+  const on=state.bag.includes(pid),fav=favs().includes(pid),how=it.how||g.how||[],cautions=(it.caution!==undefined?it.caution:(CAUTION[it.type]||[]).concat(ingCaution(it))).filter((x,i,a)=>a.indexOf(x)===i);
   const subName=(C.subs.find(([s])=>s===it.sub)||[,""])[1];
   $("pbody").innerHTML=`<a class="back" href="#c/${it.cat}">← ${esc(C.name)}</a>
   <article class="pdp pdp2">
@@ -1882,10 +1891,10 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
   </article>
   <div class="pinfo">
     ${t.types.length||t.cons.length?`<section class="pblock"><h2>Good for</h2><ul class="goodfor">${t.types.map(x=>`<li>${esc(SKT[x])} skin</li>`).join("")}${t.cons.map(x=>`<li>${esc(SKC[x])}</li>`).join("")}</ul></section>`:""}
-    ${(it.ing||[]).length?`<section class="pblock"><h2>Key ingredients</h2><dl class="inglist">${it.ing.map(i=>`<div><dt>${esc(ING[i][0])}</dt><dd>${esc(ING[i][1])}</dd></div>`).join("")}</dl>${it.inci?"":`<p class="note left">Named on the product. Full ingredient list on the package and retailer page.</p>`}</section>`:""}
-    ${how.length?`<section class="pblock"><div class="phead"><h2>How to use</h2><span class="whenpill">${esc(it.when||g.when||"")}</span></div><ol class="steps">${how.map((s,i)=>`<li><span>${i+1}</span><p>${esc(s)}</p></li>`).join("")}</ol>${it.how?"":`<p class="note left">General guide for this type of product. Always follow the directions on your package.</p>`}</section>`:""}
+    ${(it.ing||[]).length?`<section class="pblock"><h2>Key ingredients</h2><dl class="inglist">${it.ing.map(i=>`<div><dt>${esc(ING[i][0])}</dt><dd>${esc(ING[i][1])}</dd></div>`).join("")}</dl><p class="note left">${it.src?"Highlighted on the product page.":"Named on the product."} Full ingredient list on the package.</p></section>`:""}
+    ${how.length?`<section class="pblock"><div class="phead"><h2>How to use</h2><span class="whenpill">${esc(it.when||g.when||"")}</span></div><ol class="steps">${how.map((s,i)=>`<li><span>${i+1}</span><p>${esc(s)}</p></li>`).join("")}</ol><p class="note left">${it.how?"From the product page. Always follow the directions on your package.":"General guide for this type of product. Always follow the directions on your package."}</p></section>`:""}
     ${cautions.length?`<section class="pblock"><h2>Good to know</h2><ul class="cautions">${cautions.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></section>`:""}
-    ${it.src?`<p class="note left">Product details from <a href="${esc(it.src)}" target="_blank" rel="noopener">the brand's official page</a>.</p>`:""}
+    ${it.src?`<p class="note left srcnote">Usage, key ingredients and cautions from <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.srcName||"the product page")}</a>, checked November 2026. Formulas change; your package is the final word.</p>`:""}
   </div>`;
   const b=$("pbody");
   b.querySelectorAll("[data-shade]").forEach(x=>x.onclick=()=>{location.replace("#p/"+iid+"/"+x.dataset.shade)});
@@ -1896,7 +1905,7 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
   $("pregion").onclick=()=>{store.set("gy-region",r==="CA"?"US":"CA");send("region",{region:r==="CA"?"US":"CA"});renderProduct()}}
 
 /* My Beauty Routine: saved skincare sorted into morning and night order */
-const ROUTINE_ORDER={cbalm:[null,5],foam:[10,10],exfoliant:[null,15],toner:[20,20],essence:[25,25],serum:[30,30],retinoid:[null,33],eye:[35,35],cream:[40,40],sunscreen:[50,null],mask:[null,45],spot:[null,48]};
+const ROUTINE_ORDER={cbalm:[null,5],coil:[5,5],foam:[10,10],exfoliant:[null,15],toner:[20,20],essence:[25,25],serum:[30,30],retinoid:[null,33],eye:[35,35],cream:[40,40],sunscreen:[50,null],mask:[null,45],spot:[null,48]};
 function routineHTML(){const ids=favs().map(pid=>itemOf(pid)).filter(iid=>iid&&ITEMS[iid].cat!=="makeup").filter((x,i,a)=>a.indexOf(x)===i);
   if(!ids.length)return "";
   const col=(k)=>ids.filter(iid=>ROUTINE_ORDER[ITEMS[iid].type]&&ROUTINE_ORDER[ITEMS[iid].type][k]!=null).sort((a,b)=>ROUTINE_ORDER[ITEMS[a].type][k]-ROUTINE_ORDER[ITEMS[b].type][k]);
