@@ -745,6 +745,19 @@ html,body{overflow-x:clip}
 .rlist li>span{width:24px;height:24px;border-radius:50%;background:var(--surface);font-size:12px;font-weight:800;display:grid;place-items:center}
 .rlist a{text-decoration:none;color:var(--ink);display:grid}.rlist b{font-size:13.5px}.rlist small{color:var(--muted);font-size:12px}
 #savedbody .cautions{margin-top:12px}
+/* where to buy */
+.wtbbox{display:grid;gap:10px;background:var(--surface);border-radius:20px;padding:14px}
+.wtbhead{display:flex;justify-content:space-between;align-items:baseline}.wtbhead h2{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}.wtbhead span{font-size:12.5px;font-weight:700;color:var(--muted)}
+.wtblist{display:grid;gap:6px}
+.wtb{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 10px;align-items:center;text-decoration:none;color:var(--ink);background:var(--tile);border:1px solid var(--line);border-radius:14px;padding:11px 14px}
+.wtbname{font-weight:800;font-size:14.5px}.wtbmeta{grid-column:1;font-size:12px;color:var(--muted)}
+.wtbgo{grid-row:1/3;grid-column:2;font-weight:800;color:var(--accent)}
+.wtbmeta em{font-style:normal;font-weight:700}.k-product{color:#3f7a52}.k-search,.k-brand{color:var(--muted)}
+.wtbmain{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.wtbmain .wtbmeta,.wtbmain .wtbgo,.wtbmain .k-product{color:inherit;opacity:.9}
+.paid{font-weight:600;opacity:.8}
+.wtbother summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent);padding:2px 0 6px}
+.wtbother .wtblist{margin-top:4px}
+@media (prefers-color-scheme:dark){.k-product{color:#8fcf9f}}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -935,7 +948,7 @@ html,body{overflow-x:clip}
   <div class="note" id="copynote">Copies product names so you can paste them into a note or message.</div>
 </aside>
 
-<script src="data/products.js?v=4"></script>
+<script src="data/products.js?v=5"></script>
 <script>
 const SEASONS={
   spring:{mk:["Peach or coral blush","Clear coral or apricot lip tint","Light warm brown or peach eyeshadow"],en:"Spring Warm",ko:"봄웜",tag:"Bright & Warm",sc:"#cf6340",sw:["#f6c9a8","#f39a7c","#ffb07a"],desc:"Bright, warm, clear. Peach, coral and apricot make your skin glow.",
@@ -1886,10 +1899,10 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
       <p class="plead">${esc(it.what||g.what||"")}</p>
       ${it.shades?`<div class="pshades"><div class="label">Shade · <b>${esc(sh.name)}</b>${sh.num?` <span class="muted">${esc(sh.num)}</span>`:""}</div><div class="cmpstrip">${it.shades.map(id=>`<button class="tchip fit" type="button" aria-checked="${id===pid}" data-shade="${id}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${fits(id)?`<em class="star">★</em>`:""}</button>`).join("")}</div></div>`:p.fam?`<p class="note left">Shade: ${esc(p.s)}. Pick the one that matches you at the store.</p>`:""}
       ${tryable(iid)?`<button class="primary cta tryit" type="button" id="ptry">Try this shade on your face <span aria-hidden="true">→</span></button>`:""}
-      <a class="primary cta buy" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
-      <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div>
+      ${BUY[iid]?wtbHTML(iid,pid,r):`<a class="primary cta buy" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
+      <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div>`}
       <div class="pbtns"><button class="outline" type="button" id="padd" aria-pressed="${on}">${on?"On your list ✓":"+ Shopping list"}</button><button class="outline" type="button" id="pfav" aria-pressed="${fav}">${fav?"Saved ♥":it.cat==="makeup"?"Save ♡":"Add to routine ♡"}</button></div>
-      <p class="disclose">Shopping in ${r==="CA"?"Canada":"the United States"} · <button type="button" class="linkbtn" id="pregion">Switch to ${r==="CA"?"US":"Canada"}</button><br>Prices and availability are set by each retailer. Gyeol may earn a commission when you buy through these links, at no extra cost to you.</p>
+      <p class="disclose">Shopping in ${r==="CA"?"Canada":"the United States"} · <button type="button" class="linkbtn" id="pregion">Switch to ${r==="CA"?"US":"Canada"}</button><br>Prices and availability are set by each retailer.${!BUY[iid]||wtbPaid(iid)?" Gyeol may earn a commission when you buy through these links, at no extra cost to you.":""}</p>
     </div>
   </article>
   <div class="pinfo">
@@ -1907,6 +1920,25 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
   $("pfav").onclick=()=>{const f=favs(),i=f.indexOf(pid);if(i>=0)f.splice(i,1);else{f.unshift(pid);send(it.cat==="makeup"?"shade_save":"routine_add",{product:pid})}store.set("gy-favs",f.slice(0,60));renderFavCount();renderProduct()};
   $("pregion").onclick=()=>{store.set("gy-region",r==="CA"?"US":"CA");send("region",{region:r==="CA"?"US":"CA"});renderProduct()}}
 
+/* Where to buy: verified retailer links by country (data/products.js GYEOL_BUY / GYEOL_STORES) */
+const BUY=window.GYEOL_BUY||{},STORES=window.GYEOL_STORES||{};
+const KIND_LABEL={product:"Product page",search:"Search results",brand:"Brand page"};
+const KIND_RANK={product:0,brand:1,search:2};
+const isPaid=e=>(STORES[e.store]||{}).affiliate==="approved"&&!!STORES[e.store].affId;
+const wtbPaid=iid=>["CA","US"].some(c=>(BUY[iid][c]||[]).some(isPaid));
+function wtbUrl(e){if(!isPaid(e))return e.url;const id=STORES[e.store].affId;
+  if(/^amazon_/.test(e.store))return e.url+(e.url.includes("?")?"&":"?")+"tag="+encodeURIComponent(id);
+  return e.url}
+function wtbList(iid,pid,c,first){const L=(BUY[iid][c]||[]).slice().sort((a,b)=>KIND_RANK[a.kind]-KIND_RANK[b.kind]);
+  if(!L.length)return `<p class="note left">No verified ${c==="CA"?"Canadian":"US"} store link yet.</p>`;
+  return `<div class="wtblist">${L.map((e,i)=>{const st=STORES[e.store]||{name:e.store},paid=isPaid(e);
+    return `<a class="wtb${first&&i===0&&e.kind==="product"?" wtbmain":""}" href="${esc(wtbUrl(e))}" target="_blank" rel="noopener${paid?" sponsored":""}" data-p="${pid}" data-s="${esc(e.store)}" data-k="${e.kind}"><span class="wtbname">${esc(st.name)}${paid?` <small class="paid">(paid link)</small>`:""}</span><span class="wtbmeta"><em class="k-${e.kind}">${KIND_LABEL[e.kind]}</em>${e.note?` · ${esc(e.note)}`:""}</span><span class="wtbgo" aria-hidden="true">↗</span></a>`}).join("")}</div>`}
+function wtbHTML(iid,pid,r){const other=r==="CA"?"US":"CA",nm={CA:"Canada",US:"United States"};
+  const ck=[...(BUY[iid].CA||[]),...(BUY[iid].US||[])].map(e=>e.checked).sort().pop();
+  return `<section class="wtbbox" aria-label="Where to buy"><div class="wtbhead"><h2>Where to buy</h2><span>${nm[r]}</span></div>
+    ${wtbList(iid,pid,r,true)}
+    <details class="wtbother"><summary>Shopping from ${nm[other]}?</summary>${wtbList(iid,pid,other,false)}</details>
+    <p class="note left">"Search results" opens the store's search for this product; pick the exact size there.${ck?` Links checked ${new Date(ck+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}.`:""}</p></section>`}
 /* My Beauty Routine: saved skincare sorted into morning and night order */
 const ROUTINE_ORDER={cbalm:[null,5],coil:[5,5],foam:[10,10],exfoliant:[null,15],toner:[20,20],essence:[25,25],serum:[30,30],retinoid:[null,33],eye:[35,35],cream:[40,40],sunscreen:[50,null],mask:[null,45],spot:[null,48]};
 function routineHTML(){const ids=favs().map(pid=>itemOf(pid)).filter(iid=>iid&&ITEMS[iid].cat!=="makeup").filter((x,i,a)=>a.indexOf(x)===i);
