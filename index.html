@@ -584,6 +584,24 @@ a.primary{text-decoration:none;display:inline-flex;justify-content:center;align-
 .rec{background:var(--accent);color:var(--accent-ink)}
 .bagbtn{background:var(--surface)}
 footer{padding-bottom:8px}
+/* phone: keep the face and the shades on one screen */
+@media (max-width:859px){
+  #v-try-on .studio{gap:10px}
+  .appbar{background:var(--bg)}
+  #v-try-on .vhead{display:none}
+  #v-try-on .studio>.trystage{position:sticky;top:var(--appbar-h,64px);z-index:6;aspect-ratio:auto;height:min(40svh,84vw);border-radius:20px;box-shadow:0 0 0 10px var(--bg)}
+  #v-try-on .studio>*{order:9}#v-try-on .studio>.trystage{order:0}#v-try-on .studio>#tryseg{order:1}#v-try-on .studio>#trychips{order:2}#v-try-on .studio>.liverow,#v-try-on .studio>#splitrow{order:3}#v-try-on .shadehead{display:none}
+  #v-try-on .studio canvas{object-fit:cover;object-position:50% 42%}
+  #v-try-on .liverow{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px}
+  #v-try-on .liverow button{padding:9px 6px;font-size:13.5px}
+  #v-try-on .shadehead{margin-top:2px}#v-try-on .shadehead h2{font-size:17px}
+  #v-try-on .seg button{padding:6px 4px}
+  #v-try-on .studio .trychips{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:76px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:2px 2px 6px;margin-inline:-2px;scrollbar-width:none}
+  #v-try-on .studio .trychips::-webkit-scrollbar{display:none}
+  #v-try-on .trychips .tchip{scroll-snap-align:start}
+  #v-try-on .trychips .chipgroup{display:none}
+  #v-try-on .selpanel{padding:14px;gap:10px}
+}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -1443,6 +1461,7 @@ function renderTryOn(){
     $("shadecount").textContent=idx>=0?`${String(idx+1).padStart(2,"0")} / ${list.length}`:`${list.length} shades`;
     $("trychips").innerHTML=`<button class="tchip none" type="button" role="radio" aria-checked="${!T2.sel[tab]}" data-id=""><i></i><span>None</span></button>`+list.map(id=>`<button class="tchip${!state.season||fits(id)?" fit":""}" type="button" role="radio" aria-checked="${T2.sel[tab]===id}" data-id="${id}" title="${esc(P[id].b+" "+P[id].n+(P[id].s?" "+P[id].s:""))}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${star(id)}</button>`).join("");
     $("trychips").querySelectorAll(".tchip").forEach(b=>b.onclick=()=>{T2.sel[tab]=b.dataset.id||null;T2.touched=true;T2.lookId=null;send("tryon_select",{cat:tab,product:b.dataset.id||"none",season:state.season});renderTryOn();drawTry()});}
+  {const c=$("trychips");if(c.scrollWidth>c.clientWidth+4){if(c._tab===tab&&c._sl!=null)c.scrollLeft=c._sl;else{const b=c.querySelector('[aria-checked="true"]');c.scrollLeft=b?Math.max(0,b.offsetLeft-c.offsetLeft-8):0}}c._tab=tab;c.onscroll=()=>{c._sl=c.scrollLeft}}
   // selected product panel (current category; lips when browsing looks)
   const cat=tab==="looks"?(["lip","blush","eye"].find(k=>T2.sel[k])||"lip"):tab,id=T2.sel[cat],p=id&&P[id],fv=favs();
   if(p){const sh=parseShade(p);
@@ -1685,6 +1704,7 @@ $("homebag").onclick=()=>openBag(true);
 
 function renderAll(){renderSkin();renderResult();renderTryOn();renderFavCount();renderQuiz();renderFilters();renderShelf();renderSheet();renderBag()}
 renderAll();showView();
+(function(){const bar=document.querySelector(".appbar");if(!bar)return;const set=()=>document.documentElement.style.setProperty("--appbar-h",Math.round(bar.getBoundingClientRect().height+parseFloat(getComputedStyle(bar).top||0)+4)+"px");set();try{new ResizeObserver(set).observe(bar)}catch(e){addEventListener("resize",set)}})();
 </script>
 
 </body>
