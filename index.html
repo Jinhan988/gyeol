@@ -651,6 +651,97 @@ html,body{overflow-x:clip}
   #v-compare .cmpstage{aspect-ratio:auto;height:min(46svh,92vw)}#v-compare .cmpstage canvas{object-fit:cover;object-position:50% 42%}#v-compare .shadehead{margin-top:2px}
   .pdpimg{aspect-ratio:auto;height:min(30svh,64vw);display:flex;align-items:center;justify-content:center}.pdpimg .pimg.xl{width:auto;height:76%;aspect-ratio:1}
 }
+/* categories */
+.sechead{display:grid;gap:2px;margin:26px 0 12px}.sechead h2{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:0;line-height:1.05}
+.catgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cattile{position:relative;display:grid;grid-template-rows:auto 1fr;border-radius:22px;overflow:hidden;text-decoration:none;color:var(--ink);background:var(--surface);min-width:0}
+.cattile:first-child{grid-column:1/-1;grid-template-rows:none;grid-template-columns:1.1fr 1fr}
+.catart{position:relative;aspect-ratio:4/3;overflow:hidden}
+.cattile:first-child .catart{aspect-ratio:auto;min-height:170px;order:2}
+.catart-in{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;gap:0;padding:14px 10px 0}
+.catart .pimg{background:transparent;width:46%;aspect-ratio:1;height:auto;margin:0 -7%}.catart .pimg svg{width:100%;height:100%}
+.catart .cp1{transform:translateY(-10%) scale(1.08);z-index:1}.catart .cp2{transform:translateY(4%)}
+.ct-makeup .catart{background:radial-gradient(120% 90% at 70% 20%,#f6e1e4,#ead0d4)}
+.ct-skincare .catart{background:radial-gradient(120% 90% at 30% 20%,#eef3f6,#dfe8ee)}
+.ct-antiaging .catart{background:radial-gradient(120% 90% at 30% 20%,#f6ecdc,#ecdcc2)}
+.ct-cleansing .catart{background:radial-gradient(120% 90% at 30% 20%,#f7eef0,#eadfe2)}
+.ct-sun .catart{background:radial-gradient(120% 90% at 30% 20%,#fbf1dd,#f1e2c4)}
+.cattxt{display:grid;gap:3px;align-content:start;padding:12px 14px 14px}
+.cattile:first-child .cattxt{align-content:center;padding:18px}
+.cattxt small{font-size:10.5px;font-weight:700;letter-spacing:.14em;color:var(--accent)}
+.cattxt b{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.cattile:first-child .cattxt b{font-size:15px}
+.cattxt span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.cattxt em{font-style:normal;font-size:11.5px;font-weight:700;color:var(--accent);margin-top:4px}
+.catnav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:2px -2px 6px;padding:2px}
+.catnav::-webkit-scrollbar{display:none}
+.catnav a{flex:none;text-decoration:none;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:7px 12px;background:var(--tile)}
+.catnav a[aria-current="page"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+#shopcats{margin-bottom:14px}#shopcats .label{margin-bottom:6px}
+.cathead{margin-top:6px}.cathead .vtitle{font-family:var(--serif);font-weight:600;letter-spacing:0;font-size:clamp(34px,7vw,48px)}
+.trybanner{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;text-decoration:none;color:var(--ink);background:var(--accent-soft);border-radius:20px;padding:14px 16px;margin-bottom:14px}
+.trybanner.soft{background:var(--surface)}
+.trybanner b{display:block;font-size:15px}.trybanner small{color:var(--muted);font-size:12.5px;line-height:1.35;display:block}
+.trybanner em{font-style:normal;color:var(--accent);font-weight:800;font-size:18px}
+.tbart{display:flex}.tbart i{width:26px;height:26px;border-radius:50%;margin-left:-8px;box-shadow:0 0 0 2px var(--accent-soft)}.tbart i:first-child{margin-left:0}
+.trybanner.soft .tbart i{box-shadow:0 0 0 2px var(--surface)}
+.subrow{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);margin-bottom:12px}
+.subrow::-webkit-scrollbar{display:none}
+.subrow button{flex:none;border:0;background:none;padding:10px 0 9px;font-size:14px;font-weight:700;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.subrow button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.filterbar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.filterbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--tile);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:700;color:var(--ink)}
+.filterbar .count{color:var(--muted);font-size:13px;margin-left:auto}
+.linkbtn{border:0;background:none;padding:0;color:var(--accent);font-weight:700;font-size:13px;cursor:pointer}
+.filterpanel{display:grid;gap:12px;background:var(--surface);border-radius:18px;padding:14px;margin-bottom:14px}
+.fchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.fchips button{border:1px solid var(--line);background:var(--tile);border-radius:999px;padding:6px 11px;font-size:12.5px;font-weight:600;color:var(--ink)}
+.fchips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 10px}
+@media (min-width:860px){.pgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.catgrid{grid-template-columns:repeat(4,minmax(0,1fr))}.cattile:first-child{grid-column:1/-1}}
+.pcard{display:grid;gap:8px;text-decoration:none;color:var(--ink);min-width:0}
+.pcimg{position:relative;aspect-ratio:1;background:var(--surface);border-radius:18px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pcimg .pimg{background:transparent;width:auto;height:70%;aspect-ratio:1}.pcimg .pimg svg{width:100%;height:100%}
+.trytag{position:absolute;left:8px;top:8px;font-size:10.5px;font-weight:800;letter-spacing:.06em;background:var(--tile);color:var(--accent);border-radius:999px;padding:3px 8px}
+.pctxt{display:grid;gap:2px;padding:0 2px}
+.pctxt small{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.pctxt b{font-size:14px;line-height:1.25;letter-spacing:-.01em}
+.dots{display:flex;align-items:center;gap:3px;margin-top:4px}.dots i{width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}.dots em{font-style:normal;font-size:11.5px;color:var(--muted);margin-left:4px}
+.ingtag,.subtag{justify-self:start;margin-top:4px;font-size:11px;font-weight:700;color:var(--muted);background:var(--surface);border-radius:999px;padding:3px 8px}
+.catsoon{margin-top:16px}
+.note.left{text-align:left;justify-self:start;margin:6px 0 0;font-size:12px;color:var(--muted)}
+/* product page */
+.pdp2{margin-top:8px}.pdp2>*,.pdpinfo{min-width:0}.pdpinfo{grid-template-columns:minmax(0,1fr)}.pshades{min-width:0}
+.pname2{font-family:var(--serif);font-weight:600;font-size:clamp(30px,6vw,40px);line-height:1.04;letter-spacing:0}
+.ptags{display:flex;flex-wrap:wrap;gap:6px}.ptags span{font-size:11.5px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:4px 10px}
+.plead{margin:0;font-size:15px;line-height:1.5}
+.pshades .label b{color:var(--ink)}.muted{color:var(--muted);font-weight:600}
+.pshades .cmpstrip{margin-top:6px}
+.tryit{background:var(--ink)!important;color:var(--bg)!important}
+.pbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}.pbtns .outline{padding:12px 8px;font-size:14px}
+.pinfo{display:grid;gap:12px;margin-top:22px}
+.pblock{background:var(--tile);border:1px solid var(--line);border-radius:22px;padding:18px}
+.pblock h2{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.phead{display:flex;justify-content:space-between;align-items:center}.phead h2{margin:0}
+.whenpill{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:var(--ink);background:var(--surface);border-radius:999px;padding:4px 10px}
+.goodfor{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:6px}.goodfor li{font-size:13.5px;font-weight:600;background:var(--surface);border-radius:999px;padding:6px 12px}
+.inglist{margin:0;display:grid}.inglist div{display:grid;gap:2px;padding:10px 0;border-top:1px solid var(--line)}.inglist div:first-child{border-top:0;padding-top:0}
+.inglist dt{font-weight:800;font-size:14.5px}.inglist dd{margin:0;color:var(--muted);font-size:13.5px;line-height:1.45}
+.steps{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:12px}
+.steps li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
+.steps li span{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:800;font-size:13px;display:grid;place-items:center}
+.steps li p{margin:4px 0 0;font-size:14.5px;line-height:1.45}
+.cautions{margin:0;padding-left:18px;display:grid;gap:6px;font-size:13.5px;line-height:1.45}
+/* routine */
+.routinecols{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:8px}
+@media (min-width:640px){.routinecols{grid-template-columns:1fr 1fr}}
+.routinecols section{background:var(--tile);border:1px solid var(--line);border-radius:20px;padding:14px 16px}
+.routinecols h3{font-size:14px;margin-bottom:8px}
+.rlist{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.rlist li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;align-items:center}
+.rlist li>span{width:24px;height:24px;border-radius:50%;background:var(--surface);font-size:12px;font-weight:800;display:grid;place-items:center}
+.rlist a{text-decoration:none;color:var(--ink);display:grid}.rlist b{font-size:13.5px}.rlist small{color:var(--muted);font-size:12px}
+#savedbody .cautions{margin-top:12px}
 </style>
 <style>[hidden]{display:none!important}body{margin:0}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
 </head>
@@ -676,6 +767,7 @@ html,body{overflow-x:clip}
         <a class="primary cta" href="#try-on">Try On Now</a>
       </div>
     </div>
+    <section class="cathome" aria-labelledby="cathomeh"><div class="sechead"><div class="kicker">Shop by category</div><h2 id="cathomeh">Discover K-Beauty</h2></div><div class="catgrid" id="catgrid"></div></section>
     <div class="homecards">
       <a class="hcard" href="#color"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span><b>Personal Color</b><small>Find your season with AI or a 4-question quiz</small></a>
       <a class="hcard" href="#looks"><span class="hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11c2.5-3 5-4 7-3l2 1 2-1c2-1 4.5 0 7 3-2.5 4-5.5 6-9 6s-6.5-2-9-6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 11c3 .8 6 1 9 1s6-.2 9-1" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span><b>Look Library</b><small>8 Korean looks, step by step</small></a>
@@ -731,8 +823,11 @@ html,body{overflow-x:clip}
   <section class="view" data-view="shop" id="v-shop" aria-label="Shop" hidden>
     <div class="vhead"><h1 class="vtitle">Shop Your Look</h1><p>The exact products and shades from your try-on.</p></div>
     <div class="regionrow"><span>Shopping in</span><div class="seg mini" id="regionseg" role="radiogroup" aria-label="Shopping region"><button type="button" role="radio" data-r="US">United States</button><button type="button" role="radio" data-r="CA">Canada</button></div></div>
+    <div id="shopcats"></div>
     <div id="shopmain"></div>
   </section>
+  <section class="view" data-view="cat" id="v-cat" aria-label="Category" hidden><div id="catbody"></div></section>
+  <section class="view" data-view="product" id="v-product" aria-label="Product" hidden><div id="pbody"></div></section>
 
   <section class="view" data-view="color" id="v-color" aria-label="Personal color" hidden>
     <a class="back" href="#home">‹ Home</a>
@@ -836,6 +931,7 @@ html,body{overflow-x:clip}
   <div class="note" id="copynote">Copies product names so you can paste them into a note or message.</div>
 </aside>
 
+<script src="data/products.js?v=1"></script>
 <script>
 const SEASONS={
   spring:{mk:["Peach or coral blush","Clear coral or apricot lip tint","Light warm brown or peach eyeshadow"],en:"Spring Warm",ko:"봄웜",tag:"Bright & Warm",sc:"#cf6340",sw:["#f6c9a8","#f39a7c","#ffb07a"],desc:"Bright, warm, clear. Peach, coral and apricot make your skin glow.",
@@ -865,81 +961,7 @@ const amzHost=()=>region()==="CA"?"www.amazon.ca":"www.amazon.com";
 const amz=q=>`https://${amzHost()}/s?k=`+encodeURIComponent(q)+(AFF.amazon?"&tag="+encodeURIComponent(AFF.amazon):"");
 const ys=q=>"https://www.yesstyle.com/en/list.html?q="+encodeURIComponent(q)+(AFF.yesstyle?"&rco="+encodeURIComponent(AFF.yesstyle):"");
 const ggl=q=>"https://www.google.com/search?tbm=shop&q="+encodeURIComponent(q);
-/* s = official shade name; fam:true = shade depends on the person, so we name a shade family instead */
-const P={
-  snail:{b:"COSRX",n:"Advanced Snail 96 Mucin Power Essence",c:"#f1ece2"},
-  torriden:{b:"Torriden",n:"DIVE-IN Low Molecular Hyaluronic Acid Serum",c:"#d9ebf3"},
-  boj:{b:"Beauty of Joseon",n:"Relief Sun: Rice + Probiotics SPF50+",c:"#f4ead2"},
-  laneigeCushion:{b:"Laneige",n:"Neo Cushion Glow",s:"your skin match",fam:true,c:"#efcfb6"},
-  clio:{b:"CLIO",n:"Kill Cover The New Founwear Cushion",s:"your skin match",fam:true,c:"#e9c6aa"},
-  hera:{b:"HERA",n:"Black Cushion Foundation",s:"your skin match",fam:true,c:"#e3c0a5"},
-  lipbalm:{b:"Laneige",n:"Lip Glowy Balm",c:"#f5b8c4"},
-  jujube:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#05 Jujube",c:"#e0705c"},
-  peachme:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#23 Peach Peach Me",c:"#e98f78"},
-  figfig:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#04 Fig Fig",c:"#b5636f"},
-  almondrose:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#14 Almond Rose",c:"#b97a7c"},
-  snowstraw:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#28 Snow Strawberry",c:"#e27a8e"},
-  joseonfig:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#29 Joseon Fig",c:"#a2626a"},
-  plumcoke:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#16 Plum Coke",c:"#7e2638"},
-  eatdotori:{b:"rom&nd",n:"Juicy Lasting Tint",s:"#13 Eat Dotori",c:"#9c3f2c"},
-  goodbrick:{b:"Peripera",n:"Ink the Velvet",s:"01 Good Brick",c:"#a3432f"},
-  celebrose:{b:"Peripera",n:"Ink the Velvet",s:"02 Celeb Deep Rose",c:"#a8475a"},
-  vitcoral:{b:"Peripera",n:"Ink the Velvet",s:"04 Vitality Coral",c:"#ec7a63"},
-  amuse:{b:"AMUSE",n:"Dew Tint",s:"a coral or rose shade for your season",fam:true,c:"#e46f7c"},
-  btPampas:{b:"rom&nd",n:"Better Than Palette",s:"01 Pampas Garden",c:"#c3a48c"},
-  btMahogany:{b:"rom&nd",n:"Better Than Palette",s:"02 Mahogany Garden",c:"#8a4a3a"},
-  btDusty:{b:"rom&nd",n:"Better Than Palette",s:"04 Dusty Fog Garden",c:"#9c8a86"},
-  btBerry:{b:"rom&nd",n:"Better Than Palette",s:"07 Berry Fuchsia Garden",c:"#8f3a5c"},
-  btPeach:{b:"rom&nd",n:"Better Than Palette",s:"08 Peach Dahlia Garden",c:"#e3a08a"},
-  btGlitter:{b:"rom&nd",n:"Better Than Palette",s:"00 Light & Glitter Garden",c:"#efdccb"},
-  rosemilktea:{b:"dasique",n:"Shadow Palette",s:"27 Rose Milk Tea",c:"#b88a8c"},
-  etudeBrow:{b:"ETUDE",n:"Drawing Eye Brow pencil",s:"a soft brown",fam:true,c:"#6b5040"},
-  liner:{b:"CLIO",n:"Sharp, So Simple Waterproof Pencil Liner",s:"brown",fam:true,c:"#5a3a2e"},
-  peripBlush:{b:"Peripera",n:"Pure Blushed Sunshine Cheek",s:"a peach or coral shade",fam:true,c:"#f4a79a"},
-  dasiqueBlush:{b:"dasique",n:"Blending Mood Cheek",s:"a cool pink or mauve shade",fam:true,c:"#d98c95"},
-  /* studio: matte lipstick */
-  zm01:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#01 Dusty Pink",c:"#c07f86"},
-  zm02:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#02 All That Jazz",c:"#9e4a3c"},
-  zm08:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#08 Adorable",c:"#e0705f"},
-  zm13:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#13 Red Carpet",c:"#b0233a"},
-  zm15:{b:"rom&nd",n:"Zero Matte Lipstick",s:"#15 Midnight",c:"#6b2236"},
-  /* studio: blush */
-  btcN01:{b:"rom&nd",n:"Better Than Cheek",s:"N01 Nutty Nude",c:"#c99a85"},
-  btcN02:{b:"rom&nd",n:"Better Than Cheek",s:"N02 Vine Nude",c:"#c4908f"},
-  btcW02:{b:"rom&nd",n:"Better Than Cheek",s:"W02 Strawberry Milk",c:"#f0a2b0"},
-  btcW03:{b:"rom&nd",n:"Better Than Cheek",s:"W03 Apricot Milk",c:"#f3a888"},
-  btcC01:{b:"rom&nd",n:"Better Than Cheek",s:"C01 Peach Chip",c:"#f2a28c"},
-  btcC02:{b:"rom&nd",n:"Better Than Cheek",s:"C02 Blueberry Chip",c:"#c9a2bd"},
-  btcC03:{b:"rom&nd",n:"Better Than Cheek",s:"C03 Fig Chip",c:"#c47f88"},
-  dqWarm:{b:"dasique",n:"Blending Mood Cheek",s:"01 Warm Blending",c:"#f0a07f"},
-  dqCool:{b:"dasique",n:"Blending Mood Cheek",s:"02 Cool Blending",c:"#e3a5c2"},
-  dqPeach:{b:"dasique",n:"Blending Mood Cheek",s:"03 Peach Blending",c:"#f5a68a"},
-  /* studio: eyes */
-  dqSugar:{b:"dasique",n:"Shadow Palette",s:"01 Sugar Brownie",c:"#9a6b55"},
-  dqRosePetal:{b:"dasique",n:"Shadow Palette",s:"02 Rose Petal",c:"#c98a8f"},
-  dqMilkLatte:{b:"dasique",n:"Shadow Palette",s:"07 Milk Latte",c:"#b89a85"},
-  /* skincare */
-  banila:{b:"BANILA CO",n:"Clean it Zero Cleansing Balm Original",c:"#f4c6cf"},
-  cosrxGel:{b:"COSRX",n:"Low pH Good Morning Gel Cleanser",c:"#cfe6d3"},
-  dokdoCleanser:{b:"ROUND LAB",n:"1025 Dokdo Cleanser",c:"#d8e8f2"},
-  birchToner:{b:"ROUND LAB",n:"Birch Juice Moisturizing Toner",c:"#dbeaf5"},
-  anuaToner:{b:"Anua",n:"Heartleaf 77% Soothing Toner",c:"#e3efd9"},
-  dokdoToner:{b:"ROUND LAB",n:"1025 Dokdo Toner",c:"#e2edf6"},
-  anuaTxa:{b:"Anua",n:"Niacinamide 10% + TXA 4% Serum",c:"#f1ebe0"},
-  bojGlow:{b:"Beauty of Joseon",n:"Glow Serum: Propolis + Niacinamide",c:"#f2d48a"},
-  centella:{b:"SKIN1004",n:"Madagascar Centella Ampoule",c:"#f3ecd4"},
-  bha:{b:"COSRX",n:"BHA Blackhead Power Liquid",c:"#e9eef0"},
-  bojEye:{b:"Beauty of Joseon",n:"Revive Eye Serum: Ginseng + Retinal",c:"#f2e3c4"},
-  sbmRetinol:{b:"SOME BY MI",n:"Retinol Intense Reactivating Serum",c:"#f0d8b0"},
-  aestura:{b:"AESTURA",n:"Atobarrier 365 Cream",c:"#eef2f6"},
-  illiyoon:{b:"ILLIYOON",n:"Ceramide Ato Concentrate Cream",c:"#eaf1f7"},
-  aquaBomb:{b:"belif",n:"The True Cream Aqua Bomb",c:"#cfe3f4"},
-  soonjung:{b:"ETUDE",n:"SoonJung 2x Barrier Intensive Cream",c:"#e6f0e9"},
-  sleepMask:{b:"Laneige",n:"Water Sleeping Mask",c:"#bcd6f2"},
-  birchSun:{b:"ROUND LAB",n:"Birch Juice Moisturizing Sun Cream",c:"#e3eef8"},
-  skinSun:{b:"SKIN1004",n:"Hyalu-Cica Water-fit Sun Serum",c:"#dcefe9"},
-  pimple:{b:"COSRX",n:"Acne Pimple Master Patch",c:"#f3efe6"}
-};
+const P=window.GYEOL_P;
 const pq=p=>p.b+" "+p.n+(p.s&&!p.fam?" "+p.s:"");
 /* Product illustrations: drawn by product type in the product's shade (stand-ins until licensed product photos) */
 const TYPE={zm01:"stick",zm02:"stick",zm08:"stick",zm13:"stick",zm15:"stick",btcN01:"blush",btcN02:"blush",btcW02:"blush",btcW03:"blush",btcC01:"blush",btcC02:"blush",btcC03:"blush",dqWarm:"blush",dqCool:"blush",dqPeach:"blush",dqSugar:"palette",dqRosePetal:"palette",dqMilkLatte:"palette",banila:"jar",cosrxGel:"tube",dokdoCleanser:"tube",birchToner:"bottle",anuaToner:"bottle",dokdoToner:"bottle",anuaTxa:"dropper",bojGlow:"dropper",centella:"dropper",bha:"bottle",bojEye:"dropper",sbmRetinol:"dropper",aestura:"tube",illiyoon:"jar",aquaBomb:"jar",soonjung:"tube",sleepMask:"jar",birchSun:"tube",skinSun:"tube",pimple:"patch",snail:"bottle",torriden:"dropper",boj:"tube",lipbalm:"tube",laneigeCushion:"cushion",clio:"cushion",hera:"cushion",
@@ -1687,11 +1709,11 @@ $("cmpsave").onclick=()=>{const m=savedLooks(),cur={lip:T2.sel.lip,blush:T2.sel.
 /* ---------- Shop view ---------- */
 const SHOP={id:null};
 const FORM={blush:"Powder blush",eye:"Eyeshadow palette"};
-function renderShop(){const r=region();
+function renderShop(){const r=region();$("shopcats").innerHTML=`<div class="label">Browse by category</div>${catNav(null)}`;
   $("regionseg").querySelectorAll("button").forEach(b=>{b.setAttribute("aria-checked",b.dataset.r===r);b.setAttribute("aria-selected",b.dataset.r===r);
     b.onclick=()=>{store.set("gy-region",b.dataset.r);send("region",{region:b.dataset.r});renderShop();renderBag()}});
   const items=["lip","blush","eye"].map(k=>T2.sel[k]).filter(Boolean);
-  if(!items.length){$("shopmain").innerHTML=`<div class="empty"><b>Nothing to shop yet</b><p>Try on a shade first, then come back for the exact product.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`;return}
+  if(!items.length){$("shopmain").innerHTML=`<div class="empty"><b>Nothing to shop yet</b><p>Try on a shade first, or browse a category above.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`;return}
   if(!items.includes(SHOP.id))SHOP.id=items[0];
   const id=SHOP.id,p=P[id],cat=catOf(id),sh=parseShade(p),q=pq(p),on=state.bag.includes(id);
   const siblings=Object.keys(P).filter(k=>P[k].b===p.b&&P[k].n===p.n&&!P[k].fam&&catOf(k));
@@ -1719,18 +1741,18 @@ function renderShop(){const r=region();
 
 /* ---------- Saved view ---------- */
 function renderFavCount(){const n=favs().length;$("favcount").textContent=n;$("favcount").hidden=!n}
-function renderSaved(){const f=favs(),mine=savedLooks();
+function renderSaved(){const all=favs(),f=all.filter(id=>{const i=itemOf(id);return catOf(id)||(i&&ITEMS[i].cat==="makeup")||!i}),mine=savedLooks();
   $("savedbody").innerHTML=(f.length?`<div class="label">Favorite shades</div><div class="cmpstrip wrapgrid">${f.map(id=>`<button class="tchip fit" type="button" data-fav="${id}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span><em class="x" data-unfav="${id}" role="button" aria-label="Remove ${esc(shortName(id))}">×</em></button>`).join("")}</div>`
-      :`<div class="empty"><b>No saved shades yet</b><p>Tap Save This Shade in Try On to keep the ones you love.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`)
-    +(mine.length?`<div class="label" style="margin-top:22px">My looks</div><div class="cmpstrip wrapgrid">${mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}"><i style="background:conic-gradient(${[m.lip,m.blush,m.eye].map(x=>x?P[x].c:"var(--sunk)").map((c,j)=>`${c} ${j*120}deg ${(j+1)*120}deg`).join(",")})"></i><span>My look ${i+1}</span></button>`).join("")}</div>`:"");
+      :all.length?"":`<div class="empty"><b>Nothing saved yet</b><p>Tap Save This Shade in Try On to keep the ones you love.</p><a class="primary cta" href="#try-on">Go to Try On</a></div>`)
+    +(mine.length?`<div class="label" style="margin-top:22px">My looks</div><div class="cmpstrip wrapgrid">${mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}"><i style="background:conic-gradient(${[m.lip,m.blush,m.eye].map(x=>x?P[x].c:"var(--sunk)").map((c,j)=>`${c} ${j*120}deg ${(j+1)*120}deg`).join(",")})"></i><span>My look ${i+1}</span></button>`).join("")}</div>`:"")+routineHTML();
   const b=$("savedbody");
   b.querySelectorAll("[data-unfav]").forEach(x=>x.onclick=e=>{e.stopPropagation();store.set("gy-favs",favs().filter(k=>k!==x.dataset.unfav));renderFavCount();renderSaved()});
-  b.querySelectorAll("[data-fav]").forEach(x=>x.onclick=()=>{const id=x.dataset.fav,c=catOf(id);T2.sel[c]=id;T2.tab=c;T2.touched=true;location.hash="try-on"});
+  b.querySelectorAll("[data-fav]").forEach(x=>x.onclick=()=>{const id=x.dataset.fav,c=catOf(id);if(!c){location.hash="p/"+itemOf(id);return}T2.sel[c]=id;T2.tab=c;T2.touched=true;location.hash="try-on"});
   b.querySelectorAll("[data-mine]").forEach(x=>x.onclick=()=>{const m=mine[+x.dataset.mine];T2.sel={lip:m.lip||null,blush:m.blush||null,eye:m.eye||null};T2.touched=true;location.hash="try-on"})}
 
 /* ---------- Home art: a licensed photo when HERO_IMG is set, otherwise a shade composition ---------- */
 const HERO_IMG="";
-function renderHome(){const n=state.bag.length;$("homebagn").textContent=n?`${n} item${n>1?"s":""}`:"Empty";
+function renderHome(){const n=state.bag.length;$("homebagn").textContent=n?`${n} item${n>1?"s":""}`:"Empty";renderCatGrid();
   if($("homeart").dataset.done)return;$("homeart").dataset.done="1";
   if(HERO_IMG){$("homeart").innerHTML=`<img src="${esc(HERO_IMG)}" alt="Korean makeup look"><span class="aibadge">AI model</span>`;return}
   const shades=["jujube","zm01","figfig","goodbrick","zm13","plumcoke"].map(id=>P[id].c);
@@ -1739,16 +1761,169 @@ function renderHome(){const n=state.bag.length;$("homebagn").textContent=n?`${n}
     ${shades.map((c,i)=>`<path d="M${40+i*6} ${92+i*48}C${110+i*4} ${60+i*48} ${190} ${130+i*48} ${320-i*8} ${84+i*48}" stroke="${c}" stroke-width="30" stroke-linecap="round" fill="none"/><path d="M${60+i*6} ${86+i*48}C${120} ${70+i*48} ${170} ${108+i*48} ${230} ${92+i*48}" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".35"/>`).join("")}
     <g transform="translate(250 250) rotate(18)"><rect x="0" y="54" width="44" height="96" rx="4" fill="#2b2125"/><rect x="4" y="34" width="36" height="22" rx="2" fill="#c9b8a8"/><path d="M7 34V-2l30-14v50z" fill="${shades[2]}"/></g></svg>`}
 
+/* ---------- Categories: five shopping categories, product pages, routine ---------- */
+const CATS=window.GYEOL_CATS,ITEMS=window.GYEOL_ITEMS,CATBY=Object.fromEntries(CATS.map(c=>[c.id,c]));
+/* Plain-English ingredient notes (general cosmetic use, not product claims) */
+const ING={
+  snail:["Snail mucin","Snail secretion filtrate. A hydrating ingredient that helps skin hold on to moisture."],
+  ha:["Hyaluronic acid","Draws water into the top layers of skin for a plump, hydrated feel."],
+  niacinamide:["Niacinamide","A form of vitamin B3. Helps even out the look of skin tone and supports the skin barrier."],
+  txa:["Tranexamic acid","Used to fade the look of dark spots and uneven tone."],
+  centella:["Centella asiatica (cica)","A plant extract used to soothe and calm skin."],
+  heartleaf:["Heartleaf","Houttuynia cordata extract. Used to calm and refresh skin."],
+  propolis:["Propolis","A resin made by bees, used for a soothing, nourished, glowy feel."],
+  bha:["BHA (salicylic acid)","Dissolves oil inside pores and gently exfoliates. Can be drying, so build up slowly."],
+  retinol:["Retinol","A form of vitamin A. Smooths the look of fine lines and texture over time. Use at night."],
+  retinal:["Retinal","Retinaldehyde, a form of vitamin A one step closer to its active form than retinol. Use at night."],
+  ginseng:["Ginseng","A root extract used in Korean skincare for a firmer, more radiant look."],
+  ceramide:["Ceramides","Lipids that make up part of the skin barrier. Help lock in moisture."],
+  birch:["Birch sap","Birch juice used as a watery base for light hydration."],
+  rice:["Rice extract","Used for a soft, bright, even look."],
+  probiotics:["Probiotic ferments","Fermented ingredients used for a calm, balanced feel."]};
+/* General how-to by product type. Product-specific directions replace these once verified (item.how). */
+const GUIDE={
+  tint:{what:"A lightweight liquid tint that stains lips with long-lasting color.",when:"Anytime",how:["Dot color on the center of your lips.","Blend outward with the applicator or a fingertip for a soft gradient.","Add a second layer for fuller color."]},
+  lipstick:{what:"A bullet lipstick for full, even color.",when:"Anytime",how:["Trace the edges of your lips with the tip.","Fill in, then press your lips together.","For a softer, blurred look, dab the center with a fingertip."]},
+  balm:{what:"A tinted lip balm for moisture and shine.",when:"Anytime",how:["Swipe over bare lips, or over a tint for extra shine.","Reapply whenever your lips feel dry."]},
+  blush:{what:"A powder blush for a soft flush of color.",when:"Anytime",how:["Smile to find the apples of your cheeks.","Tap a little color on, then blend up toward your temples.","Build slowly. It's easier to add than to take away."]},
+  palette:{what:"An eyeshadow palette of coordinated shades.",when:"Anytime",how:["Sweep the lightest shade over the whole lid.","Add the mid shade in the crease.","Press the deepest shade along the lash line, then add shimmer to the center of the lid."]},
+  liner:{what:"A waterproof pencil eyeliner.",when:"Anytime",how:["Draw along the upper lash line, from the outer corner inward.","Keep the line thin for a natural look."]},
+  brow:{what:"A brow pencil for filling and shaping brows.",when:"Anytime",how:["Fill sparse areas with short, hair-like strokes.","Brush through with the spoolie to soften."]},
+  cushion:{what:"A cushion foundation: liquid foundation in a compact with a puff.",when:"AM",how:["Press the puff into the cushion.","Tap onto the center of your face and blend outward.","Add a second thin layer only where you want more coverage."]},
+  toner:{what:"A watery first layer after cleansing that preps and hydrates skin.",when:"AM & PM",how:["After cleansing, pour a little into your palms or onto a cotton pad.","Pat it gently into your face until absorbed."]},
+  essence:{what:"A light, hydrating layer between toner and serum.",when:"AM & PM",how:["After toner, pour a small amount into your palms.","Press it into your face and let it absorb."]},
+  serum:{what:"A concentrated treatment that targets one skin concern.",when:"AM & PM",how:["After toner, apply 2–3 drops.","Spread over your face and pat in.","Follow with moisturizer."]},
+  cream:{what:"A moisturizer that seals in hydration and supports the skin barrier.",when:"AM & PM",how:["Take a pea- to almond-sized amount.","Warm it between your fingertips and spread over your face.","Last step at night; before sunscreen in the morning."]},
+  retinoid:{what:"A vitamin A treatment for fine lines and texture.",when:"PM",how:["Use at night on clean, dry skin.","Apply a small amount over your face, avoiding the eyes and the corners of the nose and mouth.","Start 2–3 nights a week and increase slowly.","Follow with moisturizer."]},
+  eye:{what:"A treatment made for the thin skin around the eyes.",when:"AM & PM",how:["Take a tiny amount on your ring finger.","Tap gently along the bone around the eye. Don't go too close to the lash line."]},
+  cbalm:{what:"A solid cleansing balm that melts into oil to lift makeup and sunscreen.",when:"PM",how:["Scoop a little with the spatula onto dry hands.","Massage over your dry face to melt makeup and sunscreen.","Add a splash of water to turn it milky, then rinse.","Follow with a water-based cleanser (double cleanse)."]},
+  foam:{what:"A water-based face cleanser for everyday washing.",when:"AM & PM",how:["Work a small amount into a lather with water.","Massage gently over a wet face for 30–60 seconds.","Rinse with lukewarm water."]},
+  exfoliant:{what:"A leave-on chemical exfoliant that clears pores.",when:"PM",how:["After cleansing, apply with a cotton pad or your fingertips.","Avoid the eye area.","Continue with toner and moisturizer.","Start 2–3 times a week."]},
+  sunscreen:{what:"Daily sun protection, the last step of your morning routine.",when:"AM",how:["Apply as the last step of your morning skincare.","Use about two finger-lengths for your face and neck.","Reapply at least every 2 hours outdoors, and after swimming or sweating."]},
+  spot:{what:"Hydrocolloid patches that cover a single spot.",when:"Anytime",how:["Cleanse and dry the area.","Press a patch onto the spot.","Leave it on for several hours or overnight, then peel off."]},
+  mask:{what:"An overnight mask that seals in moisture while you sleep.",when:"PM",how:["Use as the last step of your night routine.","Spread a thin layer over your face.","Rinse off in the morning."]}};
+const CAUTION={
+  retinoid:["Wear sunscreen every morning while using it.","It may tingle, dry or flake at first. Use it less often if it does.","If you're pregnant or breastfeeding, ask your doctor first."],
+  exfoliant:["Wear sunscreen every morning while using it.","Don't use it on the same night as retinol at first."],
+  sunscreen:["Korean, US and Canadian versions can have different formulas and SPF labels. Check the box you receive."],
+  spot:["For a single spot only. See a doctor for painful or widespread breakouts."]};
+const ingCaution=it=>(it.ing||[]).some(i=>i==="retinol"||i==="retinal")?CAUTION.retinoid:(it.ing||[]).includes("bha")?CAUTION.exfoliant:[];
+/* Skin types and concerns come from the routine finder's own recommendations (SKR) */
+const ITAG=(()=>{const t={};const add=(id,k,v)=>{(t[id]=t[id]||{types:new Set,cons:new Set})[k].add(v)};
+  ["cleanse","tone","moist","sun"].forEach(s=>Object.entries(SKR[s]||{}).forEach(([ty,pair])=>add(pair[0],"types",ty)));
+  ["treat","night","eye"].forEach(s=>Object.entries(SKR[s]||{}).forEach(([c,pair])=>add(pair[0],"cons",c)));
+  Object.entries(SK_SERUM).forEach(([c,pair])=>add(pair[0],"cons",c));return t})();
+const itemTags=iid=>{const x=ITAG[iid];return {types:x?[...x.types]:[],cons:x?[...x.cons]:[]}};
+const itemPid=(iid,shade)=>{const it=ITEMS[iid];return it&&it.shades?(it.shades.includes(shade)?shade:it.shades[0]):iid};
+const itemOf=pid=>ITEMS[pid]?pid:Object.keys(ITEMS).find(k=>(ITEMS[k].shades||[]).includes(pid));
+const inCat=(iid,cat,sub)=>{const it=ITEMS[iid];const places=[[it.cat,it.sub]].concat(it.also||[]);return places.some(([c,s])=>c===cat&&(!sub||sub==="all"||s===sub))};
+const tryable=iid=>(ITEMS[iid].shades||[iid]).some(id=>catOf(id));
+const CST={cat:"makeup",sub:"all",f:{},open:false};
+const FKEYS=[["brand","Brand"],["ing","Ingredient"],["con","Skin concern"],["type","Skin type"]];
+function itemFacet(iid,k){const it=ITEMS[iid],p=P[itemPid(iid)];
+  if(k==="brand")return [p.b];if(k==="ing")return it.ing||[];const t=itemTags(iid);return k==="con"?t.cons:t.types}
+const facetLabel=(k,v)=>k==="ing"?ING[v][0]:k==="con"?SKC[v]:k==="type"?SKT[v]:v;
+
+function catArt(cat){const pick={makeup:["mk_jlt","mk_btc","mk_btp"],skincare:["anuaToner","torriden","illiyoon"],antiaging:["sbmRetinol","bojEye"],cleansing:["banila","cosrxGel"],sun:["boj","pimple"]}[cat];
+  return `<div class="catart-in">${pick.map((iid,i)=>`<div class="pimg cp${i}">${pack(itemPid(iid))}</div>`).join("")}</div>`}
+function renderCatGrid(){const g=$("catgrid");if(!g||g.dataset.done)return;g.dataset.done="1";
+  g.innerHTML=CATS.map((c,i)=>{const n=Object.keys(ITEMS).filter(k=>inCat(k,c.id)).length;
+    return `<a class="cattile ct-${c.id}" href="#c/${c.id}"><div class="catart">${catArt(c.id)}</div><div class="cattxt"><small>0${i+1}</small><b>${esc(c.name)}</b><span>${esc(c.tag)}</span><em>${n} products${c.id==="makeup"?" · Virtual Try-On":""} →</em></div></a>`}).join("")}
+function catNav(active){return `<nav class="catnav" aria-label="Categories">${CATS.map(c=>`<a href="#c/${c.id}"${c.id===active?` aria-current="page"`:""}>${esc(c.name)}</a>`).join("")}</nav>`}
+
+function renderCat(){const cat=CBY_ROUTE().cat;const C=CATBY[cat];if(!C){location.hash="home";return}
+  if(CST.cat!==cat){CST.cat=cat;CST.sub="all";CST.f={};CST.open=false}
+  const all=Object.keys(ITEMS).filter(k=>inCat(k,cat)).sort((x,y)=>(ITEMS[x].cat!==cat)-(ITEMS[y].cat!==cat));
+  const subs=C.subs.filter(([s])=>all.some(k=>inCat(k,cat,s)));
+  const base=all.filter(k=>inCat(k,cat,CST.sub));
+  const list=base.filter(k=>FKEYS.every(([f])=>!CST.f[f]||itemFacet(k,f).includes(CST.f[f])));
+  const facets=FKEYS.map(([f,label])=>{const vals=[...new Set(base.flatMap(k=>itemFacet(k,f)))];return {f,label,vals}}).filter(x=>x.vals.length>1||CST.f[x.f]);
+  const nf=Object.values(CST.f).filter(Boolean).length;
+  $("catbody").innerHTML=`${catNav(cat)}
+    <div class="vhead cathead"><div class="kicker">Category 0${CATS.indexOf(C)+1} / 05</div><h1 class="vtitle">${esc(C.name)}</h1><p>${esc(C.tag)}.</p></div>
+    ${cat==="makeup"?`<a class="trybanner" href="#try-on"><span class="tbart">${["jujube","btcW02","btPeach"].map(id=>`<i style="background:${P[id].c}"></i>`).join("")}</span><span><b>Virtual Try-On</b><small>See every shade on your own face before you buy.</small></span><em aria-hidden="true">→</em></a>`:""}
+    ${cat==="skincare"?`<a class="trybanner soft" href="#skincare"><span class="tbart">${["anuaToner","torriden","illiyoon"].map(id=>`<i style="background:${P[id].c}"></i>`).join("")}</span><span><b>Build my routine</b><small>Three essentials picked for your skin type and concern.</small></span><em aria-hidden="true">→</em></a>`:""}
+    <div class="subrow" role="tablist" aria-label="Product type"><button type="button" role="tab" data-sub="all" aria-selected="${CST.sub==="all"}">All</button>${subs.map(([s,n])=>`<button type="button" role="tab" data-sub="${s}" aria-selected="${CST.sub===s}">${esc(n)}</button>`).join("")}</div>
+    ${facets.length?`<div class="filterbar"><button type="button" class="filterbtn" id="filtertoggle" aria-expanded="${CST.open}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M7 12h10M10 17h4"/></svg>Filters${nf?` · ${nf}`:""}</button><span class="count">${list.length} product${list.length===1?"":"s"}</span>${nf?`<button type="button" class="linkbtn" id="fclear">Clear</button>`:""}</div>
+    <div class="filterpanel" id="filterpanel"${CST.open?"":" hidden"}>${facets.map(x=>`<div class="fgroup"><div class="label">${x.label}</div><div class="fchips">${x.vals.map(v=>`<button type="button" data-f="${x.f}" data-v="${esc(v)}" aria-pressed="${CST.f[x.f]===v}">${esc(facetLabel(x.f,v))}</button>`).join("")}</div></div>`).join("")}</div>`
+      :`<div class="filterbar"><span class="count">${list.length} product${list.length===1?"":"s"}</span></div>`}
+    ${list.length?`<div class="pgrid">${list.map(k=>pcard(k)).join("")}</div>`:`<div class="empty"><b>No products match</b><p>Try removing a filter.</p><button class="primary cta" type="button" id="fclear2">Clear filters</button></div>`}
+    ${all.length<6?`<p class="note catsoon">More ${esc(C.name.toLowerCase())} picks are on the way.</p>`:""}`;
+  const b=$("catbody");
+  b.querySelectorAll("[data-sub]").forEach(x=>x.onclick=()=>{CST.sub=x.dataset.sub;CST.f={};renderCat()});
+  const t=$("filtertoggle");if(t)t.onclick=()=>{CST.open=!CST.open;renderCat()};
+  b.querySelectorAll("[data-f]").forEach(x=>x.onclick=()=>{const f=x.dataset.f,v=x.dataset.v;CST.f[f]=CST.f[f]===v?null:v;send("cat_filter",{cat,filter:f,value:CST.f[f]||"none"});renderCat()});
+  ["fclear","fclear2"].forEach(id=>{const c=$(id);if(c)c.onclick=()=>{CST.f={};renderCat()}})}
+function pcard(iid){const it=ITEMS[iid],pid=itemPid(iid),p=P[pid],sh=it.shades||[];
+  const ing=(it.ing||[])[0];
+  return `<a class="pcard" href="#p/${iid}"><div class="pcimg">${pack(pid)}${tryable(iid)?`<span class="trytag">Try On</span>`:""}</div>
+    <div class="pctxt"><small>${esc(p.b)}</small><b>${esc(p.n)}</b>
+    ${sh.length?`<span class="dots">${sh.slice(0,6).map(id=>`<i style="background:${P[id].c}"></i>`).join("")}<em>${sh.length} shades</em></span>`:ing?`<span class="ingtag">${esc(ING[ing][0])}</span>`:`<span class="subtag">${esc((CATBY[it.cat].subs.find(([s])=>s===it.sub)||[,""])[1])}</span>`}</div></a>`}
+
+function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!it){location.hash="home";return}
+  const pid=itemPid(iid,shade),p=P[pid],C=CATBY[it.cat],g=GUIDE[it.type]||{},r=region(),q=pq(p),sh=parseShade(p),t=itemTags(iid);
+  const on=state.bag.includes(pid),fav=favs().includes(pid),how=it.how||g.how||[],cautions=(it.caution||[]).concat(CAUTION[it.type]||[],ingCaution(it)).filter((x,i,a)=>a.indexOf(x)===i);
+  const subName=(C.subs.find(([s])=>s===it.sub)||[,""])[1];
+  $("pbody").innerHTML=`<a class="back" href="#c/${it.cat}">← ${esc(C.name)}</a>
+  <article class="pdp pdp2">
+    <div class="pdpimg"><div class="pimg xl">${pack(pid)}</div><span class="illus">Illustration · ${it.shades?"shade color":"product type"}</span></div>
+    <div class="pdpinfo">
+      <div class="pbrand">${esc(p.b)}</div>
+      <h1 class="pname2">${esc(p.n)}</h1>
+      <div class="ptags"><span>${esc(subName)}</span>${t.cons.map(c=>`<span>${esc(SKC[c])}</span>`).join("")}</div>
+      <p class="plead">${esc(it.what||g.what||"")}</p>
+      ${it.shades?`<div class="pshades"><div class="label">Shade · <b>${esc(sh.name)}</b>${sh.num?` <span class="muted">${esc(sh.num)}</span>`:""}</div><div class="cmpstrip">${it.shades.map(id=>`<button class="tchip fit" type="button" aria-checked="${id===pid}" data-shade="${id}"><i style="background:${P[id].c}"></i><span>${esc(shortName(id))}</span>${fits(id)?`<em class="star">★</em>`:""}</button>`).join("")}</div></div>`:p.fam?`<p class="note left">Shade: ${esc(p.s)}. Pick the one that matches you at the store.</p>`:""}
+      ${tryable(iid)?`<button class="primary cta tryit" type="button" id="ptry">Try this shade on your face <span aria-hidden="true">→</span></button>`:""}
+      <a class="primary cta buy" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
+      <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div>
+      <div class="pbtns"><button class="outline" type="button" id="padd" aria-pressed="${on}">${on?"On your list ✓":"+ Shopping list"}</button><button class="outline" type="button" id="pfav" aria-pressed="${fav}">${fav?"Saved ♥":it.cat==="makeup"?"Save ♡":"Add to routine ♡"}</button></div>
+      <p class="disclose">Shopping in ${r==="CA"?"Canada":"the United States"} · <button type="button" class="linkbtn" id="pregion">Switch to ${r==="CA"?"US":"Canada"}</button><br>Prices and availability are set by each retailer. Gyeol may earn a commission when you buy through these links, at no extra cost to you.</p>
+    </div>
+  </article>
+  <div class="pinfo">
+    ${t.types.length||t.cons.length?`<section class="pblock"><h2>Good for</h2><ul class="goodfor">${t.types.map(x=>`<li>${esc(SKT[x])} skin</li>`).join("")}${t.cons.map(x=>`<li>${esc(SKC[x])}</li>`).join("")}</ul></section>`:""}
+    ${(it.ing||[]).length?`<section class="pblock"><h2>Key ingredients</h2><dl class="inglist">${it.ing.map(i=>`<div><dt>${esc(ING[i][0])}</dt><dd>${esc(ING[i][1])}</dd></div>`).join("")}</dl>${it.inci?"":`<p class="note left">Named on the product. Full ingredient list on the package and retailer page.</p>`}</section>`:""}
+    ${how.length?`<section class="pblock"><div class="phead"><h2>How to use</h2><span class="whenpill">${esc(it.when||g.when||"")}</span></div><ol class="steps">${how.map((s,i)=>`<li><span>${i+1}</span><p>${esc(s)}</p></li>`).join("")}</ol>${it.how?"":`<p class="note left">General guide for this type of product. Always follow the directions on your package.</p>`}</section>`:""}
+    ${cautions.length?`<section class="pblock"><h2>Good to know</h2><ul class="cautions">${cautions.map(c=>`<li>${esc(c)}</li>`).join("")}</ul></section>`:""}
+    ${it.src?`<p class="note left">Product details from <a href="${esc(it.src)}" target="_blank" rel="noopener">the brand's official page</a>.</p>`:""}
+  </div>`;
+  const b=$("pbody");
+  b.querySelectorAll("[data-shade]").forEach(x=>x.onclick=()=>{location.replace("#p/"+iid+"/"+x.dataset.shade)});
+  b.querySelectorAll("a[data-p]").forEach(a=>a.addEventListener("click",()=>track.click(a.dataset.p,"product",a.dataset.s)));
+  const tb=$("ptry");if(tb)tb.onclick=()=>{const c=catOf(pid);T2.sel[c]=pid;T2.tab=c;T2.touched=true;T2.lookId=null;send("product_try",{product:pid});location.hash="try-on"};
+  $("padd").onclick=()=>{if(!state.bag.includes(pid)){track.add(pid);state.bag.push(pid)}else state.bag=state.bag.filter(x=>x!==pid);store.set("gy-bag",state.bag);renderBag();renderHome();renderProduct()};
+  $("pfav").onclick=()=>{const f=favs(),i=f.indexOf(pid);if(i>=0)f.splice(i,1);else{f.unshift(pid);send(it.cat==="makeup"?"shade_save":"routine_add",{product:pid})}store.set("gy-favs",f.slice(0,60));renderFavCount();renderProduct()};
+  $("pregion").onclick=()=>{store.set("gy-region",r==="CA"?"US":"CA");send("region",{region:r==="CA"?"US":"CA"});renderProduct()}}
+
+/* My Beauty Routine: saved skincare sorted into morning and night order */
+const ROUTINE_ORDER={cbalm:[null,5],foam:[10,10],exfoliant:[null,15],toner:[20,20],essence:[25,25],serum:[30,30],retinoid:[null,33],eye:[35,35],cream:[40,40],sunscreen:[50,null],mask:[null,45],spot:[null,48]};
+function routineHTML(){const ids=favs().map(pid=>itemOf(pid)).filter(iid=>iid&&ITEMS[iid].cat!=="makeup").filter((x,i,a)=>a.indexOf(x)===i);
+  if(!ids.length)return "";
+  const col=(k)=>ids.filter(iid=>ROUTINE_ORDER[ITEMS[iid].type]&&ROUTINE_ORDER[ITEMS[iid].type][k]!=null).sort((a,b)=>ROUTINE_ORDER[ITEMS[a].type][k]-ROUTINE_ORDER[ITEMS[b].type][k]);
+  const am=col(0),pm=col(1),types=ids.map(i=>ITEMS[i].type),notes=[];
+  if(types.includes("retinoid")||ids.some(i=>(ITEMS[i].ing||[]).includes("retinal")))notes.push("Retinoids make skin more sensitive to sun. Wear sunscreen every morning.");
+  if(types.includes("retinoid")&&types.includes("exfoliant"))notes.push("Use your retinol and your BHA on different nights.");
+  if(!types.includes("sunscreen"))notes.push("Add a sunscreen to finish your morning routine.");
+  const li=(iid,i)=>{const p=P[itemPid(iid)];return `<li><span>${i+1}</span><a href="#p/${iid}"><b>${esc((CATBY[ITEMS[iid].cat].subs.find(([s])=>s===ITEMS[iid].sub)||[,""])[1])}</b><small>${esc(p.b)} · ${esc(p.n)}</small></a></li>`};
+  return `<div class="label" style="margin-top:22px">My beauty routine</div><div class="routinecols">
+    <section><h3>☀ Morning</h3>${am.length?`<ol class="rlist">${am.map(li).join("")}</ol>`:`<p class="note left">Nothing for the morning yet.</p>`}</section>
+    <section><h3>☾ Night</h3>${pm.length?`<ol class="rlist">${pm.map(li).join("")}</ol>`:`<p class="note left">Nothing for the night yet.</p>`}</section></div>
+    ${notes.length?`<ul class="cautions">${notes.map(n=>`<li>${esc(n)}</li>`).join("")}</ul>`:""}`}
+
+const CBY_ROUTE=()=>{const h=decodeURIComponent(location.hash.slice(1)).split("/");return h[0]==="c"?{cat:h[1]}:h[0]==="p"?{iid:h[1],shade:h[2]}:{}};
+
 /* ---------- Router ---------- */
-const VIEWS=["home","try-on","compare","shop","color","looks","skincare","saved"];
-const curView=()=>{const h=location.hash.slice(1);return VIEWS.includes(h)?h:"home"};
+const VIEWS=["home","try-on","compare","shop","color","looks","skincare","saved","cat","product"];
+const curView=()=>{const h=location.hash.slice(1);if(/^c\//.test(h))return "cat";if(/^p\//.test(h))return "product";return VIEWS.includes(h)&&h!=="cat"&&h!=="product"?h:"home"};
+let LASTROUTE="";
 function go(v,el){if(curView()!==v)location.hash=v;setTimeout(()=>{if(el&&$(el))$(el).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"})},90)}
 function showView(){const v=curView();document.querySelectorAll(".view").forEach(x=>x.hidden=x.dataset.view!==v);
-  const tab=["color","looks","skincare","saved"].includes(v)?"home":v;
+  const tab=["color","looks","skincare","saved"].includes(v)?"home":["cat","product"].includes(v)?"shop":v;
   document.querySelectorAll("#tabbar a").forEach(a=>{if(a.dataset.v===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(v!=="try-on"&&LIVE.on)stopLive();
-  if(v==="home")renderHome();if(v==="try-on")renderTryOn();if(v==="compare")renderCompare();if(v==="shop")renderShop();if(v==="saved")renderSaved();
-  window.scrollTo(0,0);send("view",{view:v})}
+  if(v==="home")renderHome();if(v==="try-on")renderTryOn();if(v==="compare")renderCompare();if(v==="shop")renderShop();if(v==="saved")renderSaved();if(v==="cat")renderCat();if(v==="product")renderProduct();
+  const rt=v==="product"?"p/"+(CBY_ROUTE().iid||""):location.hash;if(rt!==LASTROUTE)window.scrollTo(0,0);LASTROUTE=rt;
+  send("view",{view:v,...(v==="cat"?{cat:CBY_ROUTE().cat}:{}),...(v==="product"?{product:CBY_ROUTE().iid}:{})})}
 addEventListener("hashchange",showView);
 $("homebag").onclick=()=>openBag(true);
 

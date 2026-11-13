@@ -5,7 +5,8 @@ AI 셀카 퍼스널 컬러 분석과 K뷰티 룩, 제품 추천 사이트예요.
 ## 구조
 
 ```
-index.html        사이트 전체(화면, 룩·제품 데이터, 신뢰도 계산)
+index.html        사이트 전체(화면, 룩, 신뢰도 계산, 가상 메이크업)
+data/products.js  제품 데이터: 전체 제품·색상(GYEOL_P), 5개 카테고리(GYEOL_CATS), 카테고리별 제품 배치(GYEOL_ITEMS)
 api/analyze.js    셀카 분석 서버 함수: 사진을 Claude API로 보내고 결과 JSON만 돌려줌
 vercel.json       함수 실행 시간(60초), 보안 헤더
 .env.example      필요한 환경 변수
