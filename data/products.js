@@ -207,3 +207,30 @@ window.GYEOL_BUY={
   soonjung:{CA:[{"store":"amazon_ca","kind":"search","url":"https://www.amazon.ca/s?k=Etude+SoonJung+2x+Barrier+Intensive+Cream","checked":"2026-11-13"},{"store":"oy_global","kind":"search","url":"https://global.oliveyoung.com/global/search/results?query=ETUDE+SoonJung+2x+Barrier+Intensive+Cream","checked":"2026-11-13"},{"store":"kiyoko","kind":"product","url":"https://kiyoko.com/products/etude-house-soon-jung-2x-barrier-intensive-cream-60ml","note":"60ml","checked":"2026-11-13"}],US:[{"store":"amazon_us","kind":"search","url":"https://www.amazon.com/s?k=Etude+SoonJung+2x+Barrier+Intensive+Cream","checked":"2026-11-13"},{"store":"yesstyle","kind":"search","url":"https://www.yesstyle.com/en/list.html?q=Etude+SoonJung+2x+Barrier+Intensive+Cream","checked":"2026-11-13"}]},
   torriden:{CA:[{"store":"amazon_ca","kind":"search","url":"https://www.amazon.ca/s?k=Torriden+Dive-In+Low+Molecular+Hyaluronic+Acid+Serum","checked":"2026-11-13"},{"store":"oy_global","kind":"product","url":"https://global.oliveyoung.com/product/detail?prdtNo=GA260540586","note":"50ml, listed as [Upgraded]","checked":"2026-11-13"},{"store":"kiyoko","kind":"product","url":"https://kiyoko.com/products/torriden-dive-in-low-molecular-hyaluronic-acid-serum-50ml-renewed","note":"50ml (renewed)","checked":"2026-11-13"}],US:[{"store":"amazon_us","kind":"search","url":"https://www.amazon.com/s?k=Torriden+Dive-In+Low+Molecular+Hyaluronic+Acid+Serum","checked":"2026-11-13"},{"store":"oy_us","kind":"product","url":"https://us.oliveyoung.com/products/UA56625219","note":"50ml (2 options)","checked":"2026-11-13"},{"store":"yesstyle","kind":"search","url":"https://www.yesstyle.com/en/list.html?q=Torriden+Dive-In+Low+Molecular+Hyaluronic+Acid+Serum","checked":"2026-11-13"}]}
 };
+
+/* ---------- Ingredient guides (#g/<id>) ----------
+   compare: product ids; the table is built from each product's verified fields.
+   basicsLabel: "General advice" when the basics are general skincare guidance rather than sourced facts.
+   picks: [text, product id]. sources: [title, url] for facts stated in the guide. */
+window.GYEOL_GUIDES={
+  retinol:{title:"Retinol for Beginners",cat:"antiaging",kicker:"Ingredient guide · Anti-Aging",
+    lead:"Retinoids are vitamin A ingredients that smooth the look of fine lines and texture over time. They're strong, so how you start matters more than which one you pick.",
+    basicsLabel:"General advice",
+    basics:["Use them at night. Retinoids make skin more sensitive to the sun, so wear sunscreen every morning.","Start slow: 2–3 nights a week, then build up as your skin allows.","Some dryness, flaking or tingling at first is common. If it lasts, use it less often.","Don't start a retinoid and a strong exfoliant (AHA or BHA) at the same time.","If you're pregnant, trying to get pregnant or breastfeeding, ask your doctor first."],
+    compare:["cosrxRetinol","sbmRetinol","bojEye"],
+    picks:[["Want a clear week-by-week start? The cream spells out exactly how often to use it at first.","cosrxRetinol"],["Prefer a serum layer under your moisturizer? This one goes on at your serum step, at night.","sbmRetinol"],["Only want to treat around the eyes? This eye serum uses retinal and is made for that area.","bojEye"]]},
+  niacinamide:{title:"Niacinamide, Explained",cat:"skincare",kicker:"Ingredient guide · Skincare",
+    lead:"Niacinamide is a form of vitamin B3. It's in a lot of Korean skincare because it helps even out the look of skin tone and supports the skin barrier.",
+    basicsLabel:"General advice",
+    basics:["You'll find it in serums, creams and even sunscreens.","Look at what it's paired with. The partner ingredients decide what the product is best at.","Patch test a new serum first, and stop if you notice irritation."],
+    compare:["anuaTxa","bojGlow","medicubePdrn","aestura","sbmRetinol","birchSun"],
+    picks:[["Dark spots and uneven tone: niacinamide paired with tranexamic acid and arbutin.","anuaTxa"],["Dull skin that wants glow: niacinamide with propolis (this one also contains BHA).","bojGlow"],["Already have enough serums? Get niacinamide from your moisturizer, with ceramides.","aestura"]]},
+  sunscreen:{title:"Korean Sunscreen: US, Canadian and Korean Versions",cat:"sun",kicker:"Buying guide · Sun Care",
+    lead:"Many Korean sunscreens come in more than one version. The same name can mean a different formula and label, depending on where it was made to be sold.",
+    basicsLabel:"What to know",
+    basics:["In the US, sunscreen is regulated as an over-the-counter drug. Several UV filters common in Korean formulas aren't approved there, so brands make separate US formulas.","The FDA approved one new filter, bemotrizinol, in June 2026. Most popular Korean formulas still use other filters that aren't approved, so this alone doesn't bring them to US shelves.","In Canada, every sunscreen approved for sale has a DIN or NPN number. Health Canada recommends broad-spectrum protection with SPF 30 or higher.","Korean labels show UVA protection as PA+ to PA++++. US and Canadian labels say \"broad spectrum\"."],
+    check:[["United States","A Drug Facts panel and \"Broad Spectrum SPF\" on the box."],["Canada","A DIN or NPN number on the label."],["Korean version","SPF50+ PA++++ with Korean text. Resellers often sell this version online."]],
+    versions:{skinSun:["Hyalu-Cica Water-Fit Sun Serum UV, broad spectrum SPF 50","Hyalu-Cica Water-Fit Sun Serum, SPF50+ PA++++"],birchSun:["Birch Juice Moisturizing UVLock SPF 45","Birch Juice Moisturizing Sun Cream, SPF50+"],boj:["Not confirmed by Gyeol yet","Relief Sun: Rice + Probiotics, SPF50+ PA++++"]},
+    compare:["skinSun","birchSun","boj"],
+    sources:[["Health Canada: Sunscreens","https://www.canada.ca/en/health-canada/services/sun-safety/sunscreens.html"],["Korea Times: US approves new UV filter (Aug 2026)","https://www.koreatimes.co.kr/world/20260813/us-finally-approves-new-uv-filter-but-can-it-catch-up-with-k-beauty"]]}
+};
