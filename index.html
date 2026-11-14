@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Upload a selfie and Dalbom's AI finds your personal color season, then matches you with Korean makeup looks and the exact products to buy.">
-<meta property="og:title" content="Dalbom: try K-beauty shades on your face">
+<meta name="description" content="Upload a selfie and Haeon's AI finds your personal color season, then matches you with Korean makeup looks and the exact products to buy.">
+<meta property="og:title" content="Haeon: try K-beauty shades on your face">
 <meta property="og:description" content="Find your personal color season from a selfie and shop Korean makeup made for you.">
-<title>Dalbom · K-Beauty Guide</title>
+<title>Haeon · K-Beauty Guide</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap">
 <style>
@@ -807,7 +807,7 @@ footer a{color:inherit}
 
 <div class="wrap">
   <header class="appbar">
-    <a class="brand" href="#home" aria-label="Dalbom home"><b>Dalbom.</b><small>Your Color. Your Beauty.</small></a>
+    <a class="brand" href="#home" aria-label="Haeon home"><b>Haeon.</b><small>Your Color. Your Beauty.</small></a>
     <nav class="hicons" aria-label="Shortcuts">
       <a class="icobtn" href="#search" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m16 16 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></a>
       <a class="icobtn" href="#color" aria-label="Personal color"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="18.5" cy="4.5" r="1.4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a>
@@ -902,7 +902,7 @@ footer a{color:inherit}
     <div>
       <div class="label">Optional · AI personal color</div>
       <h2 class="h1b">Not sure what suits you?</h2>
-      <p>Dalbom's AI suggests your personal color season. Shades for your season then show up first in the studio, marked with ★.</p>
+      <p>Haeon's AI suggests your personal color season. Shades for your season then show up first in the studio, marked with ★.</p>
     </div>
     <div class="col">
     <div class="selfie" id="selfie">
@@ -921,7 +921,7 @@ footer a{color:inherit}
         <summary>Your photo privacy details</summary>
         <ul>
           <li>Your photo is resized in your browser, which also removes its location and camera data.</li>
-          <li>It is sent over an encrypted connection to Dalbom's server, which passes it straight to our AI provider, Anthropic, for this one analysis. Dalbom's server doesn't save or log your photo.</li>
+          <li>It is sent over an encrypted connection to Haeon's server, which passes it straight to our AI provider, Anthropic, for this one analysis. Haeon's server doesn't save or log your photo.</li>
           <li>Anthropic doesn't use it to train AI models and deletes it within 30 days, unless its usage policy or the law requires keeping it longer.</li>
           <li>Your result (your season) is saved only in this browser, so your looks stay matched to you.</li>
         </ul>
@@ -968,7 +968,7 @@ footer a{color:inherit}
     <div id="savedbody"></div>
   </section>
 
-  <footer>Dalbom beta · Dalbom never stores your photos · Some links may be affiliate links<br><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/affiliate-disclosure">Affiliate disclosure</a></footer>
+  <footer>Haeon beta · Haeon never stores your photos · Some links may be affiliate links<br><a href="/about">About</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a> · <a href="/affiliate-disclosure">Affiliate disclosure</a></footer>
 </div>
 <nav class="tabbar" id="tabbar" aria-label="Main">
   <a href="#home" data-v="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8.5H4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 19.5v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Home</span></a>
@@ -1196,7 +1196,7 @@ function renderResult(){const el=$("result");
   picks.splice(6);
   const conf=state.seasonSrc==="user"?`<span class="conf">Your pick</span>`:ai?`<span class="conf c-${esc(ai.confidence)}">${{high:"Strong match",medium:"Solid match",low:"Good start"}[ai.confidence]||"Solid match"}</span>`:`<span class="conf">From the 4-question check</span>`;
   const fb=state.seasonSrc==="user"?`<div class="fb"><span>You picked this season.</span><button class="linkbtn" type="button" data-fb="change">Change</button></div>`
-    :state.fbDone?`<div class="fb"><span>Thanks! That helps Dalbom get better.</span></div>`
+    :state.fbDone?`<div class="fb"><span>Thanks! That helps Haeon get better.</span></div>`
     :`<div class="fb"><span>Does this feel right?</span><button class="fbb" type="button" data-fb="yes">Yes, looks right</button><button class="fbb" type="button" data-fb="change">I'm a different season</button><button class="fbb" type="button" data-fb="all">Explore all looks</button></div>`;
   const fbpick=`<div class="fbpick" id="fbpick" hidden><span>Which season feels like you?</span>${Object.entries(SEASONS).map(([k,v])=>`<button class="chip" type="button" data-pick="${k}" aria-pressed="${k===state.season}"><i class="dotc" style="background:${v.sw[1]}"></i>${v.en} <span class="ko">${v.ko}</span></button>`).join("")}</div>`;
   const lowNote=ai&&ai.confidence==="low"&&state.seasonSrc!=="user"?`<p class="lownote">We're not fully sure yet, so every look is open below. Pick the ones you love.</p>`:"";
@@ -1591,7 +1591,7 @@ function renderTryOn(){
     const tri=sel=>`<i style="background:conic-gradient(${[sel.lip,sel.blush,sel.eye].map(id=>id?P[id].c:"var(--sunk)").map((c,i)=>`${c} ${i*120}deg ${(i+1)*120}deg`).join(",")})"></i>`;
     $("shadecount").textContent=`${looks.length+mine.length} looks`;
     $("trychips").innerHTML=(mine.length?`<div class="chipgroup">My looks</div>`+mine.map((m,i)=>`<button class="tchip fit" type="button" data-mine="${i}">${tri(m)}<span>My look ${i+1}</span></button>`).join(""):"")
-      +`<div class="chipgroup">Dalbom looks</div>`+looks.map(l=>`<button class="tchip fit" type="button" aria-checked="${T2.lookId===l.id}" data-look="${l.id}">${tri(LOOK_SEL[l.id])}<span>${esc(l.en)}</span>${state.season&&l.tones.includes(state.season)&&l.tones.length<4?`<em class="star">★</em>`:""}</button>`).join("");
+      +`<div class="chipgroup">Haeon looks</div>`+looks.map(l=>`<button class="tchip fit" type="button" aria-checked="${T2.lookId===l.id}" data-look="${l.id}">${tri(LOOK_SEL[l.id])}<span>${esc(l.en)}</span>${state.season&&l.tones.includes(state.season)&&l.tones.length<4?`<em class="star">★</em>`:""}</button>`).join("");
     $("trychips").querySelectorAll("[data-look]").forEach(b=>b.onclick=()=>{T2.sel=Object.assign({},LOOK_SEL[b.dataset.look]);T2.touched=true;T2.lookId=b.dataset.look;send("tryon_look",{look:b.dataset.look});renderTryOn();drawTry()});
     $("trychips").querySelectorAll("[data-mine]").forEach(b=>b.onclick=()=>{const m=mine[+b.dataset.mine];T2.sel={lip:m.lip||null,blush:m.blush||null,eye:m.eye||null};T2.touched=true;T2.lookId=null;renderTryOn();drawTry()});
   } else {
@@ -1724,17 +1724,17 @@ async function makeShareCard(){const s=SEASONS[state.season];if(!s)return null;
   // footer
   x.fillStyle=ink;x.beginPath();x.roundRect(140,H-190,800,110,55);x.fill();
   x.fillStyle="#fff";x.font=`700 34px ${SANS}`;x.fillText("Find yours free  →  "+location.host,W/2,H-122);
-  x.fillStyle=ink;x.font=`800 40px ${SER}`;x.fillText("dalbom",W/2,120);
+  x.fillStyle=ink;x.font=`800 40px ${SER}`;x.fillText("haeon",W/2,120);
   return new Promise(ok=>c.toBlob(ok,"image/png"))}
 async function openShare(){const wrap=$("sharewrap");$("sharenote").textContent="Making your card…";wrap.hidden=false;
   shareBlob=await makeShareCard();if(!shareBlob){wrap.hidden=true;return}
   const img=$("shareimg");if(img.src)URL.revokeObjectURL(img.src);img.src=URL.createObjectURL(shareBlob);
   $("sharenote").textContent="Post it to your story and tag a friend who should try it.";send("share_open",{season:state.season})}
-function saveShare(){const a=document.createElement("a");a.href=$("shareimg").src;a.download=`dalbom-${state.season}.png`;document.body.appendChild(a);a.click();a.remove();send("share_card",{season:state.season,method:"save"})}
+function saveShare(){const a=document.createElement("a");a.href=$("shareimg").src;a.download=`haeon-${state.season}.png`;document.body.appendChild(a);a.click();a.remove();send("share_card",{season:state.season,method:"save"})}
 $("shareclose").onclick=()=>{$("sharewrap").hidden=true};
 $("sharewrap").addEventListener("click",e=>{if(e.target.id==="sharewrap")$("sharewrap").hidden=true});
 $("sharesave").onclick=saveShare;
-$("sharego").onclick=async()=>{if(!shareBlob)return;const file=new File([shareBlob],`dalbom-${state.season}.png`,{type:"image/png"});
+$("sharego").onclick=async()=>{if(!shareBlob)return;const file=new File([shareBlob],`haeon-${state.season}.png`,{type:"image/png"});
   const data={files:[file],title:"My personal color",text:`I'm ${SEASONS[state.season].en}! Find your personal color: https://${location.host}`};
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share(data);send("share_card",{season:state.season,method:"share"})}catch(e){}}
   else{saveShare();$("sharenote").textContent="Saved. Now post it from your photos."}};
@@ -1796,7 +1796,7 @@ function renderShop(){const r=region();$("shopcats").innerHTML=`<div class="labe
         <a class="primary cta" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${id}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
         <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${id}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${id}" data-s="compare">Compare stores ↗</a></div>
         <button class="outline" type="button" id="pdpadd" aria-pressed="${on}">${on?"On your shopping list ✓":"+ Add to Shopping List"}</button>
-        <p class="disclose">Prices and availability are set by each retailer. Dalbom may earn a commission when you buy through these links, at no extra cost to you.</p>
+        <p class="disclose">Prices and availability are set by each retailer. Haeon may earn a commission when you buy through these links, at no extra cost to you.</p>
       </div>
     </article>
     ${siblings.length>1?`<div class="label" style="margin-top:22px">More shades of ${esc(p.n)}</div><div class="cmpstrip">${siblings.map(k=>`<button class="tchip fit" type="button" aria-checked="${k===id}" data-sib="${k}"><i style="background:${P[k].c}"></i><span>${esc(shortName(k))}</span>${fits(k)?`<em class="star">★</em>`:""}</button>`).join("")}</div>`:""}`;
@@ -1954,7 +1954,7 @@ function renderProduct(){const {iid,shade}=CBY_ROUTE();const it=ITEMS[iid];if(!i
       ${BUY[iid]?wtbHTML(iid,pid,r):`<a class="primary cta buy" href="${amz(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="amazon">Buy on ${r==="CA"?"Amazon.ca":"Amazon.com"} <span aria-hidden="true">↗</span></a>
       <div class="altbuy"><a href="${ys(q)}" target="_blank" rel="noopener sponsored" data-p="${pid}" data-s="yesstyle">YesStyle ↗</a><a href="${ggl(q)}" target="_blank" rel="noopener" data-p="${pid}" data-s="compare">Compare stores ↗</a></div>`}
       <div class="pbtns"><button class="outline" type="button" id="padd" aria-pressed="${on}">${on?"On your list ✓":"+ Shopping list"}</button><button class="outline" type="button" id="pfav" aria-pressed="${fav}">${fav?"Saved ♥":it.cat==="makeup"?"Save ♡":"Add to routine ♡"}</button></div>
-      <p class="disclose">Shopping in ${r==="CA"?"Canada":"the United States"} · <button type="button" class="linkbtn" id="pregion">Switch to ${r==="CA"?"US":"Canada"}</button><br>Prices and availability are set by each retailer.${!BUY[iid]||wtbPaid(iid)?" Dalbom may earn a commission when you buy through these links, at no extra cost to you.":""}</p>
+      <p class="disclose">Shopping in ${r==="CA"?"Canada":"the United States"} · <button type="button" class="linkbtn" id="pregion">Switch to ${r==="CA"?"US":"Canada"}</button><br>Prices and availability are set by each retailer.${!BUY[iid]||wtbPaid(iid)?" Haeon may earn a commission when you buy through these links, at no extra cost to you.":""}</p>
     </div>
   </article>
   <div class="pinfo">
@@ -1991,7 +1991,7 @@ function renderGuide(){const id=CBY_ROUTE().gid,g=GUIDES[id];if(!g){location.has
     <dl>${guideRows(id,iid).filter(r=>r[1]).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
     <a class="gcgo" href="#p/${iid}">Details and where to buy →</a></article>`}).join("")}</div>
   ${g.picks?`<section class="pblock"><h2>Which one?</h2><ul class="gpicks">${g.picks.map(([t,iid])=>{const p=P[itemPid(iid)];return `<li><p>${esc(t)}</p><a href="#p/${iid}">${esc(p.b)} · ${esc(p.n)} →</a></li>`}).join("")}</ul></section>`:""}
-  <p class="note left">Product details in this guide come from each product's page on Dalbom, which links its source and check date. Dalbom doesn't rank products by commission.</p>
+  <p class="note left">Product details in this guide come from each product's page on Haeon, which links its source and check date. Haeon doesn't rank products by commission.</p>
   ${g.sources?`<p class="note left srcnote">Sources: ${g.sources.map(([t,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</p>`:""}`}
 /* Search: products, shades, brands, ingredients, concerns, skin types, guides (local data only) */
 const SYN={wrinkle:"aging",wrinkles:"aging","fine line":"aging","anti-aging":"aging",antiaging:"aging",dry:"dryness",acne:"breakouts",pimple:"breakouts",spf:"sunscreen",sun:"sunscreen",cica:"centella","vitamin a":"retinol",lipstick:"lips",tint:"lips","lip tint":"lips",blush:"cheeks",eyeshadow:"eyes",shadow:"eyes",cleanser:"cleansing","dark spot":"spots","dark spots":"spots",hyperpigmentation:"spots"};
@@ -2020,7 +2020,7 @@ function renderSearch(fromRoute){const inp=$("sq"),h=decodeURIComponent(location
     ${gl.map(guideCard).join("")}
     ${res.length?`<div class="slist">${res.map(r=>{const it=ITEMS[r.iid],p=P[r.pid],C=CATBY[it.cat],sub=(C.subs.find(x=>x[0]===it.sub)||[,""])[1];
       return `<a class="sres" href="#p/${r.iid}"><div class="pimg">${pack(r.pid)}</div><div><small>${esc(p.b)}</small><b>${esc(p.n)}</b><span>${esc(C.name)} · ${esc(sub)}${(it.ing||[]).length?" · "+esc(ING[it.ing[0]][0]):""}${tryable(r.iid)?` · <em>Try On</em>`:""}</span></div><i aria-hidden="true">→</i></a>`}).join("")}</div>`
-      :`<div class="empty"><b>Nothing found yet</b><p>Dalbom lists ${Object.keys(ITEMS).length} products so far. Try an ingredient like "retinol", a concern like "dryness", or browse a category.</p>${catNav(null)}</div>`}`;
+      :`<div class="empty"><b>Nothing found yet</b><p>Haeon lists ${Object.keys(ITEMS).length} products so far. Try an ingredient like "retinol", a concern like "dryness", or browse a category.</p>${catNav(null)}</div>`}`;
     clearTimeout(renderSearch.t);renderSearch.t=setTimeout(()=>send("search",{q:norm(q).slice(0,60),results:res.length}),800)}
   b.querySelectorAll("[data-q]").forEach(x=>x.onclick=()=>{location.replace("#search/"+encodeURIComponent(x.dataset.q))});
   if(fromRoute&&!q&&matchMedia("(hover:hover)").matches)setTimeout(()=>inp.focus(),50)}

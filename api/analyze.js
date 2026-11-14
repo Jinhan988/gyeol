@@ -1,4 +1,4 @@
-// Dalbom (formerly Gyeol) — AI personal color analysis endpoint (Vercel serverless function).
+// Haeon (formerly Gyeol, briefly Dalbom) — AI personal color analysis endpoint (Vercel serverless function).
 // Receives one resized selfie as base64 JPEG, asks the Claude API to check the photo
 // and classify the season, and returns a small JSON result.
 // The photo is never written to disk, a database or the logs.
