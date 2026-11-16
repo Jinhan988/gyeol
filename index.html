@@ -631,6 +631,8 @@ html,body{overflow-x:clip}
 .selkick{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent)}
 .selpanel .selname h3{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.02;letter-spacing:0;margin:2px 0 1px;overflow-wrap:anywhere}
 .selpanel .selsub{margin:0;font-size:13px;color:var(--muted);display:block}.selsub b{color:var(--ink);font-weight:700}
+.approx{font-size:12.5px;line-height:1.45;color:var(--muted);margin-top:8px}.approx b{font-weight:700;color:var(--ink);margin-right:4px}
+.labsw{position:absolute;top:8px;left:8px;z-index:3;font:700 12px system-ui,sans-serif;padding:6px 10px;border-radius:999px;border:0;background:rgba(0,0,0,.6);color:#fff}
 .finpill{align-self:start;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--bg)}
 .selfit{display:inline-block;justify-self:start;margin-top:-4px}
 .studio .tryprod{display:grid;gap:12px}
@@ -1481,7 +1483,8 @@ function maskOf(S,blur,draw){const m=document.createElement("canvas");m.width=S;
   return mc.getImageData(0,0,S,S).data}
 const hexRgb=h=>{const n=parseInt(h.slice(1),16);return [n>>16,n>>8&255,n&255]};
 const FINISH=id=>id==="lipbalm"?"balm":/^zm/.test(id)?"matte":/^(goodbrick|celebrose|vitcoral)$/.test(id)?"velvet":"glossy";
-const FIN_LABEL={glossy:"Glossy",velvet:"Velvet",matte:"Matte",balm:"Sheer"};
+const SHADE_VERIFIED=window.GYEOL_SHADE_VERIFIED||{},shadeOk=id=>!!SHADE_VERIFIED[id];
+const FIN_LABEL={glossy:"Glossy",velvet:"Velvet",satin:"Satin",matte:"Matte",balm:"Sheer"};
 /* Light cast: compare the cheeks' color to a typical skin chroma, so shades sit in the photo's own lighting */
 function lightCast(d,S,pts){const ref=[1.2,.98,.82];let r=0,g=0,b=0,n=0;
   [50,280].forEach(i=>{const [cx,cy]=pts[i],rad=Math.max(3,S*.015)|0;for(let y=-rad;y<=rad;y+=2)for(let x=-rad;x<=rad;x+=2){const px=(cx+x)|0,py=(cy+y)|0;if(px<0||py<0||px>=S||py>=S)continue;const k=(py*S+px)*4;r+=d[k];g+=d[k+1];b+=d[k+2];n++}});
@@ -1519,10 +1522,96 @@ function paintMakeup(ctx,pts,S){const sel=T2.sel,faceW=Math.hypot(pts[454][0]-pt
       for(let i=3;i<mm.length;i+=4)mm[i]=mm[i]*(1-op[i]/255)});
     recolor(d,mm,P[sel.eye].c,Math.min(1,T2.amt*(shim?.6:1.05)),shim?"balm":"eye",cast);
     if(shim){let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;for(let i=3;i<mm.length;i+=4)if(mm[i]>90&&rnd()<.012){const v=200+rnd()*55;d[i-3]=Math.max(d[i-3],v);d[i-2]=Math.max(d[i-2],v*.95);d[i-1]=Math.max(d[i-1],v*.85)}}}
-  if(sel.lip){const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
+  if(sel.lip){if(LIPV===1)paintLipsV1(d,pts,S,sel,cast);else paintLipsV2(d,pts,S,sel,cast)}
+  ctx.putImageData(img,0,0)}
+/* Lips v1 (original renderer, kept for comparison and rollback: add ?lipv=1 to the URL) */
+function paintLipsV1(d,pts,S,sel,cast){const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);
     const m=maskOf(S,Math.max(1,lipW/45),mc=>{mc.fillStyle="#fff";mc.beginPath();lipPath(mc,pts,LIP_OUT);lipPath(mc,pts,LIP_IN);mc.fill("evenodd")});
     const balm=sel.lip==="lipbalm";recolor(d,m,P[sel.lip].c,balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt),balm?"balm":"lip",cast,FINISH(sel.lip))}
-  ctx.putImageData(img,0,0)}
+/* ---------- Lips v2: spline contours, pixel-refined edges, upper/lower lips, texture-preserving color ---------- */
+let LIPV=(()=>{try{return new URLSearchParams(location.search).get("lipv")==="1"?1:2}catch(e){return 2}})();
+/* lab switch for side-by-side checks: open the app with ?lab to show a v1/v2 toggle on the studio canvas */
+(()=>{try{if(!new URLSearchParams(location.search).has("lab"))return;const cv=document.getElementById("trycv"),b=document.createElement("button");b.className="labsw";b.type="button";
+  const t=()=>{b.textContent=`Lips v${LIPV} · tap to switch`};t();b.onclick=()=>{LIPV=LIPV===1?2:1;t();drawTry()};cv.parentNode.style.position="relative";cv.parentNode.appendChild(b)}catch(e){}})();
+const LIP_UO=[61,185,40,39,37,0,267,269,270,409,291],LIP_LO=[291,375,321,405,314,17,84,181,91,146,61],
+  LIP_UI=[78,191,80,81,82,13,312,311,310,415,308],LIP_LI=[308,324,318,402,317,14,87,178,88,95,78];
+/* how each finish treats shading, fine texture and shine */
+const LIPFIN={matte:{g:.55,det:.75,th:1.3,keep:.05,sheen:0},velvet:{g:.62,det:.8,th:1.25,keep:.22,sheen:.05},satin:{g:.75,det:.85,th:1.2,keep:.4,sheen:.12},
+  glossy:{g:.95,det:1,th:1.12,keep:.8,sheen:.3},balm:{g:.95,det:1,th:1.05,keep:.85,sheen:.3}};
+/* smooth curve through landmark points (Catmull-Rom as cubic Beziers) */
+function splineTo(ctx,Q,first){const n=Q.length;if(first)ctx.moveTo(Q[0][0],Q[0][1]);else ctx.lineTo(Q[0][0],Q[0][1]);
+  for(let i=0;i<n-1;i++){const p0=Q[Math.max(0,i-1)],p1=Q[i],p2=Q[i+1],p3=Q[Math.min(n-1,i+2)];
+    ctx.bezierCurveTo(p1[0]+(p2[0]-p0[0])/6,p1[1]+(p2[1]-p0[1])/6,p2[0]-(p3[0]-p1[0])/6,p2[1]-(p3[1]-p1[1])/6,p2[0],p2[1])}}
+function boxBlur(a,w,h,r){r=Math.max(1,Math.round(r));const t=new Float32Array(a.length),o=new Float32Array(a.length),n=2*r+1;
+  for(let y=0;y<h;y++){const row=y*w;let s=0;for(let x=-r;x<=r;x++)s+=a[row+Math.min(w-1,Math.max(0,x))];
+    for(let x=0;x<w;x++){t[row+x]=s/n;s+=a[row+Math.min(w-1,x+r+1)]-a[row+Math.max(0,x-r)]}}
+  for(let x=0;x<w;x++){let s=0;for(let y=-r;y<=r;y++)s+=t[Math.min(h-1,Math.max(0,y))*w+x];
+    for(let y=0;y<h;y++){o[y*w+x]=s/n;s+=t[Math.min(h-1,y+r+1)*w+x]-t[Math.max(0,y-r)*w+x]}}
+  return o}
+const LIPCV={};function lipCanvas(k,w,h){let c=LIPCV[k];if(!c){c=LIPCV[k]=document.createElement("canvas")}if(c.width!==w||c.height!==h){c.width=w;c.height=h}
+  const x=c.getContext("2d",{willReadFrequently:true});x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,w,h);return x}
+function lipMasks(pts,ox,oy,w,h){const Q=ids=>ids.map(i=>[pts[i][0]-ox,pts[i][1]-oy]),rd=x=>{const a=x.getImageData(0,0,w,h).data,f=new Float32Array(w*h);for(let i=0;i<f.length;i++)f[i]=a[i*4+3]/255;return f};
+  const draw=(k,fn)=>{const x=lipCanvas(k,w,h);x.fillStyle="#fff";x.beginPath();fn(x);x.closePath();x.fill();return rd(x)};
+  const up=draw("u",x=>{splineTo(x,Q(LIP_UO),true);splineTo(x,Q(LIP_UI.slice().reverse()),false)});
+  const lo=draw("l",x=>{splineTo(x,Q(LIP_LO),true);splineTo(x,Q(LIP_LI.slice().reverse()),false)});
+  const op=draw("o",x=>{splineTo(x,Q(LIP_UI),true);splineTo(x,Q(LIP_LI),false)});
+  const full=draw("f",x=>{splineTo(x,Q(LIP_UO),true);splineTo(x,Q(LIP_LO),false)});
+  return {up,lo,op,full}}
+function paintLipsV2(d,pts,S,sel,cast){const id=sel.lip,balm=id==="lipbalm",fin=balm?"balm":(window.__lipFinishTest||FINISH(id)),F=LIPFIN[fin]||LIPFIN.glossy;
+  const strength=balm?Math.min(1,T2.amt*.7):Math.min(1,.25+T2.amt);
+  const lipW=Math.hypot(pts[291][0]-pts[61][0],pts[291][1]-pts[61][1]);if(!(lipW>4))return;
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;LIP_UO.concat(LIP_LO).forEach(i=>{const [x,y]=pts[i];x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});
+  const mg=Math.ceil(lipW*.22);x0=Math.max(0,Math.floor(x0)-mg);y0=Math.max(0,Math.floor(y0)-mg);x1=Math.min(S,Math.ceil(x1)+mg);y1=Math.min(S,Math.ceil(y1)+mg);
+  const w=x1-x0,h=y1-y0;if(w<4||h<4)return;const N=w*h;
+  const {up,lo,op,full}=lipMasks(pts,x0,y0,w,h);
+  /* closed mouth: inner landmarks touch and can cross, which would punch slivers into the lips, so fill the whole outline */
+  const closed=Math.hypot(pts[13][0]-pts[14][0],pts[13][1]-pts[14][1])<lipW*.035;if(closed)op.fill(0);
+  /* pixel data of the lip box */
+  const R=new Float32Array(N),G=new Float32Array(N),B=new Float32Array(N),L=new Float32Array(N);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const k=((y+y0)*S+x+x0)*4,j=y*w+x;R[j]=d[k];G[j]=d[k+1];B[j]=d[k+2];L[j]=.299*d[k]+.587*d[k+1]+.114*d[k+2]}
+  const geo=new Float32Array(N),outer=new Float32Array(N);for(let j=0;j<N;j++){geo[j]=closed?full[j]:Math.max(up[j],lo[j]);outer[j]=Math.max(geo[j],op[j],full[j])}
+  /* 1) edge band around the outer lip line, sized to typical landmark error */
+  const r=Math.min(6,Math.max(1.5,lipW/28)),go=boxBlur(outer,w,h,r),go2=boxBlur(outer,w,h,r*2.5),gop=boxBlur(op,w,h,r);
+  /* 2) learn lip vs skin color from this photo: lip core vs a ring of skin just outside */
+  const feat=j=>{const s=R[j]+G[j]+B[j]+1;return [(R[j]-G[j])/s,(G[j]-B[j])/s,L[j]/510]};
+  const ml=[0,0,0],ms=[0,0,0],vl=[0,0,0],vs=[0,0,0];let nl=0,ns=0;
+  for(let j=0;j<N;j++){if(geo[j]>.5&&go[j]>.97&&gop[j]<.03){const f=feat(j);for(let c=0;c<3;c++){ml[c]+=f[c];vl[c]+=f[c]*f[c]}nl++}
+    else if(outer[j]===0&&go[j]<.03&&go2[j]>.02){const f=feat(j);for(let c=0;c<3;c++){ms[c]+=f[c];vs[c]+=f[c]*f[c]}ns++}}
+  let lam=0;const wv=[0,0,0];let mid=0,half=1;
+  if(nl>20&&ns>20){let J=0;for(let c=0;c<3;c++){ml[c]/=nl;ms[c]/=ns;const v=(vl[c]/nl-ml[c]*ml[c]+vs[c]/ns-ms[c]*ms[c])/2+1e-5;wv[c]=(ml[c]-ms[c])/v;J+=(ml[c]-ms[c])*wv[c]}
+    lam=Math.min(.85,Math.max(0,(J-1)/4));for(let c=0;c<3;c++)mid+=wv[c]*(ml[c]+ms[c])/2;half=Math.max(1e-6,J/2)}
+  /* 3) final mask: smooth geometry inside, color evidence in the edge band, nothing beyond the band */
+  const soft=boxBlur(geo,w,h,Math.max(1,r*.5)),A=new Float32Array(N);let lsum=0,lcnt=0;
+  for(let j=0;j<N;j++){let a;
+    if(go[j]<=.03)a=0;
+    else if(go[j]>=.97)a=soft[j];
+    else{const f=feat(j),sc=wv[0]*f[0]+wv[1]*f[1]+wv[2]*f[2]-mid,p=1/(1+Math.exp(-3*sc/half));
+      a=(soft[j]*(1-lam)+p*lam*(op[j]>.5?0:1))*Math.min(1,go[j]/.25)}
+    A[j]=a;if(a>.6&&gop[j]<.03){lsum+=L[j];lcnt++}}
+  const Lm=Math.max(1,lcnt?lsum/lcnt:128);
+  /* 4) keep teeth and the inside of the mouth bare */
+  for(let j=0;j<N;j++)if(gop[j]>.03&&A[j]>0){const mx=Math.max(R[j],G[j],B[j]),mn=Math.min(R[j],G[j],B[j]),sat=mx?(mx-mn)/mx:0;
+    if(sat<.2&&L[j]>Lm*1.15)A[j]*=Math.min(1,Math.max(0,(sat-.1)/.1));
+    else if(L[j]<Lm*.45)A[j]*=L[j]/(Lm*.45)}
+  const Af=boxBlur(A,w,h,1);
+  /* 5) color with the photo's own shading and fine texture (creases, pores, shine) */
+  const lw=new Float32Array(N),Lw=new Float32Array(N);for(let j=0;j<N;j++){lw[j]=geo[j];Lw[j]=L[j]*geo[j]}
+  const rb=Math.max(1.5,lipW/40),bw=boxBlur(lw,w,h,rb),bL=boxBlur(Lw,w,h,rb);
+  let [tr,tg,tb]=hexRgb(P[id].c);if(cast){tr=Math.min(255,tr*cast[0]);tg=Math.min(255,tg*cast[1]);tb=Math.min(255,tb*cast[2])}
+  const Lt=Math.max(1,.299*tr+.587*tg+.114*tb),dsc=Math.min(1.6,Math.max(.35,Lt/Lm))*F.det;
+  /* soft sheen on the centre of the lower lip (and a little on the upper lip) */
+  const lc=pts[17],li=pts[14],uc=pts[0],ui=pts[13];
+  const gx=li[0]+(lc[0]-li[0])*.4-x0,gy=li[1]+(lc[1]-li[1])*.4-y0,grx=lipW*.2,gry=Math.max(1,Math.hypot(lc[0]-li[0],lc[1]-li[1])*.28);
+  const hx=ui[0]+(uc[0]-ui[0])*.45-x0,hy=ui[1]+(uc[1]-ui[1])*.45-y0,hrx=lipW*.12,hry=Math.max(1,Math.hypot(uc[0]-ui[0],uc[1]-ui[1])*.25);
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){const j=y*w+x,a=Af[j]*strength;if(a<.004)continue;
+    const r0=R[j],g0=G[j],b0=B[j],l0=L[j],base=bw[j]>.05?bL[j]/bw[j]:l0,det=l0-base;
+    const Ln=Math.max(0,Lt*Math.pow(Math.max(.05,base/Lm),F.g)+det*dsc),k=Ln/Lt;let nr=tr*k,ng=tg*k,nb=tb*k;
+    const sp=Math.min(1,Math.max(0,(l0/Lm-F.th)/.4));nr+=(r0-nr)*sp*F.keep;ng+=(g0-ng)*sp*F.keep;nb+=(b0-nb)*sp*F.keep;
+    if(fin==="glossy"||fin==="balm"){const gl=sp*sp*60;nr+=gl;ng+=gl;nb+=gl}
+    if(F.sheen){const ex=(x-gx)/grx,ey=(y-gy)/gry,e2=(x-hx)/hrx,f2=(y-hy)/hry,s=Math.exp(-(ex*ex+ey*ey)*1.5)*lo[j]+.45*Math.exp(-(e2*e2+f2*f2)*1.5)*up[j];
+      const tex=Math.min(1.4,Math.max(.4,l0/Math.max(1,base))),add=s*F.sheen*70*tex;nr+=add;ng+=add;nb+=add}
+    if(fin==="balm"){nr=nr*.5+r0*.5;ng=ng*.5+g0*.5;nb=nb*.5+b0*.5}
+    const k4=((y+y0)*S+x+x0)*4;d[k4]=r0+(Math.min(255,nr)-r0)*a;d[k4+1]=g0+(Math.min(255,ng)-g0)*a;d[k4+2]=b0+(Math.min(255,nb)-b0)*a}}
 function splitOverlay(ctx,S,base){if(T2.split<=0)return;const sx=Math.round(S*T2.split);ctx.save();ctx.beginPath();ctx.rect(0,0,sx,S);ctx.clip();base();ctx.restore();
   ctx.fillStyle="#fff";ctx.fillRect(sx-1.5,0,3,S);ctx.font=`700 ${Math.round(S/30)}px system-ui,sans-serif`;ctx.shadowColor="rgba(0,0,0,.5)";ctx.shadowBlur=6;
   if(sx>S*.18){ctx.textAlign="left";ctx.fillText("BEFORE",12,S-14)}if(sx<S*.82){ctx.textAlign="right";ctx.fillText("AFTER",S-12,S-14)}ctx.shadowBlur=0}
@@ -1604,6 +1693,7 @@ function renderTryOn(){
   const cat=tab==="looks"?(["lip","blush","eye"].find(k=>T2.sel[k])||"lip"):tab,id=T2.sel[cat],p=id&&P[id],fv=favs();
   if(p){const sh=parseShade(p);
     $("tryprod").innerHTML=`<div class="selhead"><i class="selsw" style="background:${p.c}"></i><div class="selmeta"><div class="selkick">${esc(p.b)}</div><div class="selname"><h3>${esc(sh.name||shortName(id))}</h3></div><div class="selsub">${esc(p.n)}${sh.num?` · <b>${esc(sh.num)}</b>`:""}</div></div><span class="finpill">${cat==="lip"?FIN_LABEL[FINISH(id)]:CAT[cat]}</span></div>
+      ${cat==="lip"&&!shadeOk(id)?`<div class="approx"><b>Approximate shade.</b>Real color varies with lighting and screens.</div>`:""}
       ${fits(id)?`<div class="tag match selfit">★ Made for your ${SEASONS[state.season].en}</div>`:""}
       <a class="primary cta shopcta" href="#shop" data-shopid="${id}">Shop this exact shade <span aria-hidden="true">→</span></a>`;
     $("tryprod").querySelector("[data-shopid]").onclick=e=>{SHOP.id=e.currentTarget.dataset.shopid;send("tryon_shop",{product:SHOP.id})};

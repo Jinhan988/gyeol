@@ -249,3 +249,9 @@ window.GYEOL_GUIDES={
     compare:["skinSun","birchSun","boj"],
     sources:[["Health Canada: Sunscreens","https://www.canada.ca/en/health-canada/services/sun-safety/sunscreens.html"],["Korea Times: US approves new UV filter (Aug 2026)","https://www.koreatimes.co.kr/world/20260813/us-finally-approves-new-uv-filter-but-can-it-catch-up-with-k-beauty"]]}
 };
+
+/* Shade color verification. Every studio shade color (P[id].c) is an approximation until it is
+   checked against a real swatch the app has the right to use (our own photo of the product, or
+   brand-supplied color data). Add an entry only after that check:
+   id: {checked:"YYYY-MM-DD", method:"own swatch photo, daylight 5000K", hex:"#rrggbb"} */
+window.GYEOL_SHADE_VERIFIED = {};
