@@ -249,3 +249,39 @@ window.GYEOL_GUIDES={
     compare:["skinSun","birchSun","boj"],
     sources:[["Health Canada: Sunscreens","https://www.canada.ca/en/health-canada/services/sun-safety/sunscreens.html"],["Korea Times: US approves new UV filter (Aug 2026)","https://www.koreatimes.co.kr/world/20260813/us-finally-approves-new-uv-filter-but-can-it-catch-up-with-k-beauty"]]}
 };
+
+/* Skin fit for the skin quiz. Each entry records what a brand or retailer page says the product is for:
+   t = skin types listed (dry, oily, combination, normal, sensitive, or "all"), c = concerns it targets
+   (dryness, aging, dullness, redness, pores, breakouts), lvl = 0 gentle, 1 contains an active at a notable level,
+   2 strong active (retinoid or leave-on BHA exfoliant). beginner:true = the source says it suits first-time users.
+   Only what the source states is tagged; an empty list means the source names none. */
+window.GYEOL_SKINFIT = {
+  anuaToner:{t:["all","sensitive","oily","combination"],c:["redness","breakouts"],lvl:0,src:"Beauty Bay product page",url:"https://www.beautybay.com/p/anua/heartleaf-77-soothing-toner/",checked:"2026-11-24"},
+  birchToner:{t:["sensitive"],c:["dryness"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/birch-juice-moisturizing-toner-pimprod2049657",checked:"2026-11-24"},
+  dokdoToner:{t:["sensitive"],c:["dryness","dullness"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/1025-dokdo-toner-pimprod2052236",checked:"2026-11-24"},
+  snail:{t:["all","sensitive"],c:["dryness","dullness","redness"],lvl:0,src:"COSRX official page",url:"https://cosrx.com/products/advanced-snail-96-mucin-power-essence",checked:"2026-11-24"},
+  torriden:{t:["normal","dry","combination"],c:["dryness","dullness","aging"],lvl:0,src:"Sephora product page",url:"https://www.sephora.com/product/dive-in-serum-P517680",checked:"2026-11-24"},
+  anuaTxa:{t:["combination","normal","oily"],c:["dullness"],lvl:1,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/niacinamide-10-txa-4-serum-brightening-dark-spots-pimprod2048921",checked:"2026-11-24"},
+  bojGlow:{t:["normal","dry","combination","oily"],c:["pores","dullness","breakouts"],lvl:1,src:"Sephora product page",url:"https://www.sephora.com/product/glow-serum-30ml-P517687",checked:"2026-11-24"},
+  centella:{t:["all","combination","oily"],c:["redness","dryness","breakouts"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/madagascar-centella-ampoule-pimprod2045880/",checked:"2026-11-24"},
+  aestura:{t:["normal","dry"],c:["dryness"],lvl:0,src:"Sephora product page",url:"https://www.sephora.com/product/P515494",checked:"2026-11-24"},
+  illiyoon:{t:["sensitive","dry","all"],c:["dryness"],lvl:0,src:"Dodoskin product page",url:"https://www.dodoskin.com/products/illiyoon-ceramide-ato-concentrate-cream-150ml",checked:"2026-11-24"},
+  aquaBomb:{t:["oily","combination","normal"],c:["dryness"],lvl:0,src:"Sephora product page",url:"https://www.sephora.com/ca/en/product/belif-the-true-cream-aqua-bomb-with-hyaluronic-acid-niacinamide-P510117",checked:"2026-11-24"},
+  soonjung:{t:["sensitive"],c:["redness","dryness"],lvl:0,src:"Watsons product page",url:"https://www.watsons.com.sg/soonjung-2x-barrier-intensive-cream-for-sensitive-irritated-skin-60ml/p/BP_47016",checked:"2026-11-24"},
+  sbmRetinol:{t:["sensitive"],c:["aging","dullness"],lvl:2,src:"Soko Glam product page",url:"https://sokoglam.com/products/some-by-mi-retinol-intense-reactivating-serum",checked:"2026-11-24"},
+  bojEye:{t:["normal","dry","combination","oily"],c:["aging"],lvl:2,src:"Sephora product page",url:"https://www.sephora.com/product/revive-eye-serum-30ml-P517642",checked:"2026-11-24"},
+  banila:{t:["all"],c:[],lvl:0,src:"Soko Glam product page",url:"https://sokoglam.com/collections/cleansing-balms/products/banila-co-clean-it-zero-classic",checked:"2026-11-24"},
+  cosrxGel:{t:["all","sensitive"],c:["dullness"],lvl:0,src:"COSRX official page",url:"https://www.cosrx.com/products/low-ph-good-morning-gel-cleanser",checked:"2026-11-24"},
+  dokdoCleanser:{t:["all","sensitive","combination"],c:["dryness"],lvl:0,src:"Round Lab official guide",url:"https://roundlab.com/blogs/news/which-round-lab-cleanser-is-right-for-you",checked:"2026-11-24"},
+  bha:{t:["oily","combination"],c:["pores","breakouts"],lvl:2,src:"COSRX official page",url:"https://www.cosrx.com/collections/pores/products/bha-blackhead-power-liquid",checked:"2026-11-24"},
+  boj:{t:["sensitive","dry","combination"],c:[],lvl:0,src:"Beauty Bay sunscreen guide",url:"https://edited.beautybay.com/?p=112174",checked:"2026-11-24"},
+  birchSun:{t:["sensitive"],c:["dullness"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/birch-juice-moisturizing-uvlock-spf-45-pimprod2049647",checked:"2026-11-24"},
+  skinSun:{t:["dry","normal","combination"],c:[],lvl:0,src:"SKIN1004 official page",url:"https://www.skin1004.com/products/hyalu-cica-water-fit-sun-serum-uv",checked:"2026-11-24"},
+  pimple:{t:["all"],c:["breakouts"],lvl:0,src:"Soko Glam product page",url:"https://sokoglam.com/collections/acne/products/cosrx-acne-pimple-master-patch",checked:"2026-11-24"},
+  sleepMask:{t:["normal","dry","combination","oily"],c:["dryness","dullness"],lvl:0,src:"Sephora product page",url:"https://www.sephora.com/product/water-sleeping-mask-reform-repack-P518721",checked:"2026-11-24"},
+  cosrxRetinol:{t:[],c:["aging","dullness"],lvl:2,beginner:true,src:"Soko Glam product page",url:"https://sokoglam.com/products/the-retinol-0-1-cream",checked:"2026-11-24"},
+  bojRevive:{t:["dry"],c:["aging","dryness"],lvl:0,src:"Beauty of Joseon official page",url:"https://beautyofjoseon.com/products/revive-serum-ginseng-snail-mucin",checked:"2026-11-24"},
+  medicubePdrn:{t:["combination","dry","normal","oily","sensitive"],c:["dullness","aging"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/pdrn-pink-peptide-serum-pimprod2053536",checked:"2026-11-24"},
+  anuaOil:{t:["all","oily","dry","sensitive"],c:["pores"],lvl:0,src:"Ulta Beauty product page (brand answers)",url:"https://www.ulta.com/p/heartleaf-pore-control-cleansing-oil-pimprod2048919",checked:"2026-11-24"},
+  skin1004Foam:{t:["all","dry","oily","combination"],c:["breakouts"],lvl:0,src:"Ulta Beauty product page",url:"https://www.ulta.com/p/madagascar-centella-ampoule-foam-pimprod2045881",checked:"2026-11-24"}
+};
